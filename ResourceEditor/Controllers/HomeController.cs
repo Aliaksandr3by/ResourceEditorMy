@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,21 +11,20 @@ namespace ResourceEditor.Controllers
     {
         public ActionResult Index()
         {
+
+
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Data()
         {
-            ViewBag.Message = "Your application description page.";
-
+            List<string> cultures = new List<string>() { "ru", "en", "pl" };
+            string cultureName = "pl";
+            ResourceEditor.App_LocalResources.Resource.Culture = new CultureInfo(cultureName);
+            ViewBag.cult = ResourceEditor.App_LocalResources.Resource.q1;
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
     }
 }
