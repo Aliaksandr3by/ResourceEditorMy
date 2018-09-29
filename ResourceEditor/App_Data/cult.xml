@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Lang>
+  <LangName name="en">
+    <Id>en</Id>
+    <Value>USA</Value>
+    <Comment></Comment>
+  </LangName>
+  <LangName name="pl">
+    <Id>pl</Id>
+    <Value>Polish</Value>
+    <Comment>Польша</Comment>
+  </LangName>
+  <LangName name="ru-RU">
+    <Id>ru-RU</Id>
+    <Value>Russian</Value>
+    <Comment>РФ</Comment>
+  </LangName>
+  <LangName name="de">
+    <Id>de</Id>
+    <Value>Germany</Value>
+    <Comment>Германия</Comment>
+  </LangName>
+</Lang>

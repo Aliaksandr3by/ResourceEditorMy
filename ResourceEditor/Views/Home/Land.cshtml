@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ResourceEditor.Models.LangName>
+
+@{
+    ViewBag.Title = "Land";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Land</h2>
+
+@{
+    <form action="@Url.Action("Data", "Home")" method="post">
+        <p>
+            <select id="countrySelect" name="Id">
+                @foreach (var item in Model)
+                {
+                    <option value="@item.Id">@item.Value</option>
+                }
+            </select>
+        </p>
+        <p><input type="submit" value="Отправить"></p>
+    </form>
+}

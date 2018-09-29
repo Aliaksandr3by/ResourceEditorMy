@@ -119,14 +119,14 @@
   </resheader>
   <data name="q1" xml:space="preserve">
     <value>pl1</value>
-    <comment>eeee</comment>
+    <comment>komment1</comment>
   </data>
   <data name="q2" xml:space="preserve">
     <value>pl2</value>
-    <comment>qwewqeqe</comment>
+    <comment>komment2</comment>
   </data>
   <data name="q3" xml:space="preserve">
     <value>pl3</value>
-    <comment>dsd</comment>
+    <comment>komment3</comment>
   </data>
 </root>

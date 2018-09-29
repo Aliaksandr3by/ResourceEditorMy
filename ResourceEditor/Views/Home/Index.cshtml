@@ -1,10 +1,24 @@
 ﻿
 @{
-    ViewBag.Title = "Home Page";
-    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <p>qweqeqweqeqe</p>
-   
+<script type="text/javascript">
+    let UrlControl = "@Url.Action("Land", "Home")";
+
+</script>
+
+<h2>Index</h2>
+
+<div id="root">
+
 </div>
+
+
+@{
+    <form>
+        
+        <button type="button" id="SendCountry">Start</button>
+    </form>
+}

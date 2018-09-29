@@ -1,4 +1,5 @@
-﻿
+﻿@model System.Collections.Generic.Dictionary<string, string>
+
 @{
     ViewBag.Title = "Data";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,3 +8,24 @@
 <h2>Data</h2>
 
 <p>@ViewBag.cult</p>
+
+@{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Key</th>
+                <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.Key</th>
+                    <td>@item.Value</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}

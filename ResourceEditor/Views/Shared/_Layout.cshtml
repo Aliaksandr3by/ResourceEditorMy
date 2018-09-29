@@ -9,19 +9,18 @@
 </head>
 <body>
     <header>
-        @Html.ActionLink("qwe","Data","Home")
+        @Html.ActionLink("Index", "Index", "Home")
+        @Html.ActionLink("Lang", "Land", "Home")
     </header>
     <main>
         @RenderBody()
     </main>
 
-        <footer>
-
-        </footer>
-
+    <footer></footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/main")
     @RenderSection("scripts", required: false)
 </body>
 </html>
