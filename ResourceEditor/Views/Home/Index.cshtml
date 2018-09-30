@@ -9,6 +9,19 @@
 
 </script>
 
+<script>
+    //После загрузки
+    window.onload = () => {
+        document.getElementById('SendCountry2').addEventListener(
+            'click',
+            () => {
+                alert("awdasdad");
+            },
+            false
+        );
+    };
+</script>
+
 <h2>Index</h2>
 
 <div id="root">
@@ -18,7 +31,9 @@
 
 @{
     <form>
-        
+
         <button type="button" id="SendCountry">Start</button>
+        <button type="button" id="SendCountry2">Start</button>
     </form>
 }
+

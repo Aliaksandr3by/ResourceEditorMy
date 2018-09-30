@@ -26,11 +26,10 @@ namespace ResourceEditor.Controllers
         [HttpPost]
         public ActionResult Data()
         {
-            LangName langName = new LangName();
-            langName.Id = Request.Form[nameof(langName.Id)];
-            ResourceEditor.App_LocalResources.Resource.Culture = new CultureInfo(langName.Id);
+            string Id = Request.Form["Id"];
+            ResourceEditor.App_LocalResources.Resource.Culture = new CultureInfo(Id);
 
-            if (System.IO.File.Exists(Server.MapPath($"~/App_LocalResources/Resource.{langName.Id}.resx")))
+            if (System.IO.File.Exists(Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx")))
             {
                 ViewBag.cult = ResourceEditor.App_LocalResources.Resource.Culture;
             }
@@ -39,9 +38,11 @@ namespace ResourceEditor.Controllers
                 ViewBag.cult = "en";
             }
 
-            ResourceSet ResourceData = ResourceEditor.App_LocalResources.Resource.ResourceManager.GetResourceSet(new CultureInfo(langName.Id), true, true);
+            ResourceSet ResourceData = ResourceEditor.App_LocalResources.Resource.ResourceManager.GetResourceSet(new CultureInfo(Id), true, true);
 
             var resourceDictionary = ResourceData.Cast<DictionaryEntry>().ToDictionary(r => r.Key.ToString(), r => r.Value.ToString());
+
+            //IEnumerable<string> query = fruits.Cast<string>().OrderBy(fruit => fruit).Select(fruit => fruit);
 
             return View(resourceDictionary);
         }

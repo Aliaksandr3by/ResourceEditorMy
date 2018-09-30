@@ -10,22 +10,32 @@
 <p>@ViewBag.cult</p>
 
 @{
+<form id="data">
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">Key</th>
                 <th scope="col">Value</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
+                int i = 0;
+                i++;
                 <tr>
                     <th scope="row">@item.Key</th>
-                    <td>@item.Value</td>
+                    <td><input type="text" id="@item.Key" name="@item.Key" value="@item.Value" /></td>
+                    <td></td>
+                    <td>
+                        <button type="submit" name="deleteButton_@item.Key" value="delete" >Delete</button>
+                        <button type="submit" name="editButton_@item.Key" value="edit" >Edit</button>
+                    </td>
                 </tr>
             }
-
         </tbody>
     </table>
+</form>
 }
