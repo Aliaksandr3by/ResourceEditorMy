@@ -21,9 +21,4 @@ $(document).ready(function () {
 
 });
 
-$.expr[':'].fig = $.Sizzle.selectors.createPseudo((subSelector) => {
-    subSelector;
-    return (elem ) => {
-        return true;
-    };
-});
+$("#root").attr("qwe", "weqweqe");
