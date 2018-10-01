@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.Dictionary<string, string>
+﻿@model List<ResourceEditor.Models.LangName>
 
 @{
     ViewBag.Title = "Data";
@@ -10,7 +10,7 @@
 <p>@ViewBag.cult</p>
 
 @{
-<form id="data">
+<form id="data" method="post" action="@Url.Action("Data", "Home")">
     <table class="table">
         <thead>
             <tr>
@@ -21,21 +21,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @for (var i = 0; i < Model.Count; i++)
             {
-                int i = 0;
-                i++;
+                var item = Model[i];
                 <tr>
-                    <th scope="row">@item.Key</th>
-                    <td><input type="text" id="@item.Key" name="@item.Key" value="@item.Value" /></td>
-                    <td></td>
+                    <th scope="row"><input name="list[@i].Id" value="@item.Id" readonly></th>
+                    <td><input type="text" name="list[@i].Value" value="@item.Value" /></td>
+                    <td><input type="text" name="list[@i].Comment" value="@item.Comment" /></td>
                     <td>
-                        <button type="submit" name="deleteButton_@item.Key" value="delete" >Delete</button>
-                        <button type="submit" name="editButton_@item.Key" value="edit" >Edit</button>
+                        <button type="submit" name="deleteButton_@item.Id" value="delete">Delete</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <button type="submit" name="saveButton" value="save">Save</button>
+    <button type="submit" name="generateButton" value="generate">Generate</button>
 </form>
 }

@@ -117,16 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Title" xml:space="preserve">
+    <value>Country Information</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="nColumns" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
   <data name="q1" xml:space="preserve">
-    <value>йцуйцу</value>
-    <comment>уцкцуку</comment>
+    <value>en111</value>
+    <comment>1</comment>
   </data>
   <data name="q2" xml:space="preserve">
-    <value>йцуйуйцуй</value>
-    <comment>цукцкцкуцкцк</comment>
+    <value>en1</value>
+    <comment>22222</comment>
   </data>
   <data name="q3" xml:space="preserve">
-    <value>цуйуйцуйцууй</value>
-    <comment>цукцкцкуцкцккккк</comment>
+    <value>rn3</value>
+    <comment>1</comment>
   </data>
 </root>

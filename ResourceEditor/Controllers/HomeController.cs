@@ -17,34 +17,48 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
+
+
         public ActionResult Index()
         {
-
             return View();
         }
 
         [HttpPost]
-        public ActionResult Data()
+        public ActionResult Data(List<LangName> list)
         {
-            string Id = Request.Form["Id"];
-            ResourceEditor.App_LocalResources.Resource.Culture = new CultureInfo(Id);
+            string _id = "."+Request.Form["Id"];
+            string _pathLoad = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
+            string _pathSave = Server.MapPath($"~/App_Data/Resource{_id}.resx");
 
-            if (System.IO.File.Exists(Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx")))
+            List<LangName> _langName = null;
+
+            if (list != null && _langName == null)
             {
-                ViewBag.cult = ResourceEditor.App_LocalResources.Resource.Culture;
+                _langName = list;
             }
-            else
+            if (Request.Form["generateButton"] != null)
             {
-                ViewBag.cult = "en";
+                ResourceHelper.CreateResourceFile(_langName, _pathSave);
             }
 
-            ResourceSet ResourceData = ResourceEditor.App_LocalResources.Resource.ResourceManager.GetResourceSet(new CultureInfo(Id), true, true);
+            if (_langName == null)
+            {
+                _langName = new List<LangName>();
+                if (System.IO.File.Exists(_pathLoad))
+                {
+                    ViewBag.cult = _id;
+                    
+                    _langName = ResourceHelper.ReadResourceFile(_langName, _pathLoad);
+                }
+                else
+                {
+                    ViewBag.cult = "en";
+                    _langName = ResourceHelper.ReadResourceFile(_langName, Server.MapPath($"~/App_LocalResources/Resource.resx"));
+                }
+            }
 
-            var resourceDictionary = ResourceData.Cast<DictionaryEntry>().ToDictionary(r => r.Key.ToString(), r => r.Value.ToString());
-
-            //IEnumerable<string> query = fruits.Cast<string>().OrderBy(fruit => fruit).Select(fruit => fruit);
-
-            return View(resourceDictionary);
+            return View(_langName);
         }
 
         public ActionResult Land()
