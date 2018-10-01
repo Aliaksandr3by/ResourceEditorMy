@@ -17,19 +17,30 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
-
-
-        public ActionResult Index()
+        public ActionResult Index(List<LangName> list, string language)
         {
+            string _id = String.IsNullOrEmpty(Request.Form["Id"]) ? "" : ("." + Request.Form["Id"]);
+            string _pathLoad = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
+            string _pathSave = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
+
+            List<LangName> _langList;
+            if (list != null)
+            {
+                _langList = new List<LangName>();
+                List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+                ResourceHelper.CreateResourceFile(_langName, _pathSave, list);
+
+            }
             return View();
         }
 
-        [HttpPost]
         public ActionResult Data(List<LangName> list)
         {
-            string _id = "."+Request.Form["Id"];
+            string _id = String.IsNullOrEmpty(Request.Form["Id"]) ? "" : ("." + Request.Form["Id"]);
             string _pathLoad = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
-            string _pathSave = Server.MapPath($"~/App_Data/Resource{_id}.resx");
+            string _pathSave = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
+
+            ViewBag.cult = string.IsNullOrEmpty(_id) ? "en" : _id;
 
             List<LangName> _langName = null;
 
@@ -37,63 +48,20 @@ namespace ResourceEditor.Controllers
             {
                 _langName = list;
             }
+
+            if (_langName == null && System.IO.File.Exists(_pathLoad))
+            {
+                _langName = new List<LangName>();
+                _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+            }
+
             if (Request.Form["generateButton"] != null)
             {
                 ResourceHelper.CreateResourceFile(_langName, _pathSave);
-            }
-
-            if (_langName == null)
-            {
-                _langName = new List<LangName>();
-                if (System.IO.File.Exists(_pathLoad))
-                {
-                    ViewBag.cult = _id;
-                    
-                    _langName = ResourceHelper.ReadResourceFile(_langName, _pathLoad);
-                }
-                else
-                {
-                    ViewBag.cult = "en";
-                    _langName = ResourceHelper.ReadResourceFile(_langName, Server.MapPath($"~/App_LocalResources/Resource.resx"));
-                }
+                ViewBag.result = "good";
             }
 
             return View(_langName);
         }
-
-        public ActionResult Land()
-        {
-            List<LangName> _langs = new List<LangName>();
-
-            string xmlFile = Server.MapPath("~/App_Data/cult.xml");
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(xmlFile);
-
-            foreach (XmlNode xnode in xDoc.DocumentElement)
-            {
-                LangName country = new LangName();
-                XmlNode attr = xnode.Attributes.GetNamedItem("name");
-                country.Id = attr.Value;
-
-                foreach (XmlNode item in xnode.ChildNodes)
-                {
-                    var a = item;
-                    if (item.Name == nameof(LangName.Value))
-                    {
-                        country.Value = item.InnerText;
-                    }
-                    if (item.Name == nameof(LangName.Comment))
-                    {
-                        country.Comment = item.InnerText;
-                    }
-
-                }
-                _langs.Add(country);
-            }
-
-            return View(_langs);
-        }
-
-
     }
 }

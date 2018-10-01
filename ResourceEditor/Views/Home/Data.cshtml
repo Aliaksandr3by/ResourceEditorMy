@@ -8,10 +8,18 @@
 <h2>Data</h2>
 
 <p>@ViewBag.cult</p>
+<p>
+    @{
+        string a = @ViewBag.result;
+        a = a == null ? "qwe" : @ViewBag.result;
+    }
+</p>
 
 @{
 <form id="data" method="post" action="@Url.Action("Data", "Home")">
-    <table class="table">
+    @Html.Partial("Language")
+    <input type="text" name="_Id" value="@ViewBag.cult" readonly />
+    <table id="mainTable" class="table">
         <thead>
             <tr>
                 <th scope="col">Key</th>
@@ -35,7 +43,6 @@
             }
         </tbody>
     </table>
-    <button type="submit" name="saveButton" value="save">Save</button>
     <button type="submit" name="generateButton" value="generate">Generate</button>
 </form>
 }

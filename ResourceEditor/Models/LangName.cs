@@ -8,43 +8,74 @@ using System.ComponentModel.Design;
 using System.Resources;
 using System.Collections;
 using System.Reflection;
+using System.IO;
 
 namespace ResourceEditor.Models
 {
     public class ResourceHelper
     {
-        public static List<LangName> ReadResourceFile(List<LangName> langNames, string pathLoad)
+        public static List<LangName> ReadResourceFile(string pathLoad)
         {
-            ResXResourceReader rr = new ResXResourceReader(pathLoad);
-            rr.UseResXDataNodes = true; //делает элемент ресурса комментарий доступным
-            IDictionaryEnumerator dict = rr.GetEnumerator();
-            while (dict.MoveNext())
+            List<LangName> outLangNames = new List<LangName>();
+            using (ResXResourceReader rr = new ResXResourceReader(pathLoad))
             {
-                ResXDataNode node = (ResXDataNode)dict.Value;
-                AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-                langNames.Add(
-                    new LangName{
-                    Id = node.Name,
-                    Value = node.GetValue(assemblies).ToString(),
-                    Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
-                });
+                rr.UseResXDataNodes = true; //делает элемент ресурса комментарий доступным
+                IDictionaryEnumerator dict = rr.GetEnumerator();
+                while (dict.MoveNext())
+                {
+                    ResXDataNode node = (ResXDataNode)dict.Value;
+                    AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+                    outLangNames.Add(
+                        new LangName
+                        {
+                            Id = node.Name,
+                            Value = node.GetValue(assemblies).ToString(),
+                            Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
+                        });
+                }
             }
-            return langNames;
+            return outLangNames;
         }
 
-        public static void CreateResourceFile(List<LangName> langName, string pathSave)
+        public static void CreateResourceFile(
+            List<LangName> langName, 
+            string pathSave, 
+            List<LangName> langNameAdd = null)
         {
-            ResXResourceWriter rw = new ResXResourceWriter(pathSave);
-            rw.AddResource("Title", "Country Information");
-            rw.AddResource("nColumns", langName.Count);
-            for (int ctr = 0; ctr < langName.Count; ctr++)
+            File.Copy(pathSave, pathSave+".back", true);
+            using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
             {
-                ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
-                node.Comment = langName[ctr].Comment;
-                rw.AddResource(node);
+                for (int ctr = 0; ctr < langName.Count; ctr++)
+                {
+                    ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
+                    node.Comment = langName[ctr].Comment;
+                    rw.AddResource(node);
+                }
+
+                if (langNameAdd != null)
+                {
+                    //если ключ существует и иесли запись не добавилась warn
+                    foreach (var item in langNameAdd)
+                    {
+                        if (item.Id != null && item.Value != null)
+                        {
+                            ResXDataNode nodelangNameOne = new ResXDataNode(item.Id, item.Value)
+                            {
+                                Comment = item.Comment ?? ""
+                            };
+                            rw.AddResource(nodelangNameOne);
+                        }
+                    }
+                }
+
+                rw.Generate();
+                rw.Close();
             }
-            rw.Generate();
-            rw.Close();
+        }
+        public static void AddResourceFile(LangName langName, string pathSave)
+        {
+
+
         }
     }
 

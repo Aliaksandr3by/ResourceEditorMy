@@ -1,11 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<script type="text/javascript">
-    let UrlControl = "@Url.Action("Land", "Home")";
+﻿<script type="text/javascript">
+    let urlControl = "@Url.Action("Language", "Home")";
 
 </script>
 
@@ -30,9 +24,30 @@
 
 
 @{
-    <form>
-        <button type="button" id="SendCountry">Start</button>
-        <button type="button" id="SendCountry2">Start</button>
+    int count = 2;
+    <form id="data" method="get" action="@Url.Action("Index", "Home")">
+        @Html.Partial("Language")
+        <table id="mainTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < count; i++)
+                {
+                    var item = new ResourceEditor.Models.LangName();
+                    <tr>
+                        <th scope="row"><input name="list[@i].Id"></th>
+                        <td><input type="text" name="list[@i].Value" /></td>
+                        <td><input type="text" name="list[@i].Comment" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="submit" name="addButton" value="addNode">Add</button>
     </form>
 }
 
