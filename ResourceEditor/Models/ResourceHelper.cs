@@ -78,7 +78,7 @@ namespace ResourceEditor.Models
         public static void AddResourceFile(LangName langName, string pathSave)
         {
 
-
+            throw new NotImplementedException();
         }
     }
 }
