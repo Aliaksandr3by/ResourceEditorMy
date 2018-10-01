@@ -17,7 +17,7 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult AddMaterial(List<LangName> list)
+        public ActionResult addLineResource(List<LangName> list)
         {
             string _id = null;
             string _pathLoad = null;

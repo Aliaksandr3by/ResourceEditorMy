@@ -1,0 +1,61 @@
+﻿
+<script type="text/javascript">
+    let urlControl = "@Url.Action("Language", "Home")";
+
+</script>
+
+<script>
+    //После загрузки
+    window.onload = () => {
+        document.getElementById('SendCountry2').addEventListener(
+            'click',
+            () => {
+                alert("awdasdad");
+            },
+            false
+        );
+    };
+</script>
+
+<h2>addLineResource</h2>
+
+<div id="root">
+
+</div>
+
+
+@{
+<form action="@Url.Action("addLineResource", "Home")" method="get">
+    
+    <p><input type="submit" value="Отправить"></p>
+</form>
+
+    int count = 2;
+<form id="data" method="get" action="@Url.Action("addLineResource", "Home")">
+    @Html.Partial("Language")
+    <table id="mainTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Key</th>
+                <th scope="col">Value</th>
+                <th scope="col">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < count; i++)
+            {
+                var item = new ResourceEditor.Models.LangName();
+                <tr>
+                    <th scope="row"><input name="list[@i].Id"></th>
+                    <td><input type="text" name="list[@i].Value" /></td>
+                    <td><input type="text" name="list[@i].Comment" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" name="addButton" value="addNode">Add</button>
+</form>
+}
+
+
+
