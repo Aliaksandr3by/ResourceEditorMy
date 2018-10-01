@@ -17,7 +17,7 @@
     };
 </script>
 
-<h2>Index</h2>
+<h2>AddMaterial</h2>
 
 <div id="root">
 
@@ -25,12 +25,12 @@
 
 
 @{
-    <form action="@Url.Action("Index", "Home")" method="get">
+    <form action="@Url.Action("AddMaterial", "Home")" method="get">
         @Html.Partial("Language")
     </form>
 
     int count = 2;
-    <form id="data" method="get" action="@Url.Action("Index", "Home")">
+    <form id="data" method="get" action="@Url.Action("AddMaterial", "Home")">
         <table id="mainTable" class="table">
             <thead>
                 <tr>
