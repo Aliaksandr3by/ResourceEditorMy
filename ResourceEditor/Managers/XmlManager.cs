@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Xml;
 
 namespace ResourceEditor.Managers
 {
     public static class XmlManager
     {
-        [Obsolete("Неверный путь")]
         public static IEnumerable<Models.LangName> GetLanguages()
         {
             List<LangName> result = new List<LangName>();
-            var xmlFile = Path.GetFullPath(@"C:\\Users\\hole\\source\\repos\\ResourceEditorMy\\ResourceEditor\\App_Data\\cult.xml");
+            //string xmlFile = Path.GetFullPath(@"C:\\Users\\hole\\source\\repos\\ResourceEditorMy\\ResourceEditor\\App_Data\\cult.xml");
             //string xmlFile = Server.MapPath("~/App_Data/cult.xml");
+            string xmlFile = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/cult.xml");
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(xmlFile);
 
@@ -39,11 +40,9 @@ namespace ResourceEditor.Managers
                     {
                         country.Comment = item.InnerText;
                     }
-
                 }
                 result.Add(country);
             }
-
             return result;
         }
     }

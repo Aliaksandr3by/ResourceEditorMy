@@ -21,4 +21,13 @@ $(document).ready(function () {
 
 });
 
-$("#root").attr("qwe", "weqweqe");
+$("#addTableRow").click(
+    () => {
+        count++;
+        $('#mainTable').children('tbody').append(`<tr></tr>`);
+        let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
+        tablAddRow2.last('tr').append(`<th><input scope="row" type="text" name="list[${count}].Value" /></th>`);
+        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Value" /></td>`);
+        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Value" /></td>`);
+    }
+);

@@ -59,7 +59,8 @@ namespace ResourceEditor.Models
                     //если ключ существует и иесли запись не добавилась warn
                     foreach (var item in langNameAdd)
                     {
-                        if (item.Id != null && item.Value != null)
+                        //если ID не null , пустое значение допускается (&& item.Value != null)
+                        if (item.Id != null )
                         {
                             ResXDataNode nodelangNameOne = new ResXDataNode(item.Id, item.Value)
                             {

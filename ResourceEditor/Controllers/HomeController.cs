@@ -19,17 +19,16 @@ namespace ResourceEditor.Controllers
     {
         public ActionResult addLineResource(List<LangName> list)
         {
-            string _id = null;
+            string _id = Request.QueryString["Id"];
             string _pathLoad = null;
             string _pathSave = null;
-            if (String.IsNullOrEmpty(Request.QueryString["Id"]))
+            if (String.IsNullOrEmpty(_id))
             {
                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
             }
             else
             {
-                _id = Request.Form["Id"];
                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
             }
@@ -47,17 +46,16 @@ namespace ResourceEditor.Controllers
 
         public ActionResult Data(List<LangName> list)
         {
-            string _id = null;
+            string _id = Request.Form["Id"];
             string _pathLoad = null;
             string _pathSave = null;
-            if (String.IsNullOrEmpty(Request.Form["Id"]))
+            if (String.IsNullOrEmpty(_id))
             {
                  _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
                  _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
             }
             else
             {
-                _id = Request.Form["Id"];
                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
             }
