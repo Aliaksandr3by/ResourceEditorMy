@@ -17,8 +17,9 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(List<LangName> list, string language)
+        public ActionResult Index(List<LangName> list)
         {
+            var a = Request.QueryString["Id"];
             string _id = String.IsNullOrEmpty(Request.Form["Id"]) ? "" : ("." + Request.Form["Id"]);
             string _pathLoad = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
             string _pathSave = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
@@ -36,11 +37,22 @@ namespace ResourceEditor.Controllers
 
         public ActionResult Data(List<LangName> list)
         {
-            string _id = String.IsNullOrEmpty(Request.Form["Id"]) ? "" : ("." + Request.Form["Id"]);
-            string _pathLoad = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
-            string _pathSave = Server.MapPath($"~/App_LocalResources/Resource{_id}.resx");
+            string _id = null;
+            string _pathLoad = null;
+            string _pathSave = null;
+            if (String.IsNullOrEmpty(Request.Form["Id"]))
+            {
+                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
+                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
+            }
+            else
+            {
+                _id = Request.Form["Id"];
+                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
+                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
+            }
 
-            ViewBag.cult = string.IsNullOrEmpty(_id) ? "en" : _id;
+            ViewBag.cult = string.IsNullOrEmpty(_id) ? "" : _id;
 
             List<LangName> _langName = null;
 
@@ -51,7 +63,6 @@ namespace ResourceEditor.Controllers
 
             if (_langName == null && System.IO.File.Exists(_pathLoad))
             {
-                _langName = new List<LangName>();
                 _langName = ResourceHelper.ReadResourceFile(_pathLoad);
             }
 

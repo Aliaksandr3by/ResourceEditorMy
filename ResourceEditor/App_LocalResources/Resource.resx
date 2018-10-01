@@ -118,47 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="q1" xml:space="preserve">
-    <value>qqqqq</value>
-    <comment>уцкцуку</comment>
+    <value>q1</value>
+    <comment>q1</comment>
   </data>
   <data name="q2" xml:space="preserve">
-    <value>йцуйуйцуй</value>
-    <comment>цукцкцкуцкцк</comment>
+    <value>e1</value>
+    <comment>komment2</comment>
   </data>
   <data name="q3" xml:space="preserve">
-    <value>цуйуйцуйцууй</value>
-    <comment>цукцкцкуцкцккккк</comment>
-  </data>
-  <data name="rewr" xml:space="preserve">
-    <value>werw</value>
-    <comment>rewrw</comment>
-  </data>
-  <data name="w1" xml:space="preserve">
-    <value>w1</value>
-    <comment>w1</comment>
-  </data>
-  <data name="e1" xml:space="preserve">
     <value>e1</value>
-    <comment>e1</comment>
+    <comment>komment3</comment>
   </data>
-  <data name="t4" xml:space="preserve">
-    <value>t4</value>
-    <comment>t4</comment>
+  <data name="erytety" xml:space="preserve">
+    <value>retyety</value>
+    <comment>erytery</comment>
   </data>
-  <data name="d1" xml:space="preserve">
-    <value>d1</value>
-    <comment>d1</comment>
+  <data name="qwewqe" xml:space="preserve">
+    <value>qweqwe</value>
+    <comment>qwewqeewqe</comment>
   </data>
-  <data name="v1" xml:space="preserve">
-    <value>v1</value>
-    <comment>v1</comment>
-  </data>
-  <data name="r1" xml:space="preserve">
-    <value>r1</value>
-    <comment>r1</comment>
-  </data>
-  <data name="t1" xml:space="preserve">
-    <value>t1</value>
-    <comment>t1</comment>
+  <data name="c1" xml:space="preserve">
+    <value>c1</value>
+    <comment>c1</comment>
   </data>
 </root>

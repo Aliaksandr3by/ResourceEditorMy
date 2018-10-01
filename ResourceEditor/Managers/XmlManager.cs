@@ -10,6 +10,7 @@ namespace ResourceEditor.Managers
 {
     public static class XmlManager
     {
+        [Obsolete("Неверный путь")]
         public static IEnumerable<Models.LangName> GetLanguages()
         {
             List<LangName> result = new List<LangName>();

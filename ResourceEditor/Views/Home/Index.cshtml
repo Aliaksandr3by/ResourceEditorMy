@@ -1,4 +1,5 @@
-﻿<script type="text/javascript">
+﻿
+<script type="text/javascript">
     let urlControl = "@Url.Action("Language", "Home")";
 
 </script>
@@ -24,9 +25,12 @@
 
 
 @{
+    <form action="@Url.Action("Index", "Home")" method="get">
+        @Html.Partial("Language")
+    </form>
+
     int count = 2;
     <form id="data" method="get" action="@Url.Action("Index", "Home")">
-        @Html.Partial("Language")
         <table id="mainTable" class="table">
             <thead>
                 <tr>

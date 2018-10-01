@@ -152,6 +152,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\XmlManager.cs" />
+    <Compile Include="Models\ResourceHelper.cs" />
     <Compile Include="Models\LangName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
