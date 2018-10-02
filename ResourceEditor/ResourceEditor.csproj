@@ -49,6 +49,9 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>dll\Kendo.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.7.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.7.2\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
@@ -160,6 +163,7 @@
     <Content Include="App_Data\cult.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\products.js" />
     <Content Include="App_LocalResources\Resource.resx">
       <SubType>Designer</SubType>
     </Content>
@@ -214,7 +218,7 @@
     <Content Include="Scripts\Kendo\checkboxWidget.js" />
     <Content Include="Scripts\Kendo\kendo.all.min.js" />
     <Content Include="Scripts\Kendo\kendo.aspnetmvc.min.js" />
-    <Content Include="Scripts\Kendo\kendo.theme.min.css" />
+    <Content Include="Content\kendo.theme.min.css" />
     <Content Include="Scripts\Kendo\kendoGridAPI.js" />
     <Content Include="Scripts\Kendo\kendoGridExtension.js" />
     <Content Include="Scripts\Kendo\kendoModalWindowAPI.js" />

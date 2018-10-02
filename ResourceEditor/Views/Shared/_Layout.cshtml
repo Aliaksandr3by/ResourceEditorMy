@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - ResX Editor</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/Kendo")
+    @*@Styles.Render("~/Content/Kendocommon")*@
+    @Styles.Render("~/Content/Kendotheme")
     @Scripts.Render("~/bundles/modernizr")
 
-    @*<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css">*@
-    @*<script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>*@
+    @Scripts.Render("~/bundles/products")
+
+
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css">
+    @*<link href="http://cdn.kendostatic.com/2012.1.322/styles/kendo.default.min.css" rel="stylesheet" />*@
+
 </head>
 <body>
     <header>
@@ -20,7 +25,7 @@
         @RenderBody()
     </main>
 
-    <footer>    </footer>
+    <footer>      </footer>
 
     <div id="example">
         <div id="grid"></div>
@@ -28,8 +33,12 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/Kendo")
+    @*@Scripts.Render("~/bundles/Kendo")*@
     @Scripts.Render("~/bundles/main")
+
+    <script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>
+
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

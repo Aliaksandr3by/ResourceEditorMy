@@ -14,32 +14,32 @@
 </script>
 
 @{
-@*<form action="@Url.Action("MainTableResource", "Home")" method="post">
-    @Html.Partial("Language")
-    <p><input type="submit" value="Отправить"></p>
-</form>*@
-    
-<form method="post" action="@Url.Action("MainTableResource", "Home")">
-    @Html.Partial("SelectLanguage")
-    <div id="rootMainTable">
-        <table id="mainTable" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Key</th>
-                    <th scope="col">Value</th>
-                    <th scope="col">Comment</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody id="mainDataBodyTable">
+    @*<form action="@Url.Action("MainTableResource", "Home")" method="post">
+            @Html.Partial("Language")
+            <p><input type="submit" value="Отправить"></p>
+        </form>*@
 
-                @Html.Partial("MainTableDataResource")
+    <form method="post" action="@Url.Action("MainTableResource", "Home")">
+        @Html.Partial("SelectLanguage")
+        <div id="rootMainTable">
+            <table id="mainTable" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Key</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="mainDataBodyTable">
 
-            </tbody>
-        </table>
-    </div>
-    <button type="submit" name="generateButton" value="generate">Generate</button>
-</form>
+                    @Html.Partial("MainTableDataResource")
+
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" name="generateButton" value="generate">Generate</button>
+    </form>
 }
 
 <div id="root">

@@ -20,17 +20,14 @@ namespace ResourceEditor
 
             bundles.Add(new ScriptBundle("~/bundles/Kendo").Include(
                 "~/Scripts/Kendo/kendo.all.min.js",
-                "~/Scripts/Kendo/kendoGridAPI.js",
-                "~/Scripts/Kendo/kendoGridExtension.js",
-                "~/Scripts/Kendo/settings_kendo.all.min.js",
-                "~/Scripts/Kendo/kendo.aspnetmvc.min"));
-
-            bundles.Add(new ScriptBundle("~/bundles/main").Include("~/Scripts/main.js"));
-
-            bundles.Add(new StyleBundle("~/Content/Kendo").Include(
-                "~/Content/kendo.common.min.css",
-                "~/Content/kendo.CW.css"
+                "~/Scripts/Kendo/kendo.aspnetmvc.min"
                 ));
+
+            bundles.Add(new ScriptBundle("~/bundles/main").Include("~/Scripts/main.js")); 
+            bundles.Add(new ScriptBundle("~/bundles/products").Include("~/Scripts/products.js")); 
+
+            bundles.Add(new StyleBundle("~/Content/Kendocommon").Include("~/Content/kendo.common.min.css"));
+            bundles.Add(new StyleBundle("~/Content/Kendotheme").Include("~/Content/kendo.theme.min.css"));
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css","~/Content/site.css"));
 
         }
