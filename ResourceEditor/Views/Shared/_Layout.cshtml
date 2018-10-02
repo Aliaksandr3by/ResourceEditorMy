@@ -4,16 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - ResX Editor</title>
-    @Styles.Render("~/Content/css")
-    @*@Styles.Render("~/Content/Kendocommon")*@
-    @Styles.Render("~/Content/Kendotheme")
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/Kendo")
+
     @Scripts.Render("~/bundles/modernizr")
 
-    @*@Scripts.Render("~/bundles/products")*@
+    @Styles.Render("~/Content/site")
 
-
-    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css">
-    @*<link href="http://cdn.kendostatic.com/2012.1.322/styles/kendo.default.min.css" rel="stylesheet" />*@
+    @*<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css">*@
+    @*<link rel="stylesheet" href="http://cdn.kendostatic.com/2012.1.322/styles/kendo.default.min.css"/>*@
 
     <script type="text/javascript">
         var urlControlJsonMethod = "@Url.Action("JsonResolver", "Home")";
@@ -29,7 +28,7 @@
             <li><button type="submit" id="buttonJson">Generate Json</button></li>
 
         </ul>
-                                                                             
+
     </header>
     <main>
         @RenderBody()
@@ -39,10 +38,14 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @*@Scripts.Render("~/bundles/Kendo")*@
+    @Scripts.Render("~/bundles/Kendo")
     @Scripts.Render("~/bundles/main")
 
-    <script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>
+    @*<script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>*@
+
+    <div id="example">
+        <div id="grid"></div>
+    </div>
 
     @RenderSection("scripts", required: false)
 </body>

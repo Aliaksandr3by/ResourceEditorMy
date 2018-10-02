@@ -69,18 +69,7 @@ namespace ResourceEditor.Controllers
 
         public ActionResult MainTableResource(List<LangName> list, string Id)
         {
-            string _pathLoad = null;
-            string _pathSave = null;
-            if (String.IsNullOrEmpty(Id))
-            {
-                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
-                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
-            }
-            else
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-            }
+            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
 
@@ -91,9 +80,9 @@ namespace ResourceEditor.Controllers
                 _langName = list;
             }
 
-            if (_langName == null && System.IO.File.Exists(_pathLoad))
+            if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+                _langName = ResourceHelper.ReadResourceFile(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)
@@ -106,18 +95,7 @@ namespace ResourceEditor.Controllers
         }
         public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
         {
-            string _pathLoad = null;
-            string _pathSave = null;
-            if (String.IsNullOrEmpty(Id))
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
-            }
-            else
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-            }
+            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
 
@@ -128,9 +106,9 @@ namespace ResourceEditor.Controllers
                 _langName = list;
             }
 
-            if (_langName == null && System.IO.File.Exists(_pathLoad))
+            if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+                _langName = ResourceHelper.ReadResourceFile(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)
@@ -141,10 +119,10 @@ namespace ResourceEditor.Controllers
 
             return PartialView(_langName);
         }
-        public string JsonResolver()
+        public string JsonResolver(string Id)
         {
             string jSonlangname = default(string);
-            string _pathLoad = ResourceHelper.PathResourceResolver("", "App_LocalResources", "App_LocalResources");
+            string _pathLoad = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
 

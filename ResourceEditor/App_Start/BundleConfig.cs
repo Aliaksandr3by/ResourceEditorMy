@@ -18,17 +18,18 @@ namespace ResourceEditor
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/Kendo").Include(
-                "~/Scripts/Kendo/kendo.all.min.js",
-                "~/Scripts/Kendo/kendo.aspnetmvc.min"
-                ));
+            bundles.Add(new ScriptBundle("~/bundles/Kendo").Include("~/Scripts/kendo/2014.1.318/kendo.web.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include("~/Scripts/main.js")); 
+
             bundles.Add(new ScriptBundle("~/bundles/products").Include("~/Scripts/products.js")); 
 
-            bundles.Add(new StyleBundle("~/Content/Kendocommon").Include("~/Content/kendo.common.min.css"));
-            bundles.Add(new StyleBundle("~/Content/Kendotheme").Include("~/Content/kendo.theme.min.css"));
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css","~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css"));
+            bundles.Add(new StyleBundle("~/Content/Kendo").Include(
+                "~/Content/kendo/2014.1.318/kendo.common.min.css",
+                "~/Content/kendo/2014.1.318/kendo.default.min.css"
+                ));
+            bundles.Add(new StyleBundle("~/Content/site").Include("~/Content/site.css"));
 
         }
     }

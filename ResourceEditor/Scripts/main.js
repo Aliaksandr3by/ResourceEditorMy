@@ -1,7 +1,7 @@
 ﻿
 var count = 1;
 $("#addTableRow").click(
-    () => {
+    function myfunction() {
         $('#mainTable').children('tbody').append(`<tr></tr>`);
         let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
         tablAddRow2.last('tr').append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
@@ -43,7 +43,7 @@ $("#countrySelect").change(function () {
             type: "POST",
             url: urlControlEditMethod,
             data: {
-                Id: $('#countrySelect').val(),
+                Id: $('#countrySelect').val()
             },
             success: function (data, textStatus) {
                 console.log(textStatus);
@@ -80,11 +80,11 @@ $(".buttonJson").on("click", $(this), function () {
         type: "post",
         url: urlControlJsonMethod,
         data: {
-            Id: $('#countrySelect').val(),
+            Id: $('#countrySelect').val()
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-            products = data
+            products = data;
             $("#grid").empty();
             KendoTable();
         },
@@ -96,43 +96,51 @@ $(".buttonJson").on("click", $(this), function () {
     });
 });
 
+
+
 function KendoTable() {
 
-    $("#grid").kendoGrid({
-        dataSource: {
-            data: products,
-            schema: {
-                model: {
-                    fields: {
-                        Id: { type: "string" },
-                        Value: { type: "string" },
-                        Comment: { type: "string" },
-                    }
-                }
-            },
-            pageSize: 20,
-            serverPaging: true,
-            serverFiltering: true,
-            serverSorting: true
-        },
-        height: 550,
-        filterable: true,
-        sortable: true,
-        pageable: true,
-        columns: [
-            {
-                field: "Id",
-                title: "Order Date",
 
+}
+
+$(document).ready(
+    function () {
+        $("#grid").kendoGrid({
+            dataSource: {
+                data: products,
+                schema: {
+                    model: {
+                        fields: {
+                            Id: { type: "string" },
+                            Value: { type: "string" },
+                            Comment: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20,
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
             },
-            {
-                field: "Value",
-                title: "Order Date",
-            },
-            {
-                field: "Comment",
-                title: "Ship Name"
-            }
-        ]
-    });
-};
+            height: 550,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "Id",
+                    title: "Id"
+
+                },
+                {
+                    field: "Value",
+                    title: "Value"
+                },
+                {
+                    field: "Comment",
+                    title: "Comment"
+                }
+            ]
+        });
+    }
+);

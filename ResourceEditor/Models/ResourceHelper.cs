@@ -11,22 +11,17 @@ namespace ResourceEditor.Models
 {
     public class ResourceHelper
     {
-        [Obsolete("кортеж")]
-        public static string PathResourceResolver(string id, string pathSave, string pathLoad)
+        public static string PathResourceResolver(string id, string pathSave)
         {
-            string _pathLoad = null;
             string _pathSave = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                _pathLoad = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathLoad}/Resource.resx");
                 _pathSave = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/Resource.resx");
             }
             else
             {
-                _pathLoad = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathLoad}/Resource.{id}.resx");
                 _pathSave = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/Resource.{id}.resx");
             }
-            //var _path = (_pathSave, _pathSave);
             return _pathSave;
         }
 
