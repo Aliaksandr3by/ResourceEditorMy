@@ -20,48 +20,24 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult DeleteLineResourceControl()
+        public ActionResult DeleteLineResourceControl(string Id, string idDeleteElement)
         {
-            string _idDeleteElement = Request.QueryString["IdDeleteElement"];
-            string _id = Request.QueryString["Id"];
-            string _pathLoad = null;
-            string _pathSave = null;
-            if (String.IsNullOrEmpty(_id))
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
-            }
-            else
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
-            }
+            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
-            ResourceHelper.CreateResourceFile(_langName, _pathSave,null, _idDeleteElement);
-            ViewBag.result = $"{_idDeleteElement} {_id} ok";
+            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathSave);
+            ResourceHelper.CreateResourceFile(_langName, _pathSave, null, idDeleteElement);
+            ViewBag.result = $"{idDeleteElement} {Id} ok";
 
             return View("MainTableResource", _langName);
         }
 
         public ActionResult AddLineResource(List<LangName> list, string Id)
         {
-            string _pathLoad = null;
-            string _pathSave = null;
-            if (string.IsNullOrWhiteSpace(Id))
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
-            }
-            else
-            {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
-            }
+            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             if (list != null)
             {
-                List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+                List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathSave);
                 ResourceHelper.CreateResourceFile(_langName, _pathSave, list);
             }
             return View();
@@ -121,19 +97,11 @@ namespace ResourceEditor.Controllers
         }
         public string JsonResolver(string Id)
         {
-            string jSonlangname = default(string);
             string _pathLoad = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            foreach (var item in _langName)
-            {
-                jSonlangname += serializer.Serialize(item)+",";
-            }
-            jSonlangname = jSonlangname.TrimEnd(',');
-
-            return $"[{jSonlangname}]";
+            return ResourceHelper.ParceToJSONMethod(_langName);
         }
     }
 }

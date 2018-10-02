@@ -12,11 +12,10 @@ $("#addTableRow").click(
 );
 
 //нужно динамическое подключение ивентов
-$(".deleteLineButton").on("click", $(this), function () {
+$('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
     var that = $(this);
-
     $.ajax({
-        type: "GET",
+        type: 'GET',
         url: urlControlDeleteMethod,
         data: {
             Id: $('#countrySelect').val(),
@@ -36,28 +35,27 @@ $(".deleteLineButton").on("click", $(this), function () {
     });
 });
 
-$("#countrySelect").change(function () {
+//селектор в 2х местах, события для одного
+$('#countrySelect').change(function (e) {
     let that = $(this);
-    if (urlControlEditMethod) {
-        $.ajax({
-            type: "POST",
-            url: urlControlEditMethod,
-            data: {
-                Id: $('#countrySelect').val()
-            },
-            success: function (data, textStatus) {
-                console.log(textStatus);
-                $("#mainDataBodyTable").empty();
-                $(data).appendTo("#mainDataBodyTable");
+    $.ajax({
+        type: 'POST',
+        url: urlControlEditMethod,
+        data: {
+            Id: $('#countrySelect').val()
+        },
+        success: function (data, textStatus) {
+            console.log(textStatus);
+            $('#mainDataBodyTable').empty();
+            $(data).appendTo('#mainDataBodyTable');
 
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.error(xhr);
-                console.error(ajaxOptions);
-                console.error(thrownError);
-            }
-        });
-    }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
 });
 
 
@@ -72,10 +70,50 @@ window.onload = () => {
     );
 };
 */
-let products;
-$(".buttonJson").on("click", $(this), function () {
-    var that = $(this);
 
+let products = [{ "Id": "q1", "Value": "weqeqewq", "Comment": "qweq" }, { "Id": "q2", "Value": "q2", "Comment": "asdadsad" }, { "Id": "q3", "Value": "q3", "Comment": "asdsadadsad" }];
+
+function getTable(el) {
+    $("#grid").kendoGrid({
+        dataSource: {
+            data: el,
+            schema: {
+                model: {
+                    fields: {
+                        Id: { type: "string" },
+                        Value: { type: "string" },
+                        Comment: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 20,
+            serverPaging: true,
+            serverFiltering: true,
+            serverSorting: true
+        },
+        height: 550,
+        filterable: true,
+        sortable: true,
+        pageable: true,
+        columns: [
+            {
+                field: "Id",
+                title: "Id"
+
+            },
+            {
+                field: "Value",
+                title: "Value"
+            },
+            {
+                field: "Comment",
+                title: "Comment"
+            }
+        ]
+    });
+}
+
+$("#buttonJson").on("click", $(this), function () {
     $.ajax({
         type: "post",
         url: urlControlJsonMethod,
@@ -86,7 +124,7 @@ $(".buttonJson").on("click", $(this), function () {
             console.log(textStatus);
             products = data;
             $("#grid").empty();
-            KendoTable();
+            getTable(products);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);
@@ -98,49 +136,12 @@ $(".buttonJson").on("click", $(this), function () {
 
 
 
-function KendoTable() {
-
-
-}
+$(document).on('ready', function () {
+    
+});
 
 $(document).ready(
-    function () {
-        $("#grid").kendoGrid({
-            dataSource: {
-                data: products,
-                schema: {
-                    model: {
-                        fields: {
-                            Id: { type: "string" },
-                            Value: { type: "string" },
-                            Comment: { type: "string" }
-                        }
-                    }
-                },
-                pageSize: 20,
-                serverPaging: true,
-                serverFiltering: true,
-                serverSorting: true
-            },
-            height: 550,
-            filterable: true,
-            sortable: true,
-            pageable: true,
-            columns: [
-                {
-                    field: "Id",
-                    title: "Id"
-
-                },
-                {
-                    field: "Value",
-                    title: "Value"
-                },
-                {
-                    field: "Comment",
-                    title: "Comment"
-                }
-            ]
-        });
+    function myfunction() {
+        getTable(products);
     }
 );

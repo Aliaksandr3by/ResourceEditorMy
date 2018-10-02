@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace ResourceEditor.Models
 {
@@ -48,6 +49,13 @@ namespace ResourceEditor.Models
             return outLangNames;
         }
 
+        /// <summary>
+        /// Create, update & delete
+        /// </summary>
+        /// <param name="langName"></param>
+        /// <param name="pathSave"></param>
+        /// <param name="langNameAdd"></param>
+        /// <param name="idDeleteLineResource">delete of ID</param>
         public static void CreateResourceFile(List<LangName> langName,string pathSave,List<LangName> langNameAdd = null, string idDeleteLineResource = null)
         {
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
@@ -84,11 +92,20 @@ namespace ResourceEditor.Models
                 rw.Close();
             }
         }
-        public static void DeleteLineResource(LangName langName, string pathSave)
+        public static string ParceToJSONMethod(List<LangName> langNames)
         {
+            string jSonlangname = default(string);
 
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
 
-            throw new NotImplementedException();
+            foreach (var item in langNames)
+            {
+                jSonlangname += serializer.Serialize(item) + ",";
+            }
+
+            jSonlangname = jSonlangname.TrimEnd(',');
+
+            return $"[{jSonlangname}]";
         }
     }
 }

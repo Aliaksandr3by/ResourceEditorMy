@@ -1,25 +1,16 @@
-﻿
+﻿<script>
+        let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
+        let urlControlEditMethod = "@Url.Action("MainTableDataResource", "Home")";
+</script>
+
 @{
     ViewBag.Title = "MainTableResource";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>MainTableResource</h2>
-
-<p>@ViewBag.cult</p>
-
-<script type="text/javascript">
-    let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
-    let urlControlEditMethod = "@Url.Action("MainTableDataResource", "Home")";
-</script>
-
 @{
-    @*<form action="@Url.Action("MainTableResource", "Home")" method="post">
-            @Html.Partial("Language")
-            <p><input type="submit" value="Отправить"></p>
-        </form>*@
-
-    <form method="post" action="@Url.Action("MainTableResource", "Home")">
+<div class="mainTableResource">
+    <form  method="post" action="@Url.Action("MainTableResource", "Home")">
         @Html.Partial("SelectLanguage")
         <div id="rootMainTable">
             <table id="mainTable" class="table">
@@ -40,4 +31,5 @@
         </div>
         <button type="submit" name="generateButton" value="generate">Generate</button>
     </form>
+</div>
 }

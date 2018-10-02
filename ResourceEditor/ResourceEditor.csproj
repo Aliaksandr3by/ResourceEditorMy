@@ -751,10 +751,6 @@
     <Content Include="Scripts\kendo\2014.1.318\kendo.view.min.js" />
     <Content Include="Scripts\kendo\2014.1.318\kendo.web.min.js" />
     <Content Include="Scripts\kendo\2014.1.318\kendo.window.min.js" />
-    <Content Include="Scripts\products.js" />
-    <Content Include="App_LocalResources\Resource.resx">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -918,6 +914,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\Resource.pl.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Resource.resx">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

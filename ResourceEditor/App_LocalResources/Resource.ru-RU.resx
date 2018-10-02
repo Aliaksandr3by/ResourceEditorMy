@@ -119,19 +119,10 @@
   </resheader>
   <data name="q1" xml:space="preserve">
     <value>ываыва</value>
+    <comment>asda</comment>
   </data>
   <data name="q2" xml:space="preserve">
     <value>ваыаыа</value>
-  </data>
-  <data name="q3" xml:space="preserve">
-    <value>ывавыааы</value>
-  </data>
-  <data name="w1" xml:space="preserve">
-    <value>qweq</value>
-    <comment>qweqe</comment>
-  </data>
-  <data name="e1" xml:space="preserve">
-    <value>йцуйцуйуй</value>
-    <comment>йцуйуйцу</comment>
+    <comment>dasda</comment>
   </data>
 </root>
