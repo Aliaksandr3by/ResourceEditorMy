@@ -239,9 +239,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Home\Data.cshtml" />
-    <Content Include="Views\Home\addLineResource.cshtml" />
-    <Content Include="Views\Shared\Language.cshtml" />
+    <Content Include="Views\Home\MainTableResource.cshtml" />
+    <Content Include="Views\Home\AddLineResource.cshtml" />
+    <Content Include="Views\Shared\SelectLanguage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

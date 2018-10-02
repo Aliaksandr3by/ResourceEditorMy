@@ -19,9 +19,9 @@ namespace ResourceEditor
             );
 
             routes.MapRoute(
-                name: "DataRoute",
+                name: "MainTableResourceRoute",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Data", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "MainTableResource", id = UrlParameter.Optional }
             );
            
         }

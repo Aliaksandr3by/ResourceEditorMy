@@ -38,7 +38,7 @@ namespace ResourceEditor.Controllers
             ResourceHelper.CreateResourceFile(_langName, _pathSave,null, _idDeleteElement);
             ViewBag.result = $"{_idDeleteElement} {_id} ok";
 
-            return View("Data", _langName);
+            return View("MainTableResource", _langName);
         }
 
         public ActionResult AddLineResource(List<LangName> list, string Id)
@@ -67,7 +67,7 @@ namespace ResourceEditor.Controllers
             return View();
         }
 
-        public ActionResult Data(List<LangName> list)
+        public ActionResult MainTableResource(List<LangName> list)
         {
             string _id = Request.Form["Id"];
             string _pathLoad = null;

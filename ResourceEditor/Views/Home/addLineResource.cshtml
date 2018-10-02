@@ -3,7 +3,7 @@
 
 @{
     <form id="resourceTable" method="post" action="@Url.Action("AddLineResource", "Home")">
-        @Html.Partial("Language")
+        @Html.Partial("SelectLanguage")
         <table id="mainTable" class="table">
             <thead>
                 <tr>
@@ -24,19 +24,3 @@
     </form>
     <button type="button" id="addTableRow">+</button>
 }
-
-<script type="text/javascript">
-
-
-    //После загрузки
-    window.onload = () => {
-        document.getElementById('H2').addEventListener(
-            'click',
-            () => {
-
-            },
-            false
-        );
-    };
-</script>
-
