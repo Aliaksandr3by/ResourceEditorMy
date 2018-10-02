@@ -72,22 +72,41 @@ window.onload = () => {
     );
 };
 */
+let products;
+$(".buttonJson").on("click", $(this), function () {
+    var that = $(this);
 
-$(document).ready(function () {
+    $.ajax({
+        type: "post",
+        url: urlControlJsonMethod,
+        data: {
+            Id: $('#countrySelect').val(),
+        },
+        success: function (data, textStatus) {
+            console.log(textStatus);
+            products = data
+            $("#grid").empty();
+            KendoTable();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
+});
+
+function KendoTable() {
+
     $("#grid").kendoGrid({
         dataSource: {
-            type: "odata",
-            transport: {
-                read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
-            },
+            data: products,
             schema: {
                 model: {
                     fields: {
-                        OrderID: { type: "number" },
-                        Freight: { type: "number" },
-                        ShipName: { type: "string" },
-                        OrderDate: { type: "date" },
-                        ShipCity: { type: "string" }
+                        Id: { type: "string" },
+                        Value: { type: "string" },
+                        Comment: { type: "string" },
                     }
                 }
             },
@@ -100,22 +119,20 @@ $(document).ready(function () {
         filterable: true,
         sortable: true,
         pageable: true,
-        columns: [{
-            field: "OrderID",
-            filterable: false
-        },
-            "Freight",
-        {
-            field: "OrderDate",
-            title: "Order Date",
-            format: "{0:MM/dd/yyyy}"
-        }, {
-            field: "ShipName",
-            title: "Ship Name"
-        }, {
-            field: "ShipCity",
-            title: "Ship City"
-        }
+        columns: [
+            {
+                field: "Id",
+                title: "Order Date",
+
+            },
+            {
+                field: "Value",
+                title: "Order Date",
+            },
+            {
+                field: "Comment",
+                title: "Ship Name"
+            }
         ]
     });
-});
+};

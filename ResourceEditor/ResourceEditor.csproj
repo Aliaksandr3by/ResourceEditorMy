@@ -258,6 +258,7 @@
     <Content Include="Views\Home\AddLineResource.cshtml" />
     <Content Include="Views\Shared\SelectLanguage.cshtml" />
     <Content Include="Views\Shared\MainTableDataResource.cshtml" />
+    <Content Include="Views\Home\JsonResolver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

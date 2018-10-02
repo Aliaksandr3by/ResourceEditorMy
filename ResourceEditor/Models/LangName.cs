@@ -9,17 +9,18 @@ using System.Resources;
 using System.Collections;
 using System.Reflection;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace ResourceEditor.Models
 {
-    [Serializable]
+    [DataContract]
     public class LangName
     {
-        [XmlAttribute]
+        [DataMember]
         public string Id { get; set; }
-        [XmlAttribute]
+        [DataMember]
         public string Value { get; set; }
-        [XmlAttribute]
+        [DataMember]
         public string Comment { get; set; }
     }
 }
