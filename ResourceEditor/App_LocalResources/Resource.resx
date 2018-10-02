@@ -121,32 +121,4 @@
     <value>q1</value>
     <comment>q1</comment>
   </data>
-  <data name="q2" xml:space="preserve">
-    <value>e1</value>
-    <comment>komment2</comment>
-  </data>
-  <data name="q3" xml:space="preserve">
-    <value>e1</value>
-    <comment>komment3</comment>
-  </data>
-  <data name="erytety" xml:space="preserve">
-    <value>retyety</value>
-    <comment>erytery</comment>
-  </data>
-  <data name="qwewqe" xml:space="preserve">
-    <value>qweqwe</value>
-    <comment>qwewqeewqe</comment>
-  </data>
-  <data name="c1" xml:space="preserve">
-    <value>c1</value>
-    <comment>c1</comment>
-  </data>
-  <data name="vqwevqwevqwve" xml:space="preserve">
-    <value>qwvqwvqwve</value>
-    <comment>qwveqveqwev</comment>
-  </data>
-  <data name="гнег" xml:space="preserve">
-    <value>енгегег</value>
-    <comment>енгегег</comment>
-  </data>
 </root>

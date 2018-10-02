@@ -17,6 +17,30 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult DeleteLineResourceControl()
+        {
+            string _idDeleteElement = Request.QueryString["IdDeleteElement"];
+            string _id = Request.QueryString["Id"];
+            string _pathLoad = null;
+            string _pathSave = null;
+            if (String.IsNullOrEmpty(_id))
+            {
+                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
+                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
+            }
+            else
+            {
+                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
+                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
+            }
+
+            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+            ResourceHelper.CreateResourceFile(_langName, _pathSave,null, _idDeleteElement);
+            ViewBag.result = $"{_idDeleteElement} {_id} ok";
+
+            return View("Data", _langName);
+        }
+
         public ActionResult addLineResource(List<LangName> list)
         {
             string _id = Request.QueryString["Id"];

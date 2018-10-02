@@ -34,24 +34,19 @@ namespace ResourceEditor.Models
             return outLangNames;
         }
 
-        public static void CreateResourceFile(List<LangName> langName,string pathSave,List<LangName> langNameAdd = null)
+        public static void CreateResourceFile(List<LangName> langName,string pathSave,List<LangName> langNameAdd = null, string idDeleteLineResource = null)
         {
-            try
-            {
-                File.Copy(pathSave, pathSave + ".back", true);
-            }
-            catch (Exception)
-            {
-
-            }
-
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
             {
                 for (int ctr = 0; ctr < langName.Count; ctr++)
                 {
-                    ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
-                    node.Comment = langName[ctr].Comment;
-                    rw.AddResource(node);
+                    //filter for delete line
+                    if (idDeleteLineResource != langName[ctr].Id)
+                    {
+                        ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
+                        node.Comment = langName[ctr].Comment;
+                        rw.AddResource(node);
+                    }
                 }
 
                 if (langNameAdd != null)
@@ -75,8 +70,9 @@ namespace ResourceEditor.Models
                 rw.Close();
             }
         }
-        public static void AddResourceFile(LangName langName, string pathSave)
+        public static void DeleteLineResource(LangName langName, string pathSave)
         {
+
 
             throw new NotImplementedException();
         }

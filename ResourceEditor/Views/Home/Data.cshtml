@@ -8,6 +8,12 @@
 <h2>Data</h2>
 
 <p>@ViewBag.cult</p>
+
+<script type="text/javascript">
+    let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
+
+</script>
+
 <p>
     @{
         string a = @ViewBag.result;
@@ -42,7 +48,7 @@
                         <td><input type="text" name="list[@i].Value" value="@item.Value" /></td>
                         <td><input type="text" name="list[@i].Comment" value="@item.Comment" /></td>
                         <td>
-                            <button type="submit" name="deleteButton_@item.Id" value="delete">Delete</button>
+                            <button type="button" id="deleteButtonLineResource" name="deleteButton_@item.Id" value="@item.Id"  onclick="buttonDeleteLineResoure(this)">Delete</button>
                         </td>
                     </tr>
                 }
