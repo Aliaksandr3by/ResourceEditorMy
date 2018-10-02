@@ -41,20 +41,19 @@ namespace ResourceEditor.Controllers
             return View("Data", _langName);
         }
 
-        public ActionResult addLineResource(List<LangName> list)
+        public ActionResult AddLineResource(List<LangName> list, string Id)
         {
-            string _id = Request.QueryString["Id"];
             string _pathLoad = null;
             string _pathSave = null;
-            if (String.IsNullOrEmpty(_id))
+            if (string.IsNullOrWhiteSpace(Id))
             {
                 _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.resx");
                 _pathSave = Server.MapPath($"~/App_LocalResources/Resource.resx");
             }
             else
             {
-                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
-                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{_id}.resx");
+                _pathLoad = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
+                _pathSave = Server.MapPath($"~/App_LocalResources/Resource.{Id}.resx");
             }
 
             List<LangName> _langList;

@@ -11,25 +11,16 @@
 
 <script type="text/javascript">
     let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
-
 </script>
 
-<p>
-    @{
-        string a = @ViewBag.result;
-        a = a == null ? "qwe" : @ViewBag.result;
-    }
-</p>
-
 @{
-
 <form action="@Url.Action("Data", "Home")" method="post">
     @Html.Partial("Language")
     <p><input type="submit" value="Отправить"></p>
 </form>
     
     <form id="data" method="post" action="@Url.Action("Data", "Home")">
-        <input type="text" name="Id" value="@ViewBag.cult" readonly />
+        <input type="text" id="inputCountrySelect" name="Id" value="@ViewBag.cult" readonly />
         <table id="mainTable" class="table">
             <thead>
                 <tr>

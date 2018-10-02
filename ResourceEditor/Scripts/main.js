@@ -5,14 +5,15 @@ $(document).ready(function () {
 
 });
 
+var count = 0;
 $("#addTableRow").click(
     () => {
         count++;
         $('#mainTable').children('tbody').append(`<tr></tr>`);
         let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
-        tablAddRow2.last('tr').append(`<th><input scope="row" type="text" name="list[${count}].Value" /></th>`);
+        tablAddRow2.last('tr').append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
         tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Value" /></td>`);
-        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Value" /></td>`);
+        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
     }
 );
 
@@ -40,7 +41,7 @@ function buttonDeleteLineResoure(el) {
         type: "GET",
         url: urlControlDeleteMethod,
         data: {
-            Id: $('#countrySelect').val(),
+            Id: $('#inputCountrySelect').val(),
             IdDeleteElement: $(el).val()
 
         },
@@ -50,4 +51,6 @@ function buttonDeleteLineResoure(el) {
             console.error(thrownError);
         }
     });
+    location.reload();
+
 }

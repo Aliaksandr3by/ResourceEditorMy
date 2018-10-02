@@ -15,7 +15,7 @@ namespace ResourceEditor
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "addLineResource", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "AddLineResource", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

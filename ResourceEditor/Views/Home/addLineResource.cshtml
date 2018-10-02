@@ -1,15 +1,8 @@
-﻿@{ 
-    int count = 1;
-}
-
-<script type="text/javascript">
-      let count = @count;
-</script>
-
-<h2 id="H2">addLineResource</h2>
+﻿
+<h2 id="H2">AddLineResource</h2>
 
 @{
-    <form id="resourceTable" method="get" action="@Url.Action("addLineResource", "Home")">
+    <form id="resourceTable" method="post" action="@Url.Action("AddLineResource", "Home")">
         @Html.Partial("Language")
         <table id="mainTable" class="table">
             <thead>
@@ -20,15 +13,11 @@
                 </tr>
             </thead>
             <tbody>
-                @for (var i = 0; i < count; i++)
-                {
-                    var item = new ResourceEditor.Models.LangName();
-                    <tr>
-                        <th scope="row"><input name="list[@i].Id"></th>
-                        <td><input type="text" name="list[@i].Value" /></td>
-                        <td><input type="text" name="list[@i].Comment" /></td>
-                    </tr>
-                }
+                <tr>
+                    <th scope="row"><input name="list[0].Id"></th>
+                    <td><input type="text" name="list[0].Value" /></td>
+                    <td><input type="text" name="list[0].Comment" /></td>
+                </tr>
             </tbody>
         </table>
         <button type="submit" name="addButton" value="addNode">Add</button>

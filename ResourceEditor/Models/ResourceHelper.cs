@@ -26,7 +26,7 @@ namespace ResourceEditor.Models
                         new LangName
                         {
                             Id = node.Name,
-                            Value = node.GetValue(assemblies).ToString(),
+                            Value = node.GetValue(assemblies).ToString() ?? null,
                             Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
                         });
                 }
