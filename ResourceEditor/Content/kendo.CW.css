@@ -1,0 +1,197 @@
+/*.k-grid-header .k-header .k-link {padding:0.2em 0.6em 0.2em 0.4em;}
+.k-grid-filter, .k-header-column-menu {padding:0.2em 0.2em 0.4em;}*/
+.k-state-disabled {opacity:0.5;}
+
+.k-grid td, .k-grid th.k-header {padding:4px 7px;}
+.k-grid td {line-height:18px;}
+.k-grid-content tr .k-button {display:none;}
+.k-grid-content tr:hover .k-button {display:block;}
+.k-grid-content tr:hover.k-state-selected td {background:0;}
+.k-marquee {z-index:2;}
+.k-grid-content tr.k-no-data td {border-bottom:0;}
+
+.k-grid-header .k-dropdown.k-header .k-dropdown-wrap {border:0;}
+
+/* popup for grid column setup */
+.k-column-menu.k-popup, .k-column-menu.k-popup .k-popup {border-radius:3px;}
+.k-column-menu.k-popup .k-widget.k-menu {background:none;}
+.k-column-menu.k-popup .k-i-columns {margin-right:5px;}
+.k-column-menu.k-popup .k-menu .k-item.k-first > .k-link {padding:3px 16px 2px 6px;}
+.k-column-menu.k-popup .k-menu .k-item .k-link {padding:3px 7px;}
+.k-column-menu.k-popup .k-menu .k-item .k-link label {line-height:18px;}
+.k-column-menu.k-popup .k-menu .k-item .k-link label input[type="checkbox"] {margin:0 5px 0 0; position:relative; top:3px;}
+
+/* selectors in grid header */
+.k-grid-header .k-widget.k-dropdown, .k-grid-content .k-widget.k-dropdown {padding:0; width:auto; border:0; cursor:pointer;}
+.k-grid-header .k-dropdown-wrap, .k-grid-content .k-dropdown-wrap {padding:1px 18px 1px 0;}
+.k-grid-header .k-dropdown-wrap .k-input {font-size:10px; font-weight:bold; padding:0;}    
+.k-grid-header .k-dropdown-wrap .k-select, .k-grid-content .k-dropdown-wrap .k-select {width:10px; cursor:pointer;}
+.k-grid-header .k-dropdown-wrap .k-select .k-icon, .k-grid-content .k-dropdown-wrap .k-select .k-icon {display:none;}
+.k-grid-header .k-dropdown-wrap .k-select:after, .k-grid-content .k-dropdown-wrap .k-select:after {content:""; width:0; height:0; border-style:solid; border-width:4px 4px 0; position:absolute; top:6px; left:4px;}
+.k-grid-content .k-dropdown-wrap .k-input {font-size:11px; font-weight:bold; padding:0;}    
+/* selectors inside grid (common for all color schemes) */
+.k-grid-content .k-dropdown-wrap {background:#F3F3F3 !important; border:1px solid #cdcdcd; box-shadow: 1px 2px 0 rgba(255, 255, 255, 0.7) inset, 1px 1px 2px -1px rgba(0, 0, 0, 0.1);}
+.k-grid-content .k-dropdown-wrap.k-state-hover, .k-grid-content .k-dropdown-wrap.k-state-focused {background:#F8F8F8 !important;}
+.k-grid-content .k-dropdown-wrap.k-state-focused {border:1px solid #cdcdcd;}
+.k-grid-content .k-dropdown-wrap .k-input {color:#4d4d4d!important; text-shadow:1px 1px 0px rgba(255,255,255, 0.7) !important;}    
+.k-grid-content .k-dropdown-wrap .k-select:after {border-color:#757575 transparent transparent !important;}
+
+.k-pager-wrap {min-height:22px; line-height:20px; font-size:11px; padding:2px 0;}
+.k-pager-wrap .k-link {font-size:11px; height:19px; line-height:19px; padding:0 2px; margin:2px 2px 0 2px; border:0; cursor:pointer; border-radius:1px 7px;}
+.k-pager-wrap .k-state-disabled {opacity:0.3;}
+.k-pager-wrap .k-link .k-icon {margin-top:2px;}
+.k-pager-numbers {margin:2px 10px 0 10px;}
+.k-pager-numbers .k-link, .k-pager-numbers .k-link:hover {height:19px; line-height:19px; background:0; padding:0 5px; margin:0 1px; border:0; border-radius:1px 7px;}
+.k-pager-numbers .k-state-selected {height:19px; line-height:19px; font-size:11px; line-height:19px; font-weight:bold; padding:0 5px; margin:0 1px; border-radius:1px 7px; border:0;}
+.k-pager-wrap .k-widget.k-dropdown {margin:0 10px 0 0;}
+.k-pager-sizes {position:relative;}
+.k-pager-sizes .k-widget.k-dropdown {width:50px; cursor:pointer;}
+.k-pager-sizes .k-dropdown-wrap {padding:0 20px 0 0; box-shadow:none; -webkit-box-shadow:none; border:none;}
+.k-pager-sizes .k-dropdown-wrap .k-input {font-weight:bold; line-height:16px; padding:1px 0; border-radius:5px 20px 4px 5px; text-shadow:none !important;}
+.k-pager-sizes .k-dropdown-wrap .k-select {width:auto; padding:1px 2px 3px 3px;}
+.k-pager-sizes .k-dropdown-wrap .k-select:after {display:none;}
+.k-pager-sizes .k-dropdown-wrap .k-select .k-icon {display:inline-block;}
+.k-grid-content .k-pager-sizes .k-dropdown-wrap.k-state-focused {border:none;}
+.k-grid-content .k-pager-sizes .k-dropdown-wrap .k-select:after {display:none;}
+
+.k-pager-wrap .k-reset {float:left;}
+
+.k-detail-cell div.k-grid {margin:9px 5px 9px 0;}
+
+.k-animation-container {}
+.k-popup.k-list-container, .k-popup.k-calendar-container {border-radius:5px;}
+.k-popup.k-list-container {top:1px;}
+.k-popup .k-list {background:none; border:0; box-shadow:none; -webkit-box-shadow:none;}
+.k-popup .k-list .k-item {line-height:normal; cursor:pointer; margin:1px 0;}
+.k-popup .k-list .k-item {padding:2px 5px; line-height:14px; min-height:inherit;}
+.k-popup .k-list .k-item.k-state-hover, .k-popup .k-list .k-item.k-state-selected {border:0; box-shadow:none; -webkit-box-shadow:none;}
+
+.k-button {border:0; min-width:inherit; line-height:inherit; font-size:10px; line-height:11px; font-weight:bold; text-decoration:none; text-transform:uppercase; padding:3px 7px;}
+.k-button span {display:none;}
+.k-button:hover, .k-button.k-state-hover {text-decoration:none;}
+
+.k-tabstrip {background:none; border:0;}
+.k-widget.k-tabstrip {box-shadow:none; -webkit-box-shadow:none;}
+.k-tabstrip .k-tabstrip-items {padding:0;}
+.k-tabstrip-items .k-link {padding:5px 14px; font-size:12px;}
+.k-tabstrip-items .k-item {margin:0 5px 0 0;}
+.k-tabstrip-items .k-item.k-tab-on-top {padding:0;}
+.k-tabstrip-items .k-state-default {border:0;}
+.k-tabstrip-items .k-state-default .k-link {text-decoration:none;}
+.k-tabstrip-items .k-state-active {border:0; margin:-2px 5px 0 0; padding:2px 0 0 0;}
+.k-tabstrip-items .k-state-active .k-link {font-weight:bold;}
+.k-tabstrip-items .k-state-active.k-tab-on-top {padding:2px 0 0 0;}
+.k-tabstrip-items .k-item .k-loading.k-complete {opacity:0;}
+
+.k-tabstrip .k-content {border-width:0; margin:0; padding:0;}
+.k-listview {border:0}
+
+/*--- autocomplete ---*/
+.k-widget.k-autocomplete {background:none !important; padding:0; border:0;}
+.k-widget.k-autocomplete .k-input {box-shadow:none; -webkit-box-shadow:none;}
+
+/*---Windows---*/
+div.k-window {background:none; border-radius:10px; transform:none; min-height:50px !important;}
+.k-window .k-window-titlebar {min-height:14px;}
+.k-window .k-window-titlebar.k-header .k-header {background:0;}
+.k-window .k-window-titlebar .k-window-title {left:10px; right:10px;}
+.k-window .k-window-titlebar {font-size:13px; font-weight:bold; border-radius:7px 7px 0 0;}
+.k-window .k-window-content {padding:10px; border-radius:0 0 7px 7px; min-height:50px !important;}
+.k-window .k-window-titlebar .k-window-action {border-radius:10px; padding:1px;}
+.k-window .k-window-titlebar .k-window-action.k-state-hover {border:none;}
+.k-window-content .inp.input-validation-error {background:#FFC0CB;}
+
+/*---Calendar---*/
+.k-datepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap {background: none; border:0;}
+.k-datepicker .k-picker-wrap .k-input, .k-datetimepicker .k-picker-wrap .k-input {border-radius:4px; box-shadow:none !important; -webkit-box-shadow:none !important;}
+.k-calendar-container .k-link, .k-calendar-container .k-state-hover .k-link {border:0;}
+.k-popup.k-calendar-container, .k-calendar-container .k-calendar {background:none; padding:0; border-radius:5px;}
+.k-calendar-container .k-state-hover .k-link, .k-calendar-container .k-other-month.k-state-hover .k-link {background:none;}
+.k-calendar-container .k-state-focused, .k-calendar-container .k-state-focused.k-state-selected, .k-today.k-state-focused.k-state-hover {box-shadow:none; -webkit-box-shadow:none;}
+
+.k-numerictextbox .k-input {height:13px; line-height:13px;}
+.k-numerictextbox .k-select {margin:-2px 0 0 0;}
+
+.k-toolbar.k-grid-toolbar {margin:0;}
+
+.k-slider {margin:0 0 15px 0;}
+.k-slider .k-label {font-size: 11px;}
+.k-slider-horizontal {box-shadow:none; -webkit-box-shadow:none;}
+.k-slider-horizontal .k-slider-track, .k-slider-horizontal .k-slider-selection {height:6px; margin:-3px 0 0 0;}
+.k-slider-horizontal .k-draghandle {width:12px; height:12px; border:0; top:-3px; box-shadow:none;}
+.k-slider-horizontal .k-draghandle.k-state-focused.k-state-selected {background-image:none;}
+
+.k-slider .k-button {width:18px; height:18px; padding:0; top:4px;}
+.k-slider .k-button .k-icon {margin:1px 0 0 0; display:block;}
+.k-i-arrow-e {background-position: 2px -16px;}
+
+/* Upload files*/
+.k-upload {background:none;}
+.k-upload .k-dropzone {padding:0;}
+.k-upload-files {margin:10px 0 0 0; padding:4px; border-radius:4px;}
+.k-upload .k-upload-button {padding:4px 9px;}
+.k-upload .k-upload-button.k-state-focused {background-image:none;}
+.k-button.k-upload-empty, .k-upload .k-upload-button.k-state-focused {box-shadow:none; -webkit-box-shadow:none;}
+.k-upload .k-upload-button span {display:block;}
+.k-upload-files .k-button {font-size:10px; top:auto; margin:0; padding:2px 7px; margin:0 0 0 10px;}
+.k-upload-files .k-upload-action {padding:0; box-shadow:none; -webkit-box-shadow:none;}
+.k-upload-files .k-upload-action span {display:block;} 
+.k-upload-files .k-file:first-child {border:0;}
+.k-upload-files .k-file .k-filename {padding-bottom:0;}
+/*---fix for new kendo---*/
+.k-upload-files .k-progress {background:rgba(255, 255, 255, 0.1);} 
+.k-file {margin:0 !important;}
+.k-file .k-filename {margin:0 0 0 10px;}
+
+.k-upload-file-list li {border-top:1px solid rgba(255, 255, 255, 0.2); padding:4px 0;}
+.k-upload-file-list li:first-child {border:0;}
+.k-upload-file-list .upload-file {word-wrap:break-word;}
+.k-upload-file-list .del {position:relative; top:2px; margin:0 0 0 8px;}
+.k-upload .k-dropzone em, .k-upload .k-upload-status-total {display:none;} /*---fix for new kendo (add k-upload-status-total)---*/
+
+/* Panelbar (Accordion)*/
+.k-widget.k-panelbar .k-content {border-bottom:0;}
+.k-widget.k-panelbar .k-item {margin:1px 0;}
+.k-widget.k-panelbar li.k-item > .k-link {text-transform:uppercase; font-size:11px; font-weight:bold; border:0; padding:0 10px;}
+
+/*--- Custom Loading Mask ---*/
+.k-loading-mask.custom-loading-mask {width:auto !important; right:0; z-index:1000000;}
+
+/* Custom WISWIG*/
+.custom-wisiwig div.k-window-content {padding: 0;}
+.custom-wisiwig .k-editor-toolbar > li {margin: 0 20px 0 0;}
+.custom-wisiwig table.k-editor {background:none; width:100% !important; border:0;}
+.custom-wisiwig .k-tool {border: 0 !important;}
+.custom-wisiwig .k-tool.k-state-selected {box-shadow:none; -webkit-box-shadow:none;}
+.custom-wisiwig .k-editor-toolbar .k-dropdown-wrap {border:none !important;}
+.custom-wisiwig .k-editor-toolbar .k-dropdown-wrap .k-input {text-indent:7px;}
+.custom-wisiwig .k-editable-area .k-content {box-sizing:border-box; padding:10px;}
+.k-widget.k-window.notes-resize-rf {min-width:600px !important; min-height:510px !important; max-width:970px; max-height:510px !important;}
+.k-widget.k-window.notes-resize-rf .modal-window.k-window-content {min-height:511px !important;}
+
+/* Custom WISWIG OLD*/
+.k-widget.k-window.notes-resize {min-width:600px; min-height:510px; max-width:970px; max-height:510px;}
+.k-widget.k-window.notes-resize .k-window-content {min-height:510px !important;}
+
+.custom-wisiwig-old div.k-window-content {padding:0;}
+.custom-wisiwig-old table.k-editor {width:100% !important; border:0;}
+.custom-wisiwig-old .k-editor-toolbar .k-dropdown-wrap {border:none !important;}
+.custom-wisiwig-old .k-dropdown-wrap.k-state-border-down {padding-bottom:2px;}
+.custom-wisiwig-old .k-editable-area .k-content {box-sizing:border-box; padding:10px;}   
+.custom-wisiwig-old .k-editor .k-editor-toolbar-wrap {padding:2px 7px;}
+
+/* !!! -------------------- NEW KENDO -------------------- !!! */
+.form-list-grid .k-pager-wrap > .k-link, .form-list-grid .k-pager-numbers .k-link, .form-list-grid .k-pager-numbers .k-state-selected {min-width:auto !important;}
+.form-list-grid .k-pager-sizes .k-dropdown-wrap .k-input {height:16px !important;}
+
+.form-list-grid .k-grid-header th > .k-link > .k-icon {vertical-align:middle; margin:0 0 0 2px;}
+
+/* just form builder grid in settings */
+.form-list-grid .k-pager-wrap .k-link .k-icon {margin-top:0;}  
+.form-list-grid .k-pager-wrap .k-widget.k-dropdown {margin: -1px 10px 0 0;}
+.form-list-grid .k-pager-sizes .k-dropdown-wrap .k-select {margin:-2px 0 0; padding:0 2px 3px 3px;}
+.form-list-grid .k-dropdown-wrap.k-state-focused {box-shadow:none; -webkit-box-shadow:none; border:0;}
+
+
+ 
+    

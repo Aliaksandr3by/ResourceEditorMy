@@ -169,6 +169,8 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\kendo.common.min.css" />
+    <Content Include="Content\kendo.CW.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -209,6 +211,15 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Kendo\checkboxWidget.js" />
+    <Content Include="Scripts\Kendo\kendo.all.min.js" />
+    <Content Include="Scripts\Kendo\kendo.aspnetmvc.min.js" />
+    <Content Include="Scripts\Kendo\kendo.theme.min.css" />
+    <Content Include="Scripts\Kendo\kendoGridAPI.js" />
+    <Content Include="Scripts\Kendo\kendoGridExtension.js" />
+    <Content Include="Scripts\Kendo\kendoModalWindowAPI.js" />
+    <Content Include="Scripts\Kendo\kendoModelBinders.js" />
+    <Content Include="Scripts\Kendo\settings_kendo.all.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />
@@ -242,6 +253,7 @@
     <Content Include="Views\Home\MainTableResource.cshtml" />
     <Content Include="Views\Home\AddLineResource.cshtml" />
     <Content Include="Views\Shared\SelectLanguage.cshtml" />
+    <Content Include="Views\Shared\MainTableDataResource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

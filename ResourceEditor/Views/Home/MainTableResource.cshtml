@@ -1,5 +1,4 @@
-﻿@model List<ResourceEditor.Models.LangName>
-
+﻿
 @{
     ViewBag.Title = "MainTableResource";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,7 +10,7 @@
 
 <script type="text/javascript">
     let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
-    let urlControlEditMethod = "@Url.Action("MainTableResource", "Home")";
+    let urlControlEditMethod = "@Url.Action("MainTableDataResource", "Home")";
 </script>
 
 @{
@@ -32,27 +31,17 @@
                     <th scope="col">Action</th>
                 </tr>
             </thead>
-            <tbody>
-                @{
-                    if (@Model != null)
-                    {
-                        for (var i = 0; i < Model.Count; i++)
-                        {
-                            var item = Model[i];
-                            <tr>
-                                <th scope="row"><input name="list[@i].Id" value="@item.Id" readonly></th>
-                                <td><input type="text" name="list[@i].Value" value="@item.Value" /></td>
-                                <td><input type="text" name="list[@i].Comment" value="@item.Comment" /></td>
-                                <td>
-                                    <button type="button" name="deleteButton_@item.Id" value="@item.Id" class="deleteLineButton">Delete</button>
-                                </td>
-                            </tr>
-                        }
-                    }
-                }
+            <tbody id="mainDataBodyTable">
+
+                @Html.Partial("MainTableDataResource")
+
             </tbody>
         </table>
     </div>
     <button type="submit" name="generateButton" value="generate">Generate</button>
 </form>
 }
+
+<div id="root">
+
+</div>

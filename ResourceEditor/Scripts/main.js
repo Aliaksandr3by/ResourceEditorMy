@@ -1,8 +1,39 @@
 ﻿
 $(document).ready(function () {
-
-
-
+    $("#grid").kendoGrid({
+        dataSource: {
+            type: "odata",
+            transport: {
+                read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+            },
+            pageSize: 20
+        },
+        height: 550,
+        groupable: true,
+        sortable: true,
+        pageable: {
+            refresh: true,
+            pageSizes: true,
+            buttonCount: 5
+        },
+        columns: [{
+            template: "<div class='customer-photo'" +
+                "style='background-image: url(../content/web/Customers/#:data.CustomerID#.jpg);'></div>" +
+                "<div class='customer-name'>#: ContactName #</div>",
+            field: "ContactName",
+            title: "Contact Name",
+            width: 240
+        }, {
+            field: "ContactTitle",
+            title: "Contact Title"
+        }, {
+            field: "CompanyName",
+            title: "Company Name"
+        }, {
+            field: "Country",
+            width: 150
+        }]
+    });
 });
 
 var count = 1;
@@ -17,8 +48,8 @@ $("#addTableRow").click(
     }
 );
 
-$(".deleteLineButton").on("click", function () {
-    let that = $(this);
+$(".deleteLineButton").on("click", $(this), function () {
+    var that = $(this);
 
     $.ajax({
         type: "GET",
@@ -28,12 +59,12 @@ $(".deleteLineButton").on("click", function () {
             IdDeleteElement: that.val()
 
         },
-        success: (data, textStatus) => {
+        success: function(data, textStatus) {
             console.log(textStatus);
             location.reload();
 
         },
-        error: (xhr, ajaxOptions, thrownError) => {
+        error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);
             console.error(ajaxOptions);
             console.error(thrownError);
@@ -41,24 +72,28 @@ $(".deleteLineButton").on("click", function () {
     });
 });
 
-$(".countrySelect").change( function () {
+$("#countrySelect").change( function () {
     let that = $(this);
-    $.ajax({
-        type: "GET",
-        url: urlControlEditMethod,
-        data: {
-            Id: $('#countrySelect').val(),
-        },
-        success: (data, textStatus) => {
-            console.log(textStatus);
-            location.reload();
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
-        }
-    });
+    if (urlControlEditMethod) {
+        $.ajax({
+            type: "POST",
+            url: urlControlEditMethod,
+            data: {
+                Id: $('#countrySelect').val(),
+            },
+            success: function (data, textStatus) {
+                console.log(textStatus);
+                $("#mainDataBodyTable").empty();
+                $(data).appendTo("#mainDataBodyTable");
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.error(xhr);
+                console.error(ajaxOptions);
+                console.error(thrownError);
+            }
+        });
+    }
 });
 
 

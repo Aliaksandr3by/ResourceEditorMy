@@ -12,6 +12,14 @@ namespace ResourceEditor
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            
+
+            routes.MapRoute(
+                name: "Shared",
+                url: "Shared/{action}/{id}",
+                defaults: new { controller = "Shared", action = "MainTableResource", id = UrlParameter.Optional }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
