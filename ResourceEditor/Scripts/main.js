@@ -72,15 +72,15 @@ window.onload = () => {
 */
 
 $(function () {
-    var dataSource = createDataSource();
-    createTable(dataSource);
+    //var dataSource = createDataSource();
+    //createTable(dataSource);
 });
 
 $('#countrySelectKendo').change(function (e) {
     var value = $(this).val();
-    //var dataSource = $("#grid").kendoGrid("dataSource");
+    //var dataSource = $("#grid").data("kendoGrid").dataSource;
     createTable(createDataSource());
-    dataSource.filter({ field: "language", operator: "eq", value: value });
+    //dataSource.filter({ field: "language", operator: "eq", value: value });
 });
 
 function createTable(data) {
@@ -107,22 +107,33 @@ function createDataSource() {
             read: {
                 type: 'POST',
                 url: crudServiceBaseUrlRead,
+                //dataType: "jsonp",
+                data: {
+                    id: $('#countrySelectKendo').val()
+                }
+            },
+            update: {
+                type: 'POST',
+                url: crudServiceBaseUrlupdate,
+                //dataType: "jsonp",
                 data: {
                     id: $('#countrySelectKendo').val()
                 }
             }
         },
+        serverFiltering: true,
         pageSize: 20,
         scrollable: true,
+        batch: true,
         sortable: true,
         filterable: true,
         schema: {
             model: {
-                id: "ProductID",
+                id: "Id",
                 fields: {
-                    Id: { type: "string", editable: true, nullable: false },
-                    Value: { type: "string" },
-                    Comment: { type: "string" }
+                    Id: { type: "string", nullable: false },
+                    Value: { type: "string", editable: true, validation: { required: true } },
+                    Comment: { type: "string", editable: true }
                 }
             }
         }

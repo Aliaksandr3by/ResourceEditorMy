@@ -15,6 +15,7 @@ namespace ResourceEditor.Controllers
             return View();
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Read([DataSourceRequest] DataSourceRequest request, string id)
         {
             //string id = request.Filters ?? request.Filters.Where((e)=> e.Equals("language")).ToString();
@@ -22,20 +23,17 @@ namespace ResourceEditor.Controllers
             string _pathLoad = ResourceHelper.PathResourceResolver(id, "App_LocalResources");
 
             List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
-            var temp1 = Json(_langName);
-            string tempJsonDataTableResource = ResourceHelper.ParceToJSONMethod(_langName);
-            var tmp = Json(tempJsonDataTableResource);
-            return temp1;
+            var temp = Json(_langName);
+            return temp;
         }
 
-        public string Edit(string Id, FormCollection collection)
+        public ActionResult Edit([DataSourceRequest] DataSourceRequest request, string id)
         {
-            string _pathLoad = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
+            string _pathLoad = ResourceHelper.PathResourceResolver(id, "App_LocalResources");
 
             List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
-            string tempJsonDataTableResource = ResourceHelper.ParceToJSONMethod(_langName);
-
-            return tempJsonDataTableResource;
+            var temp = Json(_langName);
+            return temp;
         }
 
     }
