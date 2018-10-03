@@ -104,21 +104,38 @@ function createTable(data) {
 function createDataSource() {
     let dataSource = new kendo.data.DataSource({
         transport: {
-            read: {
-                type: 'POST',
-                url: crudServiceBaseUrlRead,
-                //dataType: "jsonp",
-                data: {
-                    id: $('#countrySelectKendo').val()
-                }
+            read: function (options) {
+                $.ajax({
+                    url: crudServiceBaseUrlRead,
+                    type: 'POST',
+                    //dataType: "jsonp",
+                    data: {
+                        id: $('#countrySelectKendo').val()
+                    },
+                    success: function (result) {
+                        options.success(result);
+                    },
+                    error: function (result) {
+                        options.error(result);
+                    }
+                });
             },
-            update: {
-                type: 'POST',
-                url: crudServiceBaseUrlupdate,
-                //dataType: "jsonp",
-                data: {
-                    id: $('#countrySelectKendo').val()
-                }
+            //read: {
+            //    type: 'POST',
+            //    url: crudServiceBaseUrlRead,
+            //    //dataType: "jsonp",
+            //    data: {
+            //        id: $('#countrySelectKendo').val()
+            //    }
+            //},
+            submit: function (e) {
+                var data = e.data;
+                console.log(data);
+
+                e.success(data.updated, "update");
+                e.success(data.created, "create");
+                e.success(data.destroyed, "destroy");
+                e.error(null, "customerror", "custom error");
             }
         },
         serverFiltering: true,
@@ -131,7 +148,7 @@ function createDataSource() {
             model: {
                 id: "Id",
                 fields: {
-                    Id: { type: "string", nullable: false },
+                    Id: { type: "string", editable: false, nullable: false },
                     Value: { type: "string", editable: true, validation: { required: true } },
                     Comment: { type: "string", editable: true }
                 }
