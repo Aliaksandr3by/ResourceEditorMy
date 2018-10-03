@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 
@@ -97,6 +98,11 @@ namespace ResourceEditor.Models
             string jSonlangname = default(string);
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            var a = langNames.Select(x => serializer.Serialize(x));
+            stringBuilder.Append(string.Join(",",a ));
+
 
             foreach (var item in langNames)
             {

@@ -67,6 +67,7 @@ namespace ResourceEditor.Controllers
                 ViewBag.result = "good";
             }
 
+            ResourceHelper.ParceToJSONMethod(_langName);
             return View(_langName);
         }
         public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
