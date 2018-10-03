@@ -58,7 +58,7 @@ $('#countrySelect').change(function (e) {
     });
 });
 
-
+//+++++++++++++++++++++++
 /*
 window.onload = () => {
     document.getElementById('H2').addEventListener(
@@ -75,7 +75,7 @@ $('#countrySelectKendo').change(function (e) {
     let that = $(this);
     $.ajax({
         type: 'POST',
-        url: urlJsonResolverMethod,
+        url: crudServiceBaseUrlRead,
         data: {
             Id: $('#countrySelectKendo').val()
         },
@@ -97,15 +97,13 @@ function createTable(el) {
     $("#grid").kendoGrid({
         dataSource: {
             data: el,
-            autoSync: true,
+            autoSync: true,//? oe editsave
             schema: {
                 model: {
                     fields: {
-                        id: "Id",
-                        Id: { type: "string", editable: false, nullable: false  },
+                        Id: { type: "string", editable: true, nullable: false },
                         Value: { type: "string" },
                         Comment: { type: "string" }
-
                     }
                 }
             },
@@ -118,22 +116,62 @@ function createTable(el) {
         filterable: true,
         sortable: true,
         pageable: true,
-        toolbar: ["create"],
+        toolbar: ["create", "save", "cancel"],
         columns: [
-            {
-                field: "Id",
-                title: "Id"
-
-            },
-            {
-                field: "Value",
-                title: "Value"
-            },
-            {
-                field: "Comment",
-                title: "Comment"
-            },
+            { field: "Id", title: "Id" },
+            { field: "Value", title: "Value" },
+            { field: "Comment", title: "Comment" },
             { command: "destroy", title: "Action", width: "150px" }
-        ]
+        ],
+        editable: true
     });
+}
+
+
+
+$(document).ready(function () {
+    var crudServiceBaseUrl = "https://demos.telerik.com/kendo-ui/service",
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: crudServiceBaseUrlRead,
+                    dataType: "jsonp"
+                },
+                update: {
+                    url: crudServiceBaseUrl + "/Products/Update",
+                    dataType: "jsonp"
+                },
+                destroy: {
+                    url: crudServiceBaseUrl + "/Products/Destroy",
+                    dataType: "jsonp"
+                },
+                create: {
+                    url: crudServiceBaseUrl + "/Products/Create",
+                    dataType: "jsonp"
+                },
+                parameterMap: function (options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return { models: kendo.stringify(options.models) };
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "ProductID",
+                    fields: {
+                        Id: { type: "string", editable: true, nullable: false },
+                        Value: { type: "string" },
+                        Comment: { type: "string" }
+                    }
+                }
+            }
+        });
+});
+
+function customBoolEditor(container, options) {
+    var guid = kendo.guid();
+    $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
+    $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
 }

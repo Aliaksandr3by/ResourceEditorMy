@@ -1,10 +1,10 @@
 ﻿@model ResourceEditor.Models.LangName
 
 <script>
-    let urlControlDeleteMethod = "@Url.Action("DeleteLineResourceControl", "Home")";
-    let urlControlEditMethod = "@Url.Action("MainTableDataResource", "Home")";
-    let urlJsonResolverMethod = "@Url.Action("JsonResolver", "Home")";
-    
+    let crudServiceBaseUrlRead = "@Url.Action("Read", "CRUDKendoTable")"; //read
+    let crudServiceBaseUrlUpdate = "@Url.Action("Edit", "CRUDKendoTable")"; //update
+    let crudServiceBaseUrlDestroy = "@Url.Action("Delete", "CRUDKendoTable")"; //destroy
+    let crudServiceBaseUrlCreate = "@Url.Action("Create", "CRUDKendoTable")"; //create
 </script>
 
 @{
@@ -14,12 +14,8 @@
 
 <h2>CreateMainTable</h2>
 
-
-
 @{
     <div class="mainTableResource">
-        <form method="post" action="@Url.Action("MainTableResource", "Home")">
-            @{
                 <p>
                     <select id="countrySelectKendo" name="Id">
                         <option disabled selected>Select language</option>
@@ -29,10 +25,8 @@
                         }
                     </select>
                 </p>
-            }
-            <div id="example">
-                <div id="grid"></div>
-            </div>
-        </form>
+        <div id="example">
+            <div id="grid"></div>
+        </div>
     </div>
 }

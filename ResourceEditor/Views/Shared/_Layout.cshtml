@@ -11,12 +11,6 @@
 
     @Styles.Render("~/Content/site")
 
-    @*<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.3.911/styles/kendo.common.min.css">*@
-    @*<link rel="stylesheet" href="http://cdn.kendostatic.com/2012.1.322/styles/kendo.default.min.css"/>*@
-
-    <script type="text/javascript">
-        var urlControlJsonMethod = "@Url.Action("JsonResolver", "Home")";
-    </script>
 
 </head>
 <body>
@@ -24,22 +18,22 @@
         <ul>
             <li>@Html.ActionLink("Add Line Resourcel", "AddLineResource", "Home")</li>
             <li>@Html.ActionLink("Main Table", "MainTableResource", "Home")      </li>
-            <li>@Html.ActionLink("main Kendo Table", "CreateMainTable", "Home")        </li>
+            <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "CRUDKendoTable")        </li>
         </ul>
-
     </header>
+
     <main>
         @RenderBody()
     </main>
 
-    <footer>      </footer>
+    <footer>
+        
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/Kendo")
     @Scripts.Render("~/bundles/main")
-
-    @*<script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>*@
 
     @RenderSection("scripts", required: false)
 
