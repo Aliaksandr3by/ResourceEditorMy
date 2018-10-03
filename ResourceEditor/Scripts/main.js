@@ -71,47 +71,21 @@ window.onload = () => {
 };
 */
 
-$('#countrySelectKendo').change(function (e) {
-    let that = $(this);
-    $.ajax({
-        type: 'POST',
-        url: crudServiceBaseUrlRead,
-        data: {
-            Id: $('#countrySelectKendo').val()
-        },
-        success: function (data, textStatus) {
-            console.log(textStatus);
-            $("#grid").empty();
-            let products = jQuery.parseJSON(data);
-            createTable(products);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
-        }
-    });
+$(function () {
+    var dataSource = createDataSource();
+    createTable(dataSource);
 });
 
-function createTable(el) {
+$('#countrySelectKendo').change(function (e) {
+    var value = $(this).val();
+    //var dataSource = $("#grid").kendoGrid("dataSource");
+    createTable(createDataSource());
+    dataSource.filter({ field: "language", operator: "eq", value: value });
+});
+
+function createTable(data) {
     $("#grid").kendoGrid({
-        dataSource: {
-            data: el,
-            autoSync: true,//? oe editsave
-            schema: {
-                model: {
-                    fields: {
-                        Id: { type: "string", editable: true, nullable: false },
-                        Value: { type: "string" },
-                        Comment: { type: "string" }
-                    }
-                }
-            },
-            pageSize: 1000,
-            serverPaging: true,
-            serverFiltering: true,
-            serverSorting: true
-        },
+        dataSource: data,
         height: 550,
         filterable: true,
         sortable: true,
@@ -127,51 +101,31 @@ function createTable(el) {
     });
 }
 
-
-
-$(document).ready(function () {
-    var crudServiceBaseUrl = "https://demos.telerik.com/kendo-ui/service",
-        dataSource = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: crudServiceBaseUrlRead,
-                    dataType: "jsonp"
-                },
-                update: {
-                    url: crudServiceBaseUrl + "/Products/Update",
-                    dataType: "jsonp"
-                },
-                destroy: {
-                    url: crudServiceBaseUrl + "/Products/Destroy",
-                    dataType: "jsonp"
-                },
-                create: {
-                    url: crudServiceBaseUrl + "/Products/Create",
-                    dataType: "jsonp"
-                },
-                parameterMap: function (options, operation) {
-                    if (operation !== "read" && options.models) {
-                        return { models: kendo.stringify(options.models) };
-                    }
-                }
-            },
-            batch: true,
-            pageSize: 20,
-            schema: {
-                model: {
-                    id: "ProductID",
-                    fields: {
-                        Id: { type: "string", editable: true, nullable: false },
-                        Value: { type: "string" },
-                        Comment: { type: "string" }
-                    }
+function createDataSource() {
+    let dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                type: 'POST',
+                url: crudServiceBaseUrlRead,
+                data: {
+                    id: $('#countrySelectKendo').val()
                 }
             }
-        });
-});
-
-function customBoolEditor(container, options) {
-    var guid = kendo.guid();
-    $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
-    $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
+        },
+        pageSize: 20,
+        scrollable: true,
+        sortable: true,
+        filterable: true,
+        schema: {
+            model: {
+                id: "ProductID",
+                fields: {
+                    Id: { type: "string", editable: true, nullable: false },
+                    Value: { type: "string" },
+                    Comment: { type: "string" }
+                }
+            }
+        }
+    });
+    return dataSource;
 }

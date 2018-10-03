@@ -121,4 +121,7 @@
     <value>pl1</value>
     <comment>q1</comment>
   </data>
+  <data name="q2" xml:space="preserve">
+    <value>q2</value>
+  </data>
 </root>

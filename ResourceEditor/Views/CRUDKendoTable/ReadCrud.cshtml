@@ -2,7 +2,7 @@
 
 <script>
     let crudServiceBaseUrlRead = "@Url.Action("Read", "CRUDKendoTable")"; //read
-    let crudServiceBaseUrlUpdate = "@Url.Action("Edit", "CRUDKendoTable")"; //update
+    let crudServiceBaseUrlEdit = "@Url.Action("Edit", "CRUDKendoTable")"; //update
     let crudServiceBaseUrlDestroy = "@Url.Action("Delete", "CRUDKendoTable")"; //destroy
     let crudServiceBaseUrlCreate = "@Url.Action("Create", "CRUDKendoTable")"; //create
 </script>
@@ -14,19 +14,18 @@
 
 <h2>CreateMainTable</h2>
 
-@{
-    <div class="mainTableResource">
-                <p>
-                    <select id="countrySelectKendo" name="Id">
-                        <option disabled selected>Select language</option>
-                        @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
-                        {
-                            <option value="@item.Id">@item.Value</option>
-                        }
-                    </select>
-                </p>
-        <div id="example">
-            <div id="grid"></div>
-        </div>
+
+<div class="mainTableResource">
+    <p>
+        <select id="countrySelectKendo" name="Id">
+            <option disabled selected>Select language</option>
+            @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
+            {
+                <option value="@item.Id">@item.Value</option>
+            }
+        </select>
+    </p>
+    <div id="example">
+        <div id="grid"></div>
     </div>
-}
+</div>
