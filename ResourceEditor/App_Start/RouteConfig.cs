@@ -19,6 +19,13 @@ namespace ResourceEditor
                 defaults: new { controller = "Home", action = "AddLineResource", id = UrlParameter.Optional }
             );
 
+
+            routes.MapRoute(
+                name: "DefaultCreateMainTable",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "CreateMainTable", id = UrlParameter.Optional }
+            );
+
             routes.MapRoute(
                 name: "MainTableResourceRoute",
                 url: "{controller}/{action}/{id}",

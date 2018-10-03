@@ -24,9 +24,7 @@
         <ul>
             <li>@Html.ActionLink("Add Line Resourcel", "AddLineResource", "Home")</li>
             <li>@Html.ActionLink("Main Table", "MainTableResource", "Home")      </li>
-            <li>@Html.ActionLink("Json Resolver", "JsonResolver", "Home", null, new { id = "" })        </li>
-            <li><button type="submit" id="buttonJson">Generate Json</button></li>
-
+            <li>@Html.ActionLink("main Kendo Table", "CreateMainTable", "Home")        </li>
         </ul>
 
     </header>
@@ -43,10 +41,7 @@
 
     @*<script src="http://kendo.cdn.telerik.com/2018.3.911/js/kendo.all.min.js"></script>*@
 
-    <div id="example">
-        <div id="grid"></div>
-    </div>
-
     @RenderSection("scripts", required: false)
+
 </body>
 </html>

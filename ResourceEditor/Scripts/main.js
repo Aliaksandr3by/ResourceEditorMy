@@ -71,22 +71,45 @@ window.onload = () => {
 };
 */
 
-let products = [{ "Id": "q1", "Value": "weqeqewq", "Comment": "qweq" }, { "Id": "q2", "Value": "q2", "Comment": "asdadsad" }, { "Id": "q3", "Value": "q3", "Comment": "asdsadadsad" }];
+$('#countrySelectKendo').change(function (e) {
+    let that = $(this);
+    $.ajax({
+        type: 'POST',
+        url: urlJsonResolverMethod,
+        data: {
+            Id: $('#countrySelectKendo').val()
+        },
+        success: function (data, textStatus) {
+            console.log(textStatus);
+            $("#grid").empty();
+            let products = jQuery.parseJSON(data);
+            createTable(products);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
+});
 
-function getTable(el) {
+function createTable(el) {
     $("#grid").kendoGrid({
         dataSource: {
             data: el,
+            autoSync: true,
             schema: {
                 model: {
                     fields: {
-                        Id: { type: "string" },
+                        id: "Id",
+                        Id: { type: "string", editable: false, nullable: false  },
                         Value: { type: "string" },
                         Comment: { type: "string" }
+
                     }
                 }
             },
-            pageSize: 20,
+            pageSize: 1000,
             serverPaging: true,
             serverFiltering: true,
             serverSorting: true
@@ -95,6 +118,7 @@ function getTable(el) {
         filterable: true,
         sortable: true,
         pageable: true,
+        toolbar: ["create"],
         columns: [
             {
                 field: "Id",
@@ -108,40 +132,8 @@ function getTable(el) {
             {
                 field: "Comment",
                 title: "Comment"
-            }
+            },
+            { command: "destroy", title: "Action", width: "150px" }
         ]
     });
 }
-
-$("#buttonJson").on("click", $(this), function () {
-    $.ajax({
-        type: "post",
-        url: urlControlJsonMethod,
-        data: {
-            Id: $('#countrySelect').val()
-        },
-        success: function (data, textStatus) {
-            console.log(textStatus);
-            products = data;
-            $("#grid").empty();
-            getTable(products);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
-        }
-    });
-});
-
-
-
-$(document).on('ready', function () {
-    
-});
-
-$(document).ready(
-    function myfunction() {
-        getTable(products);
-    }
-);

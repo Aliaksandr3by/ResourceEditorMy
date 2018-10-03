@@ -95,13 +95,21 @@ namespace ResourceEditor.Controllers
 
             return PartialView(_langName);
         }
+
         public string JsonResolver(string Id)
         {
             string _pathLoad = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
 
             List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+            string tempJsonDataTableResource = ResourceHelper.ParceToJSONMethod(_langName);
 
-            return ResourceHelper.ParceToJSONMethod(_langName);
+            return tempJsonDataTableResource;
+        }
+
+        public ViewResult CreateMainTable(string Id)
+        {
+
+            return View();
         }
     }
 }
