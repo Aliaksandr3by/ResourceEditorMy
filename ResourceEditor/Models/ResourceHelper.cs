@@ -23,22 +23,30 @@ namespace ResourceEditor.Models
         /// <returns></returns>
         public static string GetPath(string id = null, string pathSave = "App_LocalResources")
         {
-            string _pathSave = default(string);
+            string _file = default(string); //name file
+
             if (string.IsNullOrWhiteSpace(id))
             {
-                _pathSave = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/Resource.resx");
+                _file = "Resource.resx";
             }
             else
             {
-                _pathSave = System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/Resource.{id}.resx");
+                _file = "Resource.{id}.resx";
             }
-            return _pathSave;
+
+            string[] allFoundFiles = Directory.GetFiles(
+                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"),
+                _file, 
+                SearchOption.AllDirectories
+                );
+ 
+            return allFoundFiles.FirstOrDefault();
         }
 
         /// <summary>
-        /// 
+        /// Get all the data from the file
         /// </summary>
-        /// <param name="pathLoad"></param>
+        /// <param name="pathLoad">Full path by explore file</param>
         /// <returns></returns>
         public static List<LangName> GetAll(string pathLoad)
         {
@@ -142,6 +150,7 @@ namespace ResourceEditor.Models
         /// <param name="pathSave"></param>
         /// <param name="langNameAdd"></param>
         /// <param name="idDeleteLineResource">delete of ID</param>
+        [Obsolete("The method is better not to use")]
         public static void CreateResourceFile(List<LangName> langName, string pathSave, List<LangName> langNameAdd = null, string idDeleteLineResource = null)
         {
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
