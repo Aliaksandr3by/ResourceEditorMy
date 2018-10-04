@@ -8,30 +8,29 @@ using System.Web.Mvc;
 
 namespace ResourceEditor.Controllers
 {
-    public class CRUDKendoTableController : Controller
+    public class TableEditResourceController : Controller
     {
         public ViewResult ReadCrud()
         {
             return View();
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Read([DataSourceRequest] DataSourceRequest request, string id)
         {
             //string id = request.Filters ?? request.Filters.Where((e)=> e.Equals("language")).ToString();
 
-            string _pathLoad = ResourceHelper.PathResourceResolver(id, "App_LocalResources");
+            string _pathLoad = ResourceHelper.GetPath(id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+            List<LangName> _langName = ResourceHelper.GetAll(_pathLoad);
             var temp = Json(_langName);
             return temp;
         }
 
         public ActionResult Edit([DataSourceRequest] DataSourceRequest request, string id)
         {
-            string _pathLoad = ResourceHelper.PathResourceResolver(id, "App_LocalResources");
+            string _pathLoad = ResourceHelper.GetPath(id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathLoad);
+            List<LangName> _langName = ResourceHelper.GetAll(_pathLoad);
             var temp = Json(_langName);
             return temp;
         }

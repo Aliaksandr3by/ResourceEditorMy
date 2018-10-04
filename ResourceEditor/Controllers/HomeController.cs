@@ -22,9 +22,9 @@ namespace ResourceEditor.Controllers
     {
         public ActionResult DeleteLineResourceControl(string Id, string idDeleteElement)
         {
-            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
+            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathSave);
+            List<LangName> _langName = ResourceHelper.GetAll(_pathSave);
             ResourceHelper.CreateResourceFile(_langName, _pathSave, null, idDeleteElement);
             ViewBag.result = $"{idDeleteElement} {Id} ok";
 
@@ -33,11 +33,11 @@ namespace ResourceEditor.Controllers
 
         public ActionResult AddLineResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
+            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
             if (list != null)
             {
-                List<LangName> _langName = ResourceHelper.ReadResourceFile(_pathSave);
+                List<LangName> _langName = ResourceHelper.GetAll(_pathSave);
                 ResourceHelper.CreateResourceFile(_langName, _pathSave, list);
             }
             return View();
@@ -45,7 +45,7 @@ namespace ResourceEditor.Controllers
 
         public ActionResult MainTableResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
+            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
             ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
 
@@ -58,7 +58,7 @@ namespace ResourceEditor.Controllers
 
             if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.ReadResourceFile(_pathSave);
+                _langName = ResourceHelper.GetAll(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)
@@ -72,7 +72,7 @@ namespace ResourceEditor.Controllers
         }
         public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.PathResourceResolver(Id, "App_LocalResources");
+            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
             ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
 
@@ -85,7 +85,7 @@ namespace ResourceEditor.Controllers
 
             if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.ReadResourceFile(_pathSave);
+                _langName = ResourceHelper.GetAll(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)
