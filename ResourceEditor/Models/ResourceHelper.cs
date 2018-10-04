@@ -69,8 +69,8 @@ namespace ResourceEditor.Models
                         });
                 }
             }
-            outLangNames.OrderBy(e => e.Id);
-            return outLangNames;
+            List<LangName> a = outLangNames.OrderBy(e => e.Id).ToList();
+            return a;
         }
 
         /// <summary>
