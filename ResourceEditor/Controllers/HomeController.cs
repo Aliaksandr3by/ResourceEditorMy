@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Xml;
 using System.Xml.Linq;
+using ResourceEditor.Managers;
 
 namespace ResourceEditor.Controllers
 {
@@ -24,75 +25,40 @@ namespace ResourceEditor.Controllers
         {
             string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.Read(_pathSave);
-            ResourceHelper.CreateResourceFile(_langName, _pathSave, null, idDeleteElement);
-            ViewBag.result = $"{idDeleteElement} {Id} ok";
+            List<LangName> _langName = ResourceHelper.Delete(_pathSave, idDeleteElement);
+
+            ViewBag.result = $"{idDeleteElement} {Id} delete";
 
             return View("MainTableResource", _langName);
         }
 
         public ActionResult AddLineResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
+            if (list != null) ResourceHelper.Insert(list, Id);
 
-            if (list != null)
-            {
-                List<LangName> _langName = ResourceHelper.Read(_pathSave);
-                ResourceHelper.CreateResourceFile(_langName, _pathSave, list);
-            }
             return View();
         }
 
         public ActionResult MainTableResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
-            ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
+            string _pathSave = ResourceHelper.GetPath(Id);
 
-            List<LangName> _langName = null;
+            List<LangName> _langName = ResourceHelper.Read(_pathSave);
 
-            if (list != null && _langName == null)
-            {
-                _langName = list;
-            }
+            ViewBag.result = "good";
 
-            if (_langName == null && System.IO.File.Exists(_pathSave))
-            {
-                _langName = ResourceHelper.Read(_pathSave);
-            }
-
-            if (Request.Form["generateButton"] != null)
-            {
-                ResourceHelper.CreateResourceFile(_langName, _pathSave);
-                ViewBag.result = "good";
-            }
-
-            ResourceHelper.ParceToJSON(_langName);
             return View(_langName);
         }
         public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
         {
-            string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
+            string _pathSave = ResourceHelper.GetPath(Id);
+
+            List<LangName> _langName = ResourceHelper.Read(_pathSave);
+
+            ViewBag.result = "good";
 
             ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
-
-            List<LangName> _langName = null;
-
-            if (list != null && _langName == null)
-            {
-                _langName = list;
-            }
-
-            if (_langName == null && System.IO.File.Exists(_pathSave))
-            {
-                _langName = ResourceHelper.Read(_pathSave);
-            }
-
-            if (Request.Form["generateButton"] != null)
-            {
-                ResourceHelper.CreateResourceFile(_langName, _pathSave);
-                ViewBag.result = "good";
-            }
 
             return PartialView(_langName);
         }

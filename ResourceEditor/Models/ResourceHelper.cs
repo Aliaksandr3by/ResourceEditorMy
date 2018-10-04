@@ -37,10 +37,10 @@ namespace ResourceEditor.Models
 
             string[] allFoundFiles = Directory.GetFiles(
                 System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"),
-                _file, 
+                _file,
                 SearchOption.AllDirectories
                 );
- 
+
             return allFoundFiles.FirstOrDefault();
         }
 
@@ -69,6 +69,7 @@ namespace ResourceEditor.Models
                         });
                 }
             }
+            outLangNames.OrderBy(e => e.Id);
             return outLangNames;
         }
 
@@ -103,6 +104,7 @@ namespace ResourceEditor.Models
                     node.Comment = langName[ctr].Comment;
                     rw.AddResource(node);
                 }
+
                 rw.Generate();
             }
         }
@@ -113,7 +115,7 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path load/save a Resx file</param>
         /// <param name="updateElement">Object with data</param>
         /// <param name="StatusUpdate">error status</param>
-        public static List<LangName> Update(string pathSave, List<LangName> updateElement, out string StatusUpdate)
+        public static List<LangName> Update(string pathSave, List<LangName> updateElement)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
@@ -143,34 +145,73 @@ namespace ResourceEditor.Models
             return originalElement;
         }
 
-        //test
-        public static void DeleteAllEntitiesEN()
+        public static List<LangName> Insert(List<LangName> newItemList, string Id)
         {
+            string pathSave = ResourceHelper.GetPath(Id);
 
+            List<LangName> originalElement = ResourceHelper.Read(pathSave);
+            if (newItemList != null)
+            {
+                originalElement.AddRange(newItemList);
+            }
+
+            ResourceHelper.Create(originalElement, pathSave);
+
+            return originalElement;
         }
 
-        public static List<LangName> Delete(string pathSave, List<LangName> deleteElement, out string StatusDelete)
+        //test
+        public static string[] DeleteAllEntitiesEN(string deleteElement, string pathSave = "App_LocalResources", string file = "Resource.resx")
+        {
+            //exclude Resource.resx
+            string[] allFoundFiles = Directory.GetFiles(
+                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"), "Resource.*.resx", SearchOption.AllDirectories);
+
+            foreach (var item in allFoundFiles)
+            {
+                if (file != Path.GetFileName(item))
+                {
+                    ResourceHelper.Delete(item, deleteElement);
+                }
+            }
+
+            return allFoundFiles;
+        }
+
+        public static List<LangName> Delete(string pathSave, string deleteElement)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
-
+            int _index = default;
             try
             {
+                _index = originalElement.FindIndex((e) => e.Id == deleteElement);
+                if (_index >= 0)
+                {
+                    originalElement.RemoveAt(_index);
+                }
+
                 using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
                 {
-                    for (int i = 0; i < deleteElement.Count; i++)
+                    for (int i = 0; i < originalElement.Count; i++)
                     {
-                        originalElement.RemoveAt(
-                                originalElement.FindIndex((e) => e.Id == deleteElement[i].Id)
-                            );
                         _createNodeElement(rw, originalElement[i].Id, originalElement[i].Value, originalElement[i].Comment);
                     }
                     rw.Generate();
-                    StatusDelete = "";
+                    StatusDelete = "Ok";
                 }
             }
             catch (ArgumentNullException ex)
             {
                 StatusDelete = ex.Message;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                StatusDelete = ex.Message;
+            }
+
+            if (pathSave.Contains("Resource.resx"))
+            {
+                DeleteAllEntitiesEN(deleteElement);
             }
 
             return originalElement;

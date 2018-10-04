@@ -16,6 +16,7 @@ namespace ResourceEditor.Models
     [DataContract]
     public class LangName
     {
+       
         [DataMember]
         public string Id { get; set; }
         [DataMember]
