@@ -14,6 +14,7 @@ namespace ResourceEditor.Models
     public class ResourceHelper
     {
         public static string StatusUpdate = default(string);
+        public static string StatusDelete = default(string);
 
         /// <summary>
         /// This method allows to get the path to save the Resource file
@@ -31,7 +32,7 @@ namespace ResourceEditor.Models
             }
             else
             {
-                _file = "Resource.{id}.resx";
+                _file = $"Resource.{id}.resx";
             }
 
             string[] allFoundFiles = Directory.GetFiles(
@@ -48,17 +49,17 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="pathLoad">Full path by explore file</param>
         /// <returns></returns>
-        public static List<LangName> GetAll(string pathLoad)
+        public static List<LangName> Read(string pathLoad)
         {
             List<LangName> outLangNames = new List<LangName>();
             using (ResXResourceReader rr = new ResXResourceReader(pathLoad))
             {
-                rr.UseResXDataNodes = true; //делает элемент ресурса комментарий доступным
+                rr.UseResXDataNodes = true; //makes a comment resource item available
                 IDictionaryEnumerator dict = rr.GetEnumerator();
                 while (dict.MoveNext())
                 {
                     ResXDataNode node = (ResXDataNode)dict.Value;
-                    AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+                    AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); //i do`t know
                     outLangNames.Add(
                         new LangName
                         {
@@ -92,7 +93,7 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="langName">Object with data</param>
         /// <param name="pathSave">path save Resx</param>
-        public static void CreateResource(List<LangName> langName, string pathSave)
+        public static void Create(List<LangName> langName, string pathSave)
         {
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
             {
@@ -103,7 +104,6 @@ namespace ResourceEditor.Models
                     rw.AddResource(node);
                 }
                 rw.Generate();
-                //rw.Close();
             }
         }
 
@@ -113,9 +113,9 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path load/save a Resx file</param>
         /// <param name="updateElement">Object with data</param>
         /// <param name="StatusUpdate">error status</param>
-        public static List<LangName> UpdateResource(string pathSave, List<LangName> updateElement, out string StatusUpdate)
+        public static List<LangName> Update(string pathSave, List<LangName> updateElement, out string StatusUpdate)
         {
-            List<LangName> originalElement = ResourceHelper.GetAll(pathSave); //метод зависит от внешнего метода
+            List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
             try
             {
@@ -138,6 +138,39 @@ namespace ResourceEditor.Models
             catch (ArgumentNullException ex)
             {
                 StatusUpdate = ex.Message;
+            }
+
+            return originalElement;
+        }
+
+        //test
+        public static void DeleteAllEntitiesEN()
+        {
+
+        }
+
+        public static List<LangName> Delete(string pathSave, List<LangName> deleteElement, out string StatusDelete)
+        {
+            List<LangName> originalElement = ResourceHelper.Read(pathSave);
+
+            try
+            {
+                using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
+                {
+                    for (int i = 0; i < deleteElement.Count; i++)
+                    {
+                        originalElement.RemoveAt(
+                                originalElement.FindIndex((e) => e.Id == deleteElement[i].Id)
+                            );
+                        _createNodeElement(rw, originalElement[i].Id, originalElement[i].Value, originalElement[i].Comment);
+                    }
+                    rw.Generate();
+                    StatusDelete = "";
+                }
+            }
+            catch (ArgumentNullException ex)
+            {
+                StatusDelete = ex.Message;
             }
 
             return originalElement;
@@ -187,25 +220,21 @@ namespace ResourceEditor.Models
                 rw.Close();
             }
         }
-        public static string ParceToJSONMethod(List<LangName> langNames)
-        {
-            string jSonlangname = default(string);
 
+        /// <summary>
+        /// This method need to parse collection object to JSON format
+        /// </summary>
+        /// <param name="langNames"></param>
+        /// <returns></returns>
+        public static string ParceToJSON(List<LangName> langNames)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
-            StringBuilder stringBuilder = new StringBuilder();
-            var a = langNames.Select(x => serializer.Serialize(x));
-            stringBuilder.Append(string.Join(",", a));
+            var _tempLangname = langNames.Select(x => serializer.Serialize(x));
+            stringBuilder.Append(string.Join(",", _tempLangname));
 
-
-            foreach (var item in langNames)
-            {
-                jSonlangname += serializer.Serialize(item) + ",";
-            }
-
-            jSonlangname = jSonlangname.TrimEnd(',');
-
-            return $"[{jSonlangname}]";
+            return $"[{stringBuilder}]";
         }
     }
 }

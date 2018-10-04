@@ -24,7 +24,7 @@ namespace ResourceEditor.Controllers
         {
             string _pathSave = ResourceHelper.GetPath(Id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.GetAll(_pathSave);
+            List<LangName> _langName = ResourceHelper.Read(_pathSave);
             ResourceHelper.CreateResourceFile(_langName, _pathSave, null, idDeleteElement);
             ViewBag.result = $"{idDeleteElement} {Id} ok";
 
@@ -37,7 +37,7 @@ namespace ResourceEditor.Controllers
 
             if (list != null)
             {
-                List<LangName> _langName = ResourceHelper.GetAll(_pathSave);
+                List<LangName> _langName = ResourceHelper.Read(_pathSave);
                 ResourceHelper.CreateResourceFile(_langName, _pathSave, list);
             }
             return View();
@@ -58,7 +58,7 @@ namespace ResourceEditor.Controllers
 
             if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.GetAll(_pathSave);
+                _langName = ResourceHelper.Read(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)
@@ -67,7 +67,7 @@ namespace ResourceEditor.Controllers
                 ViewBag.result = "good";
             }
 
-            ResourceHelper.ParceToJSONMethod(_langName);
+            ResourceHelper.ParceToJSON(_langName);
             return View(_langName);
         }
         public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
@@ -85,7 +85,7 @@ namespace ResourceEditor.Controllers
 
             if (_langName == null && System.IO.File.Exists(_pathSave))
             {
-                _langName = ResourceHelper.GetAll(_pathSave);
+                _langName = ResourceHelper.Read(_pathSave);
             }
 
             if (Request.Form["generateButton"] != null)

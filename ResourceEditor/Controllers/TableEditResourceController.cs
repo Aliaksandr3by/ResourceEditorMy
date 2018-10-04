@@ -21,7 +21,7 @@ namespace ResourceEditor.Controllers
 
             string _pathLoad = ResourceHelper.GetPath(id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.GetAll(_pathLoad);
+            List<LangName> _langName = ResourceHelper.Read(_pathLoad);
             var temp = Json(_langName);
             return temp;
         }
@@ -30,9 +30,16 @@ namespace ResourceEditor.Controllers
         {
             string _pathLoad = ResourceHelper.GetPath(id, "App_LocalResources");
 
-            List<LangName> _langName = ResourceHelper.GetAll(_pathLoad);
-            var temp = Json(_langName);
-            return temp;
+            List<LangName> _langName = ResourceHelper.Read(_pathLoad);
+
+            return Json(_langName);
+        }
+
+        public string _getJson(string id)
+        {
+            List<LangName> _langName = ResourceHelper.Read(ResourceHelper.GetPath(id, "App_LocalResources"));
+            var a = ResourceHelper.ParceToJSON(_langName);
+            return a + Environment.NewLine;
         }
 
     }

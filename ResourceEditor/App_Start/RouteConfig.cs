@@ -32,10 +32,17 @@ namespace ResourceEditor
             );
 
             routes.MapRoute(
-                name: "DefaultCRUDKendoTable",
+                name: "DefaultTableEditResource",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "CRUDKendoTable", action = "ReadCrud", id = UrlParameter.Optional }
+                defaults: new { controller = "TableEditResource", action = "ReadCrud", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "getJson",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "TableEditResource", action = "_getJson", id = UrlParameter.Optional }
+            );
+            
         }
     }
 }
