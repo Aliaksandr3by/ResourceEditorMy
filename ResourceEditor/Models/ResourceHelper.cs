@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ResourceEditor.Entities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,9 +14,6 @@ namespace ResourceEditor.Models
 {
     public class ResourceHelper
     {
-        public static string StatusUpdate = default(string);
-        public static string StatusDelete = default(string);
-
         /// <summary>
         /// This method allows to get the path to save the Resource file
         /// </summary>
@@ -79,13 +77,13 @@ namespace ResourceEditor.Models
         /// <param name="id">id</param>
         /// <param name="value">value</param>
         /// <param name="comment">comment</param>
-        private static void _createNodeElement(ResXResourceWriter rw, string id, string value, string comment)
+        private static ResXDataNode _createNodeElement(ResXResourceWriter rw, string id, string value, string comment)
         {
             ResXDataNode _node = new ResXDataNode(id, value)
             {
                 Comment = comment
             };
-            rw.AddResource(_node);
+            return _node;
         }
 
         /// <summary>
@@ -93,17 +91,14 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="langName">Object with data</param>
         /// <param name="pathSave">path save Resx</param>
-        public static void Create(List<LangName> langName, string pathSave)
+        public static void Create(string pathSave, List<LangName> langName)
         {
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
             {
                 for (int ctr = 0; ctr < langName.Count; ctr++)
                 {
-                    ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
-                    node.Comment = langName[ctr].Comment;
-                    rw.AddResource(node);
+                    rw.AddResource(_createNodeElement(rw, langName[ctr].Id, langName[ctr].Value, langName[ctr].Comment));
                 }
-
                 rw.Generate();
             }
         }
@@ -114,151 +109,94 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path load/save a Resx file</param>
         /// <param name="updateElement">Object with data</param>
         /// <param name="StatusUpdate">error status</param>
-        public static List<LangName> Update(string pathSave, List<LangName> updateElement)
+        public static List<LangName> Update(string pathSave, LangName updateElement)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
-            try
+            int _index = originalElement.FindIndex((e) => e.Id == updateElement.Id);
+
+            if (_index >= 0)
             {
-                using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
-                {
-                    int _index = default(int);
-                    for (int i = 0; i < updateElement.Count; i++)
-                    {
-                        _index = originalElement.FindIndex((e) => e.Id == updateElement[i].Id);
-                        if (_index >= 0)
-                        {
-                            originalElement[_index] = updateElement[i];
-                            _createNodeElement(rw, originalElement[i].Id, originalElement[i].Value, originalElement[i].Comment);
-                        }
-                    }
-                    rw.Generate();
-                    StatusUpdate = "";
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                StatusUpdate = ex.Message;
+                originalElement[_index] = updateElement;
+                ResourceHelper.Create(pathSave, originalElement);
             }
 
             return originalElement;
         }
 
-        public static List<LangName> Insert(List<LangName> newItemList, string Id)
+        public static List<LangName> Insert(string pathSave, List<LangName> newItemList)
         {
-            string pathSave = ResourceHelper.GetPath(Id);
-
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
+
             if (newItemList != null)
             {
                 originalElement.AddRange(newItemList);
+                ResourceHelper.Create(pathSave, originalElement);
             }
-
-            ResourceHelper.Create(originalElement, pathSave);
 
             return originalElement;
         }
 
         //test
-        public static string[] DeleteAllEntitiesEN(string deleteElement, string pathSave = "App_LocalResources", string file = "Resource.resx")
+        public static string[] DeleteAllEntitiesEN(LangName deleteElement, string pathSave = "App_LocalResources", string file = "Resource.resx")
         {
             //exclude Resource.resx
             string[] allFoundFiles = Directory.GetFiles(
                 System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"), "Resource.*.resx", SearchOption.AllDirectories);
-
+            string result = default;
             foreach (var item in allFoundFiles)
             {
                 if (file != Path.GetFileName(item))
                 {
-                    ResourceHelper.Delete(item, deleteElement);
+                    ResourceHelper.Delete(item, deleteElement, out result);
                 }
             }
 
             return allFoundFiles;
         }
 
-        public static List<LangName> Delete(string pathSave, string deleteElement)
+        /// <summary>
+        /// This method need for delete node in Resx file
+        /// </summary>
+        /// <param name="pathSave">Path save file</param>
+        /// <param name="deleteElementID">Deleted item ID</param>
+        /// <returns>Update collection</returns>
+        public static bool Delete(string pathSave, LangName langNameID, out string messageResult)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
-            int _index = default;
+
             try
             {
-                _index = originalElement.FindIndex((e) => e.Id == deleteElement);
+                int _index = originalElement.FindIndex((e) => e.Id == langNameID.Id);
                 if (_index >= 0)
                 {
                     originalElement.RemoveAt(_index);
+                    ResourceHelper.Create(pathSave, originalElement);
                 }
-
-                using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
-                {
-                    for (int i = 0; i < originalElement.Count; i++)
-                    {
-                        _createNodeElement(rw, originalElement[i].Id, originalElement[i].Value, originalElement[i].Comment);
-                    }
-                    rw.Generate();
-                    StatusDelete = "Ok";
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                StatusDelete = ex.Message;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                StatusDelete = ex.Message;
+                messageResult = ex.Message;
+                return false;
             }
+            catch (Exception ex)
+            {
+                messageResult = ex.Message;
+                return false;
+            }   
 
             if (pathSave.Contains("Resource.resx"))
             {
-                DeleteAllEntitiesEN(deleteElement);
+                if (DeleteAllEntitiesEN(langNameID) == null)
+                {
+                    messageResult = "unknown error";
+                    return false;
+                }
             }
 
-            return originalElement;
-        }
+            messageResult = $"Delete {langNameID.Id} - {langNameID.Value} is complete";
 
-        /// <summary>
-        /// Create, update & delete
-        /// </summary>
-        /// <param name="langName"></param>
-        /// <param name="pathSave"></param>
-        /// <param name="langNameAdd"></param>
-        /// <param name="idDeleteLineResource">delete of ID</param>
-        [Obsolete("The method is better not to use")]
-        public static void CreateResourceFile(List<LangName> langName, string pathSave, List<LangName> langNameAdd = null, string idDeleteLineResource = null)
-        {
-            using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
-            {
-                for (int ctr = 0; ctr < langName.Count; ctr++)
-                {
-                    //filter for delete line
-                    if (idDeleteLineResource != langName[ctr].Id)
-                    {
-                        ResXDataNode node = new ResXDataNode(langName[ctr].Id, langName[ctr].Value);
-                        node.Comment = langName[ctr].Comment;
-                        rw.AddResource(node);
-                    }
-                }
-
-                if (langNameAdd != null)
-                {
-                    //если ключ существует и иесли запись не добавилась warn
-                    foreach (var item in langNameAdd)
-                    {
-                        //если ID не null , пустое значение допускается (&& item.Value != null)
-                        if (item.Id != null)
-                        {
-                            ResXDataNode nodelangNameOne = new ResXDataNode(item.Id, item.Value)
-                            {
-                                Comment = item.Comment ?? ""
-                            };
-                            rw.AddResource(nodelangNameOne);
-                        }
-                    }
-                }
-
-                rw.Generate();
-                rw.Close();
-            }
+            return true;
         }
 
         /// <summary>

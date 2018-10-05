@@ -1,4 +1,5 @@
-﻿using ResourceEditor.Models;
+﻿using ResourceEditor.Entities;
+using ResourceEditor.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -7,46 +8,50 @@ namespace ResourceEditor.Controllers
     public class HomeController : Controller
     {
         //TODO rename Id to id
-        public ActionResult DeleteLineResource(string Id, string idDeleteElement)
+        [HttpPost]
+        public bool Delete(LangName list, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
 
-            List<LangName> _langName = ResourceHelper.Delete(_pathSave, idDeleteElement);
+            string result = default;
+            ViewBag.result = $"{result}"; //???
 
-            ViewBag.result = $"{idDeleteElement} {Id} delete";
-
-            return View("MainTableResource", _langName);
+            return ResourceHelper.Delete(_pathSave, list, out result);
         }
 
-        public ActionResult AddLineResource(List<LangName> list, string Id)
+        public ActionResult Insert(List<LangName> list, string Id)
         {
-            if (list != null) ResourceHelper.Insert(list, Id);
-
-            return View();
-        }
-
-        public ActionResult MainTableResource(List<LangName> list, string Id)
-        {
-
             string _pathSave = ResourceHelper.GetPath(Id);
 
-            List<LangName> _langName = ResourceHelper.Read(_pathSave);
+            if (list != null) ResourceHelper.Insert(_pathSave, list);
 
-            ViewBag.result = "good";
-
-            return View(_langName);
+            return View("Read");
         }
-        public PartialViewResult MainTableDataResource(List<LangName> list, string Id)
+
+        public ActionResult Read(List<LangName> list, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
 
             List<LangName> _langName = ResourceHelper.Read(_pathSave);
 
-            ViewBag.result = "good";
+            return View("Read", _langName);
+        }
+        public ActionResult Update(List<LangName> list, string Id)
+        {
+            string _pathSave = ResourceHelper.GetPath(Id);
 
-            ViewBag.cult = string.IsNullOrEmpty(Id) ? "" : Id;
+            List<LangName> _langName = ResourceHelper.Read(_pathSave);
 
-            return PartialView(_langName);
+            return View("Read", _langName);
+        }
+
+        public PartialViewResult Switch(List<LangName> list, string Id)
+        {
+            string _pathSave = ResourceHelper.GetPath(Id);
+
+            List<LangName> _langName = ResourceHelper.Read(_pathSave);
+
+            return PartialView("UpdateData", _langName);
         }
     }
 }

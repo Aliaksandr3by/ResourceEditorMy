@@ -1,4 +1,4 @@
-﻿using ResourceEditor.Models;
+﻿using ResourceEditor.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ namespace ResourceEditor.Managers
 {
     public static class XmlManager
     {
-        public static IEnumerable<Models.LangName> GetLanguages()
+        public static IEnumerable<Entities.LangName> GetLanguages()
         {
             List<LangName> result = new List<LangName>();
             //string xmlFile = Path.GetFullPath(@"C:\\Users\\hole\\source\\repos\\ResourceEditorMy\\ResourceEditor\\App_Data\\cult.xml");

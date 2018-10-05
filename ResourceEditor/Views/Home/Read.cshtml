@@ -1,0 +1,43 @@
+﻿<script>
+    let urlControlActionDelete = "@Url.Action("Delete", "Home")";
+    let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
+</script>
+
+@{
+    ViewBag.Title = "Main Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+
+    <div class="mainTableResource">
+
+        <form method="post" action="@Url.Action("Read", "Home")">
+            <p>
+                <select id="countrySelect" name="Id">
+                    @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
+                    {
+                        <option value="@item.Id">@item.Value</option>
+                    }
+                </select>
+            </p>
+            <div id="rootMainTable">
+                <table id="mainTable" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainDataBodyTable">
+                        @Html.Partial("UpdateData")
+                    </tbody>
+                </table>
+            </div>
+            <p><button type="button" class="btn btn-warning float-right" id="addTableRow">+</button></p>
+            <p><button class="btn btn-success btn-block" type="submit" name="generateButton" value="generate">Save</button></p>
+        </form>
+    </div>
+}

@@ -1,0 +1,18 @@
+﻿@model List<ResourceEditor.Entities.LangName>
+
+@{
+    List<ResourceEditor.Entities.LangName> list = new List<ResourceEditor.Entities.LangName>();
+
+    for (var i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+        <tr>
+            <th scope="row"><input name="@list[@i].Id" value="@item.Id" readonly></th>
+            <td><input type="text" name="@list[@i].Value" value="@item.Value" /></td>
+            <td><input type="text" name="@list[@i].Comment" value="@item.Comment" /></td>
+            <td>
+                <button type="button" name="deleteButton_@item.Id" value="@list" class="deleteLineButton btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    }
+}

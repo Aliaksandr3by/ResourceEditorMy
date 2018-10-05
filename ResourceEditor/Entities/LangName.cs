@@ -11,7 +11,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace ResourceEditor.Models
+namespace ResourceEditor.Entities
 {
     [DataContract]
     public class LangName

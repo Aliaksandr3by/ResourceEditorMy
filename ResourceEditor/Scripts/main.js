@@ -1,30 +1,28 @@
 ﻿
-var count = 1;
+var count = 0;
 $("#addTableRow").click(
     function myfunction() {
         $('#mainTable').children('tbody').append(`<tr></tr>`);
         let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
-        tablAddRow2.last('tr').append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
-        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Value" /></td>`);
-        tablAddRow2.last('tr').append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
+        tablAddRow2.last().append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
+        tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Value" /></td>`);
+        tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
         count++;
     }
 );
 
-//нужно динамическое подключение ивентов
 $('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
     var that = $(this);
     $.ajax({
         type: 'GET',
-        url: urlControlDeleteMethod,
+        url: urlControlActionDelete,
         data: {
             Id: $('#countrySelect').val(),
-            IdDeleteElement: that.val()
-
+            list: that.val()
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-            location.reload();
+            //location.reload();
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -35,12 +33,11 @@ $('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
     });
 });
 
-//селектор в 2х местах, события для одного
 $('#countrySelect').change(function (e) {
     let that = $(this);
     $.ajax({
         type: 'POST',
-        url: urlControlEditMethod,
+        url: urlControlSwitchLanguage,
         data: {
             Id: $('#countrySelect').val()
         },
@@ -95,9 +92,10 @@ function createTable(data) {
             { field: "Id", title: "Id" },
             { field: "Value", title: "Value" },
             { field: "Comment", title: "Comment" },
-            { command: "destroy", title: "Action", width: "150px" }
+            { command: "destroy", title: "Action", width: "150px" },
+            { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
         ],
-        editable: true
+        editable: "inline"
     });
 }
 
@@ -108,7 +106,7 @@ function createDataSource() {
                 $.ajax({
                     url: crudServiceBaseUrlRead,
                     type: 'POST',
-                    //dataType: "jsonp",
+                    dataType: "json",
                     data: {
                         id: $('#countrySelectKendo').val()
                     },
@@ -120,7 +118,7 @@ function createDataSource() {
                     }
                 });
             },
-            //read: {
+                        //read: {
             //    type: 'POST',
             //    url: crudServiceBaseUrlRead,
             //    //dataType: "jsonp",
@@ -128,14 +126,24 @@ function createDataSource() {
             //        id: $('#countrySelectKendo').val()
             //    }
             //},
-            submit: function (e) {
-                var data = e.data;
-                console.log(data);
-
-                e.success(data.updated, "update");
-                e.success(data.created, "create");
-                e.success(data.destroyed, "destroy");
-                e.error(null, "customerror", "custom error");
+            update: {
+                type: 'POST',
+                url: crudServiceBaseUrlUpdate,
+                //dataType: "jsonp"
+            },
+            create: {
+                type: 'POST',
+                url: crudServiceBaseUrlCreate,
+                dataType: "json"
+            },
+            destroy: {
+                url: crudServiceBaseUrlDelete,
+                dataType: "json"
+            },
+            parameterMap: function (options, operation) {
+                if (operation !== "read" && options.models) {
+                    return { models: kendo.stringify(options.models) };
+                }
             }
         },
         serverFiltering: true,

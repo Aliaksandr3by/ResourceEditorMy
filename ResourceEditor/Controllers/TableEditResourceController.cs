@@ -1,4 +1,5 @@
 ﻿using Kendo.Mvc.UI;
+using ResourceEditor.Entities;
 using ResourceEditor.Models;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,31 @@ namespace ResourceEditor.Controllers
             string _pathLoad = ResourceHelper.GetPath(id);
 
             List<LangName> _langName = ResourceHelper.Read(_pathLoad);
-            var temp = Json(_langName);
-            return temp;
+
+            return Json(_langName);
         }
 
-        public ActionResult Edit([DataSourceRequest] DataSourceRequest request, string id)
+        public ActionResult Update([DataSourceRequest] DataSourceRequest request, LangName langName, string id = "en")
         {
             string _pathLoad = ResourceHelper.GetPath(id);
 
-            List<LangName> _langName = ResourceHelper.Read(_pathLoad);
+            List<LangName> _langName = ResourceHelper.Update(_pathLoad, langName);
+
+            return Json(_langName);
+        }
+
+        public ActionResult Delete([DataSourceRequest] DataSourceRequest request, LangName langName, string id = "en")
+        {
+            string _pathLoad = ResourceHelper.GetPath(id);
+            string result = default;
+
+            //убрать
+            List<LangName> _langName;
+            if (ResourceHelper.Delete(_pathLoad, langName, out result))
+            {
+                _langName = ResourceHelper.Read(_pathLoad);
+            }
+            
 
             return Json(_langName);
         }

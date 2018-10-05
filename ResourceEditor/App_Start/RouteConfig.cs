@@ -14,22 +14,29 @@ namespace ResourceEditor
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
+                name: "HomeRead",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "AddLineResource", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Read", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
-                name: "DefaultCreateMainTable",
+                name: "HomeInsert",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "CreateMainTable", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Insert", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
-                name: "MainTableResourceRoute",
+                name: "HomeUpdate",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "MainTableResource", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Update", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "HomeDelete",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Delete", id = UrlParameter.Optional }
+            );
+
 
             routes.MapRoute(
                 name: "DefaultTableEditResource",
