@@ -7,33 +7,39 @@
     <title>@ViewBag.Title - ResX Editor</title>
 
     @Styles.Render("~/Content/bootstrap")
-    @Styles.Render("~/Content/Kendo")
+    @Styles.Render("~/Content/kendoUI")
     @Styles.Render("~/Content/site")
 
 </head>
 <body>
-    <header class="container-fluid">
-        <ul>
-            <li>@Html.ActionLink("Add Line Resourcel", "AddLineResource", "Home")</li>
-            <li>@Html.ActionLink("Main Table", "MainTableResource", "Home")      </li>
-            <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "TableEditResource")        </li>
-            <li>@Html.ActionLink("Get JSON", "_getJson", "TableEditResource")        </li>
-        </ul>
-    </header>
-
-    <main>
-        @RenderBody()
-    </main>
-
-    <footer>
-        @Html.Partial("GetUserIP")
-    </footer>
+    <div class="container">
+        <header class="row">
+            <div class="col">
+                <ul>
+                    <li>@Html.ActionLink("Add Line Resourcel", "AddLineResource", "Home")</li>
+                    <li>@Html.ActionLink("Main Table", "MainTableResource", "Home")      </li>
+                    <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "TableEditResource")        </li>
+                    <li>@Html.ActionLink("Get JSON", "_getJson", "TableEditResource")        </li>
+                </ul>
+            </div>
+        </header>
+        <main class="row">
+            <div class="col"> 
+                @RenderBody()
+            </div>
+        </main>
+        <footer class="row">
+            <div class="col"> 
+                @Html.Partial("GetUserIP")
+            </div>
+        </footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryvalunob")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/Kendo")
+    @Scripts.Render("~/bundles/kendoUI")
     @Scripts.Render("~/bundles/main")
 
     @RenderSection("scripts", required: false)
