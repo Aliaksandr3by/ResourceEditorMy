@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "checkJs": true,
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "alwaysStrict": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "esnext",
+      "esnext.array",
+      "esnext.asynciterable",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+    "exclude": [
+        "node_modules",
+        "build"
+    ]
+}

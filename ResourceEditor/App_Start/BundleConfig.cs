@@ -8,27 +8,20 @@ namespace ResourceEditor
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include("~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include("~/node_modules/jquery/dist/jquery.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/node_modules/jquery-validation/dist/jquery.validate.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jqueryvalunob").Include("~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include("~/Scripts/jquery.validate*"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/node_modules/bootstrap/dist/js/bootstrap.js"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/Kendo").Include("~/Scripts/kendo/2014.1.318/kendo.web.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/Kendo").Include("~/node_modules/kendo-ui-core/js/kendo.core.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include("~/Scripts/main.js")); 
 
-            bundles.Add(new ScriptBundle("~/bundles/products").Include("~/Scripts/products.js")); 
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/node_modules/bootstrap/dist/css/bootstrap.css"));
 
-            bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css"));
-            bundles.Add(new StyleBundle("~/Content/Kendo").Include(
-                "~/Content/kendo/2014.1.318/kendo.common.min.css",
-                "~/Content/kendo/2014.1.318/kendo.default.min.css"
-                ));
+            bundles.Add(new StyleBundle("~/Content/Kendo").Include("~/node_modules/kendo-ui-core/css/web/kendo.default.css"));
+
             bundles.Add(new StyleBundle("~/Content/site").Include("~/Content/site.css"));
 
         }
