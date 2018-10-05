@@ -7,22 +7,63 @@ $("#addTableRow").click(
         tablAddRow2.last().append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
         tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Value" /></td>`);
         tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
+        tablAddRow2.last().append(`<td><p><button type="button" class="saveLineButton btn btn-success" id="buttonSave${count}">Save</button></p></td>`);
         count++;
     }
 );
 
-$('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
+$("#addTableRow").on('click', '.saveLineButton', $(this), function (e) {
     var that = $(this);
+    let saveeOblect = list.filter((obj) => {
+        if (obj.Id === that.val()) {
+            return obj;
+        }
+    });
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: urlControlActionDelete,
         data: {
-            Id: $('#countrySelect').val(),
-            list: that.val()
+            Id: $('#countrySelect').val()
+
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-            //location.reload();
+
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
+});
+
+
+$('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
+    let that = $(this);
+    let deleteRow;
+    let deleteOblect = list.filter((obj) => {
+        if (obj.Id === that.val()) {
+            deleteRow = $(`#tableRow_${obj.Id}`);
+            return obj;
+        }
+    });
+    
+    $.ajax({
+        type: 'POST',
+        url: urlControlActionDelete,
+        data: {
+            Id: $('#countrySelect').val(),
+            langName: deleteOblect
+        },
+        success: function (data, textStatus) {
+            console.log(textStatus);
+
+            if ($(data)) {
+                //deleteRow.empty();
+                that.closest('tr').empty();
+            }
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -118,7 +159,7 @@ function createDataSource() {
                     }
                 });
             },
-                        //read: {
+            //read: {
             //    type: 'POST',
             //    url: crudServiceBaseUrlRead,
             //    //dataType: "jsonp",

@@ -91,7 +91,7 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="langName">Object with data</param>
         /// <param name="pathSave">path save Resx</param>
-        public static void Create(string pathSave, List<LangName> langName)
+        public static bool Create(string pathSave, List<LangName> langName)
         {
             using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
             {
@@ -100,6 +100,7 @@ namespace ResourceEditor.Models
                     rw.AddResource(_createNodeElement(rw, langName[ctr].Id, langName[ctr].Value, langName[ctr].Comment));
                 }
                 rw.Generate();
+                return true;
             }
         }
 
@@ -124,17 +125,18 @@ namespace ResourceEditor.Models
             return originalElement;
         }
 
-        public static List<LangName> Insert(string pathSave, List<LangName> newItemList)
+        public static bool Insert(string pathSave, List<LangName> newItemList)
         {
-            List<LangName> originalElement = ResourceHelper.Read(pathSave);
+            bool result = false;
 
             if (newItemList != null)
             {
+                List<LangName> originalElement = ResourceHelper.Read(pathSave);
                 originalElement.AddRange(newItemList);
-                ResourceHelper.Create(pathSave, originalElement);
+                result = ResourceHelper.Create(pathSave, originalElement);
             }
 
-            return originalElement;
+            return result;
         }
 
         //test
@@ -168,10 +170,20 @@ namespace ResourceEditor.Models
             try
             {
                 int _index = originalElement.FindIndex((e) => e.Id == langNameID.Id);
+
                 if (_index >= 0)
                 {
                     originalElement.RemoveAt(_index);
                     ResourceHelper.Create(pathSave, originalElement);
+                }
+
+                if (pathSave.Contains("Resource.resx"))
+                {
+                    if (DeleteAllEntitiesEN(langNameID) == null)
+                    {
+                        messageResult = "unknown error";
+                        return false;
+                    }
                 }
             }
             catch (ArgumentOutOfRangeException ex)
@@ -184,15 +196,6 @@ namespace ResourceEditor.Models
                 messageResult = ex.Message;
                 return false;
             }   
-
-            if (pathSave.Contains("Resource.resx"))
-            {
-                if (DeleteAllEntitiesEN(langNameID) == null)
-                {
-                    messageResult = "unknown error";
-                    return false;
-                }
-            }
 
             messageResult = $"Delete {langNameID.Id} - {langNameID.Value} is complete";
 

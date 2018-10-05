@@ -9,14 +9,13 @@ namespace ResourceEditor.Controllers
     {
         //TODO rename Id to id
         [HttpPost]
-        public bool Delete(LangName list, string Id)
+        public bool Delete(List<LangName> langName, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
-
             string result = default;
             ViewBag.result = $"{result}"; //???
 
-            return ResourceHelper.Delete(_pathSave, list, out result);
+            return ResourceHelper.Delete(_pathSave, langName[0], out result);
         }
 
         public ActionResult Insert(List<LangName> list, string Id)

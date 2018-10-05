@@ -1,6 +1,11 @@
-﻿<script>
-    let urlControlActionDelete = "@Url.Action("Delete", "Home")";
-    let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
+﻿@section scripts {
+
+}
+
+<script type="text/javascript">
+        let urlControlActionDelete = "@Url.Action("Delete", "Home")";
+        let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
+        let list = [];
 </script>
 
 @{
@@ -37,7 +42,6 @@
                 </table>
             </div>
             <p><button type="button" class="btn btn-warning float-right" id="addTableRow">+</button></p>
-            <p><button class="btn btn-success btn-block" type="submit" name="generateButton" value="generate">Save</button></p>
         </form>
     </div>
 }

@@ -42,7 +42,7 @@ namespace ResourceEditor.Controllers
             string result = default;
 
             //убрать
-            List<LangName> _langName;
+            List<LangName> _langName = default;
             if (ResourceHelper.Delete(_pathLoad, langName, out result))
             {
                 _langName = ResourceHelper.Read(_pathLoad);
