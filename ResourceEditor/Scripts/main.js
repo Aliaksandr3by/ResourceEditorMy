@@ -14,17 +14,17 @@ $("#addTableRow").click(
 
 $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
     let that = $(this);
-    let a = that.closest('tr').children('')
+    let saveInput = that.closest('tr').children('td').children('input');
     $.ajax({
         type: 'POST',
         url: urlControlActionUpdate,
         data: {
             Id: $('#countrySelect').val(),
-            rowUpdate: list.find((obj) => {     //list имеено устаревшие данные до обновления
-                if (obj.Id === that.val()) {
-                    return obj;
-                }
-            })
+            rowUpdate: {
+                Id: that.val(),
+                Value: saveInput.val(),
+                Comment: saveInput.val()
+            }
         },
         success: function (data, textStatus) {
             console.log(textStatus);
