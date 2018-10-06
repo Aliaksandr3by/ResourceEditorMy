@@ -7,15 +7,22 @@ $("#addTableRow").click(
         tablAddRow2.last().append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
         tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Value" /></td>`);
         tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
-        tablAddRow2.last().append(`<td><p><button type="button" class="saveLineButton btn btn-success" id="buttonSave${count}">Save</button></p></td>`);
+        tablAddRow2.last().append(`<td><button type="button" class="saveLineButton btn btn-success" id="buttonSave${count}">Save</button></td>`);
+        tablAddRow2.last().append(`<td></td>`);
         count++;
     }
 );
 
+///Method 
+$("#rootMainTable").on('change', '.inputResourseData', $(this), function (e) {
+    let that = $(this);
+    let a = that.closest('tr').children('td').children('button');
+    a.attr('disabled', false);
+});
+
 ///Method save row
 $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
     let that = $(this);
-    let saveInput = that.closest('tr').children('td').children('input');
     let a = $(`#Value_${that.val()}`).val();
     let b = $(`#Comment_${that.val()}`).val();
     $.ajax({
