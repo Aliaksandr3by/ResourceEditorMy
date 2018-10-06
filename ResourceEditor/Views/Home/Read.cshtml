@@ -1,13 +1,11 @@
 ﻿@section scripts {
-
-}
-
 <script type="text/javascript">
         let urlControlActionDelete = "@Url.Action("Delete", "Home")";
         let urlControlActionUpdate = "@Url.Action("Update", "Home")";
         let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
         let list = [];
 </script>
+}
 
 @{
     ViewBag.Title = "Main Table";
@@ -15,9 +13,7 @@
 }
 
 @{
-
     <div class="mainTableResource">
-
         <form method="post" action="@Url.Action("Read", "Home")">
             <p>
                 <select id="countrySelect" name="Id">

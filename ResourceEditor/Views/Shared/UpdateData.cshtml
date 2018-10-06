@@ -6,13 +6,13 @@
     {
         var item = Model[i];
 
-        <script type="text/javascript">
+        @*<script type="text/javascript">
             list.push({
                 Id:"@item.Id",
                 Value:"@item.Value",
                 Comment:"@item.Comment"
             });
-        </script>
+        </script>*@
 
         <tr id="tableRow_@item.Id">
             <th scope="row"><input id="Id_@item.Id" name="list[@i].Id" value="@item.Id" readonly></th>

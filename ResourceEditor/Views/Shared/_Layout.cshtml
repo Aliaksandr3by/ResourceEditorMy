@@ -10,15 +10,17 @@
     @Styles.Render("~/Content/kendoUI")
     @Styles.Render("~/Content/site")
 
+    @RenderSection("scripts", required: false)
+
 </head>
 <body>
     <div class="container">
         <header class="row">
             <div class="col">
                 <ul>
-                    <li>@Html.ActionLink("Main Table", "read", "Home")      </li>
-                    <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "TableEditResource")        </li>
-                    <li>@Html.ActionLink("Get JSON", "_getJson", "TableEditResource")        </li>
+                    <li>@Html.ActionLink("Main Table", "read", "Home")</li>
+                    <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "TableEditResource")</li>
+                    <li>@Html.ActionLink("Get JSON", "_getJson", "TableEditResource")</li>
                 </ul>
             </div>
         </header>
@@ -40,8 +42,6 @@
     @Scripts.Render("~/bundles/jqueryvalunob")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/kendoUI")
-
-    @RenderSection("scripts", required: false)
 
     @Scripts.Render("~/bundles/main")
 

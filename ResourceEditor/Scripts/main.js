@@ -1,5 +1,5 @@
 ﻿
-var count = 0;
+let count = 0;
 $("#addTableRow").click(
     function myfunction() {
         $('#mainTable').children('tbody').append(`<tr></tr>`);
@@ -12,6 +12,7 @@ $("#addTableRow").click(
     }
 );
 
+///Method save row
 $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
     let that = $(this);
     let saveInput = that.closest('tr').children('td').children('input');
@@ -30,8 +31,7 @@ $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-
-
+            that.attr('disabled', true);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);
@@ -44,16 +44,19 @@ $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
 ///Method delete row
 $('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
     let that = $(this);
+    let a = $(`#Id_${that.val()}`).val();
+    let b = $(`#Value_${that.val()}`).val();
+    let c = $(`#Comment_${that.val()}`).val();
     $.ajax({
         type: 'POST',
         url: urlControlActionDelete,
         data: {
             Id: $('#countrySelect').val(),
-            rowDelete: list.find((obj) => {
-                if (obj.Id === that.val()) {
-                    return obj;
-                }
-            })
+            rowDelete: {
+                Id: a,
+                Value: b,
+                Comment: c
+            }
         },
         success: function (data, textStatus) {
             console.log(textStatus);

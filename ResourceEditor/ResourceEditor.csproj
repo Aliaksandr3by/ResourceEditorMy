@@ -1286,6 +1286,7 @@
     <Content Include="node_modules\kendo\2014.1.318\kendo.window.min.js.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
+    <None Include="Properties\PublishProfiles\iis.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
