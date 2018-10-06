@@ -6,6 +6,7 @@
     {
         var item = Model[i];
 
+
         @*<script type="text/javascript">
             list.push({
                 Id:"@item.Id",
@@ -15,11 +16,11 @@
         </script>*@
 
         <tr id="tableRow_@item.Id">
-            <th scope="row"><input class="inputResourseData" id="Id_@item.Id" name="list[@i].Id" value="@item.Id" readonly></th>
-            <td><input type="text" class="inputResourseData" id="Value_@item.Id" name="list[@i].Value" value="@item.Value" /></td>
-            <td><input type="text" class="inputResourseData" id="Comment_@item.Id" name="list[@i].Comment" value="@item.Comment" /></td>
-            <td><button type="button" id="saveButton_@item.Id" value="@item.Id" class="saveLineButton btn btn-success">Save</button></td>
-            <td><button type="button" id="deleteButton_@item.Id" value="@item.Id" class="deleteLineButton btn btn-danger">Delete</button></td>
+            <th scope="row"><input class="inputResourseData  form-control d-inline w-100" id="Id_@item.Id" name="list[@i].Id" value="@item.Id" readonly></th>
+            <td><input type="text" class="inputResourseData  form-control d-inline w-100" id="Value_@item.Id" name="list[@i].Value" value="@item.Value" /></td>
+            <td><input type="text" class="inputResourseData  form-control d-inline w-100" id="Comment_@item.Id" name="list[@i].Comment" value="@item.Comment" /></td>
+            <td><button type="button" id="saveButton_@item.Id" value="@item.Id" class="saveLineButton btn btn-success d-inline w-100">Save</button></td>
+            <td><button type="button" id="deleteButton_@item.Id" value="@item.Id" class="deleteLineButton btn btn-danger d-inline w-100">Delete</button></td>
         </tr>
     }
 }

@@ -77,13 +77,20 @@ namespace ResourceEditor.Models
         /// <param name="id">id</param>
         /// <param name="value">value</param>
         /// <param name="comment">comment</param>
-        private static ResXDataNode _createNodeElement(ResXResourceWriter rw, string id, string value, string comment)
+        private static ResXDataNode _createNodeElement(ResXResourceWriter rw, string id, string value, string comment = "")
         {
-            ResXDataNode _node = new ResXDataNode(id, value)
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                Comment = comment
-            };
-            return _node;
+                ResXDataNode _node = new ResXDataNode(id, value)
+                {
+                    Comment = comment
+                };
+                return _node;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -93,14 +100,28 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path save Resx</param>
         public static bool Create(string pathSave, List<LangName> langName)
         {
-            using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
+            if (langName != null)
             {
-                for (int ctr = 0; ctr < langName.Count; ctr++)
+                using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
                 {
-                    rw.AddResource(_createNodeElement(rw, langName[ctr].Id, langName[ctr].Value, langName[ctr].Comment));
+                    for (int ctr = 0; ctr < langName.Count; ctr++)
+                    {
+                        if (!string.IsNullOrWhiteSpace(langName[ctr].Id))
+                        {
+                            var node = _createNodeElement(rw, langName[ctr].Id, langName[ctr].Value, langName[ctr].Comment);
+                            if (node != null)
+                            {
+                                rw.AddResource(node);
+                            }
+                        }
+                    }
+                    rw.Generate();
+                    return true;
                 }
-                rw.Generate();
-                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -123,10 +144,10 @@ namespace ResourceEditor.Models
             }
             else
             {
-                return false;
+                return ResourceHelper.Insert(pathSave, new List<LangName>() { updateElement }) ? true : false;
             }
 
-           
+
         }
 
         public static bool Insert(string pathSave, List<LangName> newItemList)

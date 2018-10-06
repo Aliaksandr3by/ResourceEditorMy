@@ -1,17 +1,26 @@
-﻿
-let count = 0;
+﻿let parseToBool = (el) => {
+    if (el.toLowerCase() === "true") {
+        return true;
+    } else if (el.toLowerCase() === "false") {
+        return false;
+    } else {
+        return false;
+    }
+};
+
 $("#addTableRow").click(
     function myfunction() {
         $('#mainTable').children('tbody').append(`<tr></tr>`);
         let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
-        tablAddRow2.last().append(`<th><input scope="row" type="text" name="list[${count}].Id" /></th>`);
-        tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Value" /></td>`);
-        tablAddRow2.last().append(`<td><input type="text" name="list[${count}].Comment" /></td>`);
-        tablAddRow2.last().append(`<td><button type="button" class="saveLineButton btn btn-success" id="buttonSave${count}">Save</button></td>`);
+        tablAddRow2.last().append(`<th><input type="text" class="inputResourseData form-control d-inline w-100" id="Id_${countTableElement}" name="list[${countTableElement}].Id" scope="row"/></th>`);
+        tablAddRow2.last().append(`<td><input type="text" class="inputResourseData form-control d-inline w-100" id="Value_${countTableElement}" name="list[${countTableElement}].Value" /></td>`);
+        tablAddRow2.last().append(`<td><input type="text" class="inputResourseData form-control d-inline w-100" id="Comment_${countTableElement}" name="list[${countTableElement}].Comment" /></td>`);
+        tablAddRow2.last().append(`<td><button type="button" id="buttonSave${countTableElement}" value="${countTableElement}" class="saveLineButton btn btn-success d-inline w-100" >Save</button></td>`);
         tablAddRow2.last().append(`<td></td>`);
-        count++;
+        countTableElement++;
     }
-);
+); //<input type="text" class="inputResourseData" id="Comment_q4" name="list[3].Comment" value="1">
+//<button type="button" id="saveButton_q4" value="q4" class="saveLineButton btn btn-success">Save</button>
 
 ///Method 
 $("#rootMainTable").on('change', '.inputResourseData', $(this), function (e) {
@@ -23,22 +32,30 @@ $("#rootMainTable").on('change', '.inputResourseData', $(this), function (e) {
 ///Method save row
 $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
     let that = $(this);
-    let a = $(`#Value_${that.val()}`).val();
-    let b = $(`#Comment_${that.val()}`).val();
+    let a = $(`#Id_${that.val()}`);
+    let b = $(`#Value_${that.val()}`);
+    let c = $(`#Comment_${that.val()}`);
     $.ajax({
         type: 'POST',
         url: urlControlActionUpdate,
         data: {
             Id: $('#countrySelect').val(),
             rowUpdate: {
-                Id: that.val(),
-                Value: a,
-                Comment: b
+                Id: a.val(),
+                Value: b.val(),
+                Comment: c.val()
             }
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-            that.attr('disabled', true);
+            if (parseToBool(data)) {
+                that.removeClass('btn-warning');
+                a.removeClass('is-invalid');
+                that.attr('disabled', true);
+            } else {
+                that.addClass('btn-warning');
+                a.addClass('is-invalid');
+            } 
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);
@@ -113,101 +130,3 @@ window.onload = () => {
     );
 };
 */
-
-$(function () {
-    //var dataSource = createDataSource();
-    //createTable(dataSource);
-});
-
-$('#countrySelectKendo').change(function (e) {
-    var value = $(this).val();
-    //var dataSource = $("#grid").data("kendoGrid").dataSource;
-    createTable(createDataSource());
-    //dataSource.filter({ field: "language", operator: "eq", value: value });
-});
-
-function createTable(data) {
-    $("#grid").kendoGrid({
-        dataSource: data,
-        height: 550,
-        filterable: true,
-        sortable: true,
-        pageable: true,
-        toolbar: ["create", "save", "cancel"],
-        columns: [
-            { field: "Id", title: "Id" },
-            { field: "Value", title: "Value" },
-            { field: "Comment", title: "Comment" },
-            { command: "destroy", title: "Action", width: "150px" },
-            { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
-        ],
-        editable: "inline"
-    });
-}
-
-function createDataSource() {
-    let dataSource = new kendo.data.DataSource({
-        transport: {
-            read: function (options) {
-                $.ajax({
-                    url: crudServiceBaseUrlRead,
-                    type: 'POST',
-                    dataType: "json",
-                    data: {
-                        id: $('#countrySelectKendo').val()
-                    },
-                    success: function (result) {
-                        options.success(result);
-                    },
-                    error: function (result) {
-                        options.error(result);
-                    }
-                });
-            },
-            //read: {
-            //    type: 'POST',
-            //    url: crudServiceBaseUrlRead,
-            //    //dataType: "jsonp",
-            //    data: {
-            //        id: $('#countrySelectKendo').val()
-            //    }
-            //},
-            update: {
-                type: 'POST',
-                url: crudServiceBaseUrlUpdate,
-                //dataType: "jsonp"
-            },
-            create: {
-                type: 'POST',
-                url: crudServiceBaseUrlCreate,
-                dataType: "json"
-            },
-            destroy: {
-                url: crudServiceBaseUrlDelete,
-                dataType: "json"
-            },
-            parameterMap: function (options, operation) {
-                if (operation !== "read" && options.models) {
-                    return { models: kendo.stringify(options.models) };
-                }
-            }
-        },
-        serverFiltering: true,
-        pageSize: 20,
-        scrollable: true,
-        batch: true,
-        sortable: true,
-        filterable: true,
-        schema: {
-            model: {
-                id: "Id",
-                fields: {
-                    Id: { type: "string", editable: false, nullable: false },
-                    Value: { type: "string", editable: true, validation: { required: true } },
-                    Comment: { type: "string", editable: true }
-                }
-            }
-        }
-    });
-    return dataSource;
-}

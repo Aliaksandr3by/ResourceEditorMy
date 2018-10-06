@@ -7,7 +7,11 @@ namespace ResourceEditor.Controllers
 {
     public class HomeController : Controller
     {
-        //TODO rename Id to id
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost]
         public bool Delete(LangName rowDelete, string Id)
         {
@@ -19,9 +23,16 @@ namespace ResourceEditor.Controllers
         }
         public bool Update(LangName rowUpdate, string Id)
         {
-            string _pathSave = ResourceHelper.GetPath(Id);
+            if (ModelState.IsValid)
+            {
+                string _pathSave = ResourceHelper.GetPath(Id);
 
-            return ResourceHelper.Update(_pathSave, rowUpdate);
+                return ResourceHelper.Update(_pathSave, rowUpdate);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool Insert(List<LangName> list, string Id)

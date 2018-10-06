@@ -1,10 +1,11 @@
 ﻿@section scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
         let urlControlActionDelete = "@Url.Action("Delete", "Home")";
         let urlControlActionUpdate = "@Url.Action("Update", "Home")";
         let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
-        let list = [];
-</script>
+    let list = [];
+    let countTableElement = 0;
+    </script>
 }
 
 @{
@@ -15,14 +16,17 @@
 @{
     <div class="mainTableResource">
         <form method="post" action="@Url.Action("Read", "Home")">
+            <br />
             <p>
-                <select id="countrySelect" name="Id">
+                <select class="form-control d-inline w-100" id="countrySelect" name="Id">
+                    <option disabled>Select language</option>
                     @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
                     {
                         <option value="@item.Id">@item.Value</option>
                     }
                 </select>
             </p>
+            <br />
             <div id="rootMainTable">
                 <table id="mainTable" class="table table-striped">
                     <thead class="thead-dark">
@@ -38,9 +42,8 @@
                         @Html.Partial("UpdateData")
                     </tbody>
                 </table>
-                <p><button type="button" class="addLineButton btn btn-success" id="buttonAdd">Add</button></p>
             </div>
-            <p><button type="button" class="btn btn-warning float-right" id="addTableRow">+</button></p>
+            <p><button type="button" class="btn btn-warning d-inline w-100" id="addTableRow">+</button></p>
         </form>
     </div>
 }

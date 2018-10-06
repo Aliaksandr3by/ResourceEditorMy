@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="qwe" xml:space="preserve">
-    <value>qweqweqwe</value>
-    <comment>qwewqe</comment>
+  <data name="q1" xml:space="preserve">
+    <value>qwe</value>
+    <comment>1</comment>
+  </data>
+  <data name="q2" xml:space="preserve">
+    <value>asd</value>
+  </data>
+  <data name="q3" xml:space="preserve">
+    <value>zxc</value>
+    <comment>2</comment>
+  </data>
+  <data name="q4" xml:space="preserve">
+    <value>wer</value>
+  </data>
+  <data name="q5" xml:space="preserve">
+    <value>sdf</value>
+    <comment>3</comment>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>xcv</value>
+    <comment>4</comment>
   </data>
 </root>

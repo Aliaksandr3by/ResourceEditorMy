@@ -17,10 +17,16 @@
     <div class="container">
         <header class="row">
             <div class="col">
-                <ul>
-                    <li>@Html.ActionLink("Main Table", "read", "Home")</li>
-                    <li>@Html.ActionLink("Main Kendo Table", "ReadCrud", "TableEditResource")</li>
-                    <li>@Html.ActionLink("Get JSON", "_getJson", "TableEditResource")</li>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        @Html.ActionLink("Index", "Index", "Home", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Main Table", "read", "Home", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
                 </ul>
             </div>
         </header>
@@ -30,8 +36,10 @@
             </div>
         </main>
         <footer class="row">
-            <div class="col"> 
-                @Html.Partial("GetUserIP")
+            <div class="col">
+                <div class="alert alert-secondary" role="alert">
+                    @Html.Partial("GetUserIP")
+                </div>
             </div>
         </footer>
     </div>
