@@ -118,10 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="q1" xml:space="preserve">
+    <value>qewqeq</value>
+  </data>
+  <data name="q2" xml:space="preserve">
     <value>qwe</value>
   </data>
   <data name="q3" xml:space="preserve">
-    <value>qwe</value>
-    <comment>qwe</comment>
+    <value>eqwee</value>
+  </data>
+  <data name="q4" xml:space="preserve">
+    <value>1</value>
+    <comment>1</comment>
   </data>
 </root>

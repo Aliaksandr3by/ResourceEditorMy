@@ -15,9 +15,9 @@
         </script>
 
         <tr id="tableRow_@item.Id">
-            <th scope="row"><input name="list[@i].Id" value="@item.Id" readonly></th>
-            <td><input type="text" name="list[@i].Value" value="@item.Value" /></td>
-            <td><input type="text" name="list[@i].Comment" value="@item.Comment" /></td>
+            <th scope="row"><input id="Id_@item.Id" name="list[@i].Id" value="@item.Id" readonly></th>
+            <td><input type="text" id="Value_@item.Id" name="list[@i].Value" value="@item.Value" /></td>
+            <td><input type="text" id="Comment_@item.Id" name="list[@i].Comment" value="@item.Comment" /></td>
             <td>
                 <button type="button" name="saveButton_@item.Id" value="@item.Id" class="saveLineButton btn btn-success">Save</button>
                 <button type="button" name="deleteButton_@item.Id" value="@item.Id" class="deleteLineButton btn btn-danger">Delete</button>

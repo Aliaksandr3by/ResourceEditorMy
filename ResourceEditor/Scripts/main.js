@@ -15,6 +15,8 @@ $("#addTableRow").click(
 $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
     let that = $(this);
     let saveInput = that.closest('tr').children('td').children('input');
+    let a = $(`#Value_${that.val()}`).val();
+    let b = $(`#Comment_${that.val()}`).val();
     $.ajax({
         type: 'POST',
         url: urlControlActionUpdate,
@@ -22,8 +24,8 @@ $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
             Id: $('#countrySelect').val(),
             rowUpdate: {
                 Id: that.val(),
-                Value: saveInput.val(),
-                Comment: saveInput.val()
+                Value: a,
+                Comment: b
             }
         },
         success: function (data, textStatus) {
