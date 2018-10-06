@@ -27,13 +27,11 @@ namespace ResourceEditor.Controllers
             return Json(_langName);
         }
 
-        public ActionResult Update([DataSourceRequest] DataSourceRequest request, LangName langName, string id = "en")
+        public bool Update([DataSourceRequest] DataSourceRequest request, LangName langName, string id = "en")
         {
             string _pathLoad = ResourceHelper.GetPath(id);
 
-            List<LangName> _langName = ResourceHelper.Update(_pathLoad, langName);
-
-            return Json(_langName);
+            return ResourceHelper.Update(_pathLoad, langName);
         }
 
         public ActionResult Delete([DataSourceRequest] DataSourceRequest request, LangName langName, string id = "en")

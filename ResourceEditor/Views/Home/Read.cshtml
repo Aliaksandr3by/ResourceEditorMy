@@ -4,6 +4,7 @@
 
 <script type="text/javascript">
         let urlControlActionDelete = "@Url.Action("Delete", "Home")";
+        let urlControlActionUpdate = "@Url.Action("Update", "Home")";
         let urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
         let list = [];
 </script>
@@ -40,6 +41,7 @@
                         @Html.Partial("UpdateData")
                     </tbody>
                 </table>
+                <p><button type="button" class="addLineButton btn btn-success" id="buttonAdd">Add</button></p>
             </div>
             <p><button type="button" class="btn btn-warning float-right" id="addTableRow">+</button></p>
         </form>

@@ -12,19 +12,19 @@ $("#addTableRow").click(
     }
 );
 
-$("#addTableRow").on('click', '.saveLineButton', $(this), function (e) {
-    var that = $(this);
-    let saveeOblect = list.filter((obj) => {
-        if (obj.Id === that.val()) {
-            return obj;
-        }
-    });
+$("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
+    let that = $(this);
+    let a = that.closest('tr').children('')
     $.ajax({
         type: 'POST',
-        url: urlControlActionDelete,
+        url: urlControlActionUpdate,
         data: {
-            Id: $('#countrySelect').val()
-
+            Id: $('#countrySelect').val(),
+            rowUpdate: list.find((obj) => {     //list имеено устаревшие данные до обновления
+                if (obj.Id === that.val()) {
+                    return obj;
+                }
+            })
         },
         success: function (data, textStatus) {
             console.log(textStatus);
@@ -39,32 +39,25 @@ $("#addTableRow").on('click', '.saveLineButton', $(this), function (e) {
     });
 });
 
-
+///Method delete row
 $('#rootMainTable').on('click', '.deleteLineButton', $(this), function (e) {
     let that = $(this);
-    let deleteRow;
-    let deleteOblect = list.filter((obj) => {
-        if (obj.Id === that.val()) {
-            deleteRow = $(`#tableRow_${obj.Id}`);
-            return obj;
-        }
-    });
-    
     $.ajax({
         type: 'POST',
         url: urlControlActionDelete,
         data: {
             Id: $('#countrySelect').val(),
-            langName: deleteOblect
+            rowDelete: list.find((obj) => {
+                if (obj.Id === that.val()) {
+                    return obj;
+                }
+            })
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-
             if ($(data)) {
-                //deleteRow.empty();
                 that.closest('tr').empty();
             }
-
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);

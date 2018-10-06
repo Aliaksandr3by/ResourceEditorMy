@@ -110,7 +110,7 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path load/save a Resx file</param>
         /// <param name="updateElement">Object with data</param>
         /// <param name="StatusUpdate">error status</param>
-        public static List<LangName> Update(string pathSave, LangName updateElement)
+        public static bool Update(string pathSave, LangName updateElement)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
@@ -119,10 +119,14 @@ namespace ResourceEditor.Models
             if (_index >= 0)
             {
                 originalElement[_index] = updateElement;
-                ResourceHelper.Create(pathSave, originalElement);
+                return ResourceHelper.Create(pathSave, originalElement) ? true : false;
+            }
+            else
+            {
+                return false;
             }
 
-            return originalElement;
+           
         }
 
         public static bool Insert(string pathSave, List<LangName> newItemList)

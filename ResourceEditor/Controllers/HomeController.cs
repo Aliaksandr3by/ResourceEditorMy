@@ -9,33 +9,31 @@ namespace ResourceEditor.Controllers
     {
         //TODO rename Id to id
         [HttpPost]
-        public bool Delete(List<LangName> langName, string Id)
+        public bool Delete(LangName rowDelete, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
             string result = default;
             ViewBag.result = $"{result}"; //???
 
-            return ResourceHelper.Delete(_pathSave, langName[0], out result);
+            return ResourceHelper.Delete(_pathSave, rowDelete, out result);
         }
-
-        public ActionResult Insert(List<LangName> list, string Id)
+        public bool Update(LangName rowUpdate, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
 
-            if (list != null) ResourceHelper.Insert(_pathSave, list);
+            return ResourceHelper.Update(_pathSave, rowUpdate);
+        }
 
-            return View("Read");
+        public bool Insert(List<LangName> list, string Id)
+        {
+            string _pathSave = ResourceHelper.GetPath(Id);
+
+            if (list == null) return false;
+
+            return ResourceHelper.Insert(_pathSave, list);
         }
 
         public ActionResult Read(List<LangName> list, string Id)
-        {
-            string _pathSave = ResourceHelper.GetPath(Id);
-
-            List<LangName> _langName = ResourceHelper.Read(_pathSave);
-
-            return View("Read", _langName);
-        }
-        public ActionResult Update(List<LangName> list, string Id)
         {
             string _pathSave = ResourceHelper.GetPath(Id);
 
