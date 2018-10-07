@@ -1,4 +1,5 @@
-﻿using ResourceEditor.Entities;
+﻿using Newtonsoft.Json;
+using ResourceEditor.Entities;
 using ResourceEditor.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -12,54 +13,60 @@ namespace ResourceEditor.Controllers
             return View();
         }
 
-        [HttpPost]
-        public bool Delete(LangName rowDelete, string Id)
+        public ActionResult Read(List<LangName> list, string Language)
         {
-            string _pathSave = ResourceHelper.GetPath(Id);
-            string result = default;
-            ViewBag.result = $"{result}"; //???
-
-            return ResourceHelper.Delete(_pathSave, rowDelete, out result);
-        }
-        public bool Update(LangName rowUpdate, string Id)
-        {
-            if (ModelState.IsValid)
-            {
-                string _pathSave = ResourceHelper.GetPath(Id);
-
-                return ResourceHelper.Update(_pathSave, rowUpdate);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool Insert(List<LangName> list, string Id)
-        {
-            string _pathSave = ResourceHelper.GetPath(Id);
-
-            if (list == null) return false;
-
-            return ResourceHelper.Insert(_pathSave, list);
-        }
-
-        public ActionResult Read(List<LangName> list, string Id)
-        {
-            string _pathSave = ResourceHelper.GetPath(Id);
+            string _pathSave = ResourceHelper.GetPath(Language);
 
             List<LangName> _langName = ResourceHelper.Read(_pathSave);
 
             return View("Read", _langName);
         }
 
-        public PartialViewResult Switch(List<LangName> list, string Id)
+        [HttpPost]
+        public ActionResult Delete(LangName rowDelete, string Language)
         {
-            string _pathSave = ResourceHelper.GetPath(Id);
+            string _pathSave = ResourceHelper.GetPath(Language);
+            string result = default;
+            ViewBag.result = $"{result}"; //???
 
-            List<LangName> _langName = ResourceHelper.Read(_pathSave);
+            return Json(ResourceHelper.Delete(_pathSave, rowDelete, out result));
+        }
 
-            return PartialView("UpdateData", _langName);
+        [HttpPost]
+        public ActionResult Update(LangName rowUpdate, string Language)
+        {
+            if (ModelState.IsValid)
+            {
+                string _pathSave = ResourceHelper.GetPath(Language);
+                var tmp = ResourceHelper.Update(_pathSave, rowUpdate);
+                var tmpJson = JsonConvert.SerializeObject((ResourceHelper.Update(_pathSave, rowUpdate)));
+                return Json(tmp);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Insert(List<LangName> list, string Language)
+        {
+            string _pathSave = ResourceHelper.GetPath(Language);
+
+            if (list != null)
+            {
+                return Json(ResourceHelper.Insert(_pathSave, list));
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult Switch(string Language)
+        {
+            string _pathSave = ResourceHelper.GetPath(Language);
+
+            return Json(ResourceHelper.Read(_pathSave));
         }
     }
 }

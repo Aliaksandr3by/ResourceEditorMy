@@ -6,15 +6,6 @@
     {
         var item = Model[i];
 
-
-        @*<script type="text/javascript">
-            list.push({
-                Id:"@item.Id",
-                Value:"@item.Value",
-                Comment:"@item.Comment"
-            });
-        </script>*@
-
         <tr id="tableRow_@item.Id">
             <th scope="row"><input class="inputResourseData  form-control d-inline w-100" id="Id_@item.Id" name="list[@i].Id" value="@item.Id" readonly></th>
             <td><input type="text" class="inputResourseData  form-control d-inline w-100" id="Value_@item.Id" name="list[@i].Value" value="@item.Value" /></td>

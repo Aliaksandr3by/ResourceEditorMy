@@ -455,23 +455,23 @@
     <Content Include="node_modules\jquery-validation\LICENSE.md" />
     <Content Include="node_modules\jquery-validation\package.json" />
     <Content Include="node_modules\jquery-validation\README.md" />
+    <Content Include="node_modules\jquery.cookie\Gruntfile.js" />
+    <Content Include="node_modules\jquery.cookie\jquery.cookie.js" />
+    <Content Include="node_modules\jquery.cookie\MIT-LICENSE.txt" />
+    <Content Include="node_modules\jquery.cookie\test\index.html" />
+    <Content Include="node_modules\jquery.cookie\test\malformed_cookie.html" />
+    <Content Include="node_modules\jquery.cookie\test\server.js" />
+    <Content Include="node_modules\jquery.cookie\test\tests.js" />
     <Content Include="node_modules\jquery\AUTHORS.txt" />
-    <Content Include="node_modules\jquery\bower.json" />
     <Content Include="node_modules\jquery\dist\core.js" />
     <Content Include="node_modules\jquery\dist\jquery.js" />
     <Content Include="node_modules\jquery\dist\jquery.min.js" />
-    <Content Include="node_modules\jquery\dist\jquery.min.map" />
     <Content Include="node_modules\jquery\dist\jquery.slim.js" />
     <Content Include="node_modules\jquery\dist\jquery.slim.min.js" />
-    <Content Include="node_modules\jquery\dist\jquery.slim.min.map" />
     <Content Include="node_modules\jquery\external\sizzle\dist\sizzle.js" />
     <Content Include="node_modules\jquery\external\sizzle\dist\sizzle.min.js" />
-    <Content Include="node_modules\jquery\external\sizzle\dist\sizzle.min.map" />
     <Content Include="node_modules\jquery\external\sizzle\LICENSE.txt" />
     <Content Include="node_modules\jquery\LICENSE.txt" />
-    <Content Include="node_modules\jquery\package.json" />
-    <Content Include="node_modules\jquery\README.md" />
-    <Content Include="node_modules\jquery\src\.eslintrc.json" />
     <Content Include="node_modules\jquery\src\ajax.js" />
     <Content Include="node_modules\jquery\src\ajax\jsonp.js" />
     <Content Include="node_modules\jquery\src\ajax\load.js" />
@@ -608,6 +608,7 @@
     <Content Include="node_modules\popper.js\README.md" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
+    <Content Include="Scripts\header.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -625,6 +626,24 @@
     <Content Include="Views\Shared\GetUserIP.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="node_modules\jquery\bower.json" />
+    <Content Include="node_modules\jquery\dist\jquery.min.map" />
+    <Content Include="node_modules\jquery\dist\jquery.slim.min.map" />
+    <Content Include="node_modules\jquery\external\sizzle\dist\sizzle.min.map" />
+    <Content Include="node_modules\jquery\package.json" />
+    <Content Include="node_modules\jquery\README.md" />
+    <Content Include="node_modules\jquery\src\.eslintrc.json" />
+    <Content Include="node_modules\jquery.cookie\.jshintrc" />
+    <Content Include="node_modules\jquery.cookie\.npmignore" />
+    <Content Include="node_modules\jquery.cookie\.tm_properties" />
+    <Content Include="node_modules\jquery.cookie\.travis.yml" />
+    <Content Include="node_modules\jquery.cookie\bower.json" />
+    <Content Include="node_modules\jquery.cookie\CHANGELOG.md" />
+    <Content Include="node_modules\jquery.cookie\component.json" />
+    <Content Include="node_modules\jquery.cookie\CONTRIBUTING.md" />
+    <Content Include="node_modules\jquery.cookie\cookie.jquery.json" />
+    <Content Include="node_modules\jquery.cookie\package.json" />
+    <Content Include="node_modules\jquery.cookie\README.md" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <None Include="Properties\PublishProfiles\iis.pubxml" />
@@ -679,8 +698,7 @@
           <IISUrl>http://localhost:53861/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <CustomServerUrl>https://resxeditor.ddns.net/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

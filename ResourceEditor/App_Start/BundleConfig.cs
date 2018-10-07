@@ -9,11 +9,10 @@ namespace ResourceEditor
         public static void RegisterBundles(BundleCollection bundles)
         {
             /*JS*/
-            Bundle jqueryBundle = new ScriptBundle("~/bundles/jquery");
-            jqueryBundle.Include("~/node_modules/jquery/dist/jquery.js");
-            jqueryBundle.CdnFallbackExpression = @"~/node_modules/jquery/dist/jquery.js";
-            jqueryBundle.CdnPath = @"https://code.jquery.com/jquery-3.3.1.js";
-            bundles.Add(jqueryBundle);
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                "~/node_modules/jquery/dist/jquery.js",
+                "~/node_modules/jquery.cookie/jquery.cookie.js")
+                );
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/node_modules/jquery-validation/dist/jquery.validate.js"));
@@ -25,13 +24,6 @@ namespace ResourceEditor
                 "~/node_modules/bootstrap/dist/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include("~/Scripts/main.js"));
-
-            Bundle kendoUIBundle = new ScriptBundle("~/bundles/kendoUI");
-            kendoUIBundle.CdnPath = @"http://kendo.cdn.telerik.com/2014.1.318/js/kendo.all.min.js";
-            kendoUIBundle.Include(
-                "~/node_modules/kendo/2014.1.318/kendo.web.min.js",
-                "~/node_modules/kendo/2014.1.318/kendo.autocomplete.min.js");
-            bundles.Add(kendoUIBundle);
 
             /*CSS*/
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(

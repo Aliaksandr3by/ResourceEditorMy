@@ -46,7 +46,7 @@ namespace ResourceEditor.Models
         /// Get all the data from the file
         /// </summary>
         /// <param name="pathLoad">Full path by explore file</param>
-        /// <returns></returns>
+        /// <returns>Edited data</returns>
         public static List<LangName> Read(string pathLoad)
         {
             List<LangName> outLangNames = new List<LangName>();
@@ -77,6 +77,7 @@ namespace ResourceEditor.Models
         /// <param name="id">id</param>
         /// <param name="value">value</param>
         /// <param name="comment">comment</param>
+        /// <returns></returns>
         private static ResXDataNode _createNodeElement(ResXResourceWriter rw, string id, string value, string comment = "")
         {
             if (!string.IsNullOrWhiteSpace(id))
@@ -131,7 +132,7 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">path load/save a Resx file</param>
         /// <param name="updateElement">Object with data</param>
         /// <param name="StatusUpdate">error status</param>
-        public static bool Update(string pathSave, LangName updateElement)
+        public static IEnumerable<LangName> Update(string pathSave, LangName updateElement)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
@@ -140,28 +141,29 @@ namespace ResourceEditor.Models
             if (_index >= 0)
             {
                 originalElement[_index] = updateElement;
-                return ResourceHelper.Create(pathSave, originalElement) ? true : false;
+                ResourceHelper.Create(pathSave, originalElement);
+                return originalElement;
             }
             else
             {
-                return ResourceHelper.Insert(pathSave, new List<LangName>() { updateElement }) ? true : false;
+                ResourceHelper.Insert(pathSave, new List<LangName>() { updateElement });
+                return originalElement;
             }
 
 
         }
 
-        public static bool Insert(string pathSave, List<LangName> newItemList)
+        public static IEnumerable<LangName> Insert(string pathSave, List<LangName> newItemList)
         {
-            bool result = false;
-
+            List<LangName> originalElement = default;
             if (newItemList != null)
             {
-                List<LangName> originalElement = ResourceHelper.Read(pathSave);
+                originalElement = ResourceHelper.Read(pathSave);
                 originalElement.AddRange(newItemList);
-                result = ResourceHelper.Create(pathSave, originalElement);
+                ResourceHelper.Create(pathSave, originalElement);
             }
 
-            return result;
+            return originalElement;
         }
 
         //test
@@ -188,7 +190,7 @@ namespace ResourceEditor.Models
         /// <param name="pathSave">Path save file</param>
         /// <param name="deleteElementID">Deleted item ID</param>
         /// <returns>Update collection</returns>
-        public static bool Delete(string pathSave, LangName langNameID, out string messageResult)
+        public static IEnumerable<LangName> Delete(string pathSave, LangName langNameID, out string messageResult)
         {
             List<LangName> originalElement = ResourceHelper.Read(pathSave);
 
@@ -207,24 +209,24 @@ namespace ResourceEditor.Models
                     if (DeleteAllEntitiesEN(langNameID) == null)
                     {
                         messageResult = "unknown error";
-                        return false;
+                        return originalElement;
                     }
                 }
+
+                messageResult = $"Delete {langNameID.Id} - {langNameID.Value} is complete";
+
+                return originalElement;
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 messageResult = ex.Message;
-                return false;
+                return null;
             }
             catch (Exception ex)
             {
                 messageResult = ex.Message;
-                return false;
+                return null;
             }   
-
-            messageResult = $"Delete {langNameID.Id} - {langNameID.Value} is complete";
-
-            return true;
         }
 
         /// <summary>
