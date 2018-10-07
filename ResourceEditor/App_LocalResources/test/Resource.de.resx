@@ -119,6 +119,8 @@
   </resheader>
   <data name="q1" xml:space="preserve">
     <value>qwe</value>
-    <comment>qwe</comment>
+  </data>
+  <data name="q2" xml:space="preserve">
+    <value>qweqe</value>
   </data>
 </root>

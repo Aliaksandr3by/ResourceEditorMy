@@ -1,4 +1,4 @@
-﻿let parseToBool = (el) => {
+﻿let parseBool = (el) => {
     if (el.toLowerCase() === "true") {
         return true;
     } else if (el.toLowerCase() === "false") {
@@ -8,21 +8,36 @@
     }
 };
 
-$("#addTableRow").click(
-    function myfunction() {
-        $('#mainTable').children('tbody').append(`<tr></tr>`);
-        let tablAddRow2 = $('#mainTable').children('tbody').children('tr');
-        tablAddRow2.last().append(`<th><input type="text" class="inputResourseData form-control d-inline w-100" id="Id_${countTableElement}" name="list[${countTableElement}].Id" scope="row"/></th>`);
-        tablAddRow2.last().append(`<td><input type="text" class="inputResourseData form-control d-inline w-100" id="Value_${countTableElement}" name="list[${countTableElement}].Value" /></td>`);
-        tablAddRow2.last().append(`<td><input type="text" class="inputResourseData form-control d-inline w-100" id="Comment_${countTableElement}" name="list[${countTableElement}].Comment" /></td>`);
-        tablAddRow2.last().append(`<td><button type="button" id="buttonSave${countTableElement}" value="${countTableElement}" class="saveLineButton btn btn-success d-inline w-100" >Save</button></td>`);
-        tablAddRow2.last().append(`<td></td>`);
-        countTableElement++;
-    }
-); //<input type="text" class="inputResourseData" id="Comment_q4" name="list[3].Comment" value="1">
-//<button type="button" id="saveButton_q4" value="q4" class="saveLineButton btn btn-success">Save</button>
+let countTableElement = 0;
 
-///Method 
+$("#addTableRow").on('click', $(this), (e) => {
+    let createInput = (el) => {
+        return $('<input>', {
+            type: 'text',
+            class: 'inputResourseData form-control d-inline w-100',
+            id: `${el}_${countTableElement}`,
+            name: `list[${countTableElement}].${el}`
+        });
+    };
+
+    let lastTR = $('#mainTable').children('tbody').append(`<tr id="tableRow_${countTableElement}"></tr>`).children('tr').last();
+
+    lastTR.each(
+        (i, el) => {
+            console.dir(el);
+            //this.append('th').append('td').append('td').append('td');
+        }
+    );
+
+    lastTR.append('<th scope="row"></th>').children('th').last().append(createInput("Id"));
+    lastTR.append('<td></td>').children('td').last().append(createInput("Value"));
+    lastTR.append('<td></td>').children('td').last().append(createInput("Comment"));
+    lastTR.append(`<td><button type="button" id="buttonSave${countTableElement}" value="${countTableElement}" class="saveLineButton btn btn-success d-inline w-100" >Save</button></td>`);
+    lastTR.append(`<td></td>`);
+    countTableElement++;
+});
+
+///Method
 $("#rootMainTable").on('change', '.inputResourseData', $(this), function (e) {
     let that = $(this);
     let a = that.closest('tr').children('td').children('button');
@@ -48,7 +63,7 @@ $("#rootMainTable").on('click', '.saveLineButton', $(this), function (e) {
         },
         success: function (data, textStatus) {
             console.log(textStatus);
-            if (parseToBool(data)) {
+            if (parseBool(data)) {
                 that.removeClass('btn-warning');
                 a.removeClass('is-invalid');
                 that.attr('disabled', true);
@@ -118,15 +133,13 @@ $('#countrySelect').change(function (e) {
     });
 });
 
-//+++++++++++++++++++++++
-/*
 window.onload = () => {
-    document.getElementById('H2').addEventListener(
-        'click',
-        () => {
+    //document.getElementById('H2').addEventListener(
+    //    'click',
+    //    () => {
 
-        },
-        false
-    );
+    //    },
+    //    false
+    //);
 };
-*/
+
