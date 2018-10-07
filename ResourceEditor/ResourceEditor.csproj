@@ -608,7 +608,6 @@
     <Content Include="node_modules\popper.js\README.md" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <Content Include="Scripts\header.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
