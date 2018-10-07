@@ -142,15 +142,17 @@ $('#rootMainTable').on('click', '.deleteLineButton', null, (e) => {
 });
 
 
-$('#countrySelect').change((e) => {
+$('#countrySelect').on('change', null, null, (e) => {
     let that = $(e.target);//$(this);
-    localStorage.setItem("countrySelect", that.val().toString());
+    if (that.val() !== "") {
+        localStorage.setItem("countrySelect", that.val().toString());
+    }
 
     $.ajax({
         type: 'POST',
         url: urlControlSwitchLanguage,
         data: {
-            Language: $('#countrySelect').val()
+            Language: that.val()
         },
         success: (data, textStatus) => {
             $('#mainDataBodyTable').empty();
@@ -167,7 +169,7 @@ $('#countrySelect').change((e) => {
 $(window).on('load', function () {
     /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
     let lsLang = localStorage.getItem("countrySelect");
-    $('#countrySelect').val(lsLang).change();
+    $('#countrySelect').val(lsLang).trigger('change');
 
 });
 
