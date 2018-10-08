@@ -25,7 +25,7 @@ namespace ResourceEditor
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/node_modules/bootstrap/dist/js/bootstrap.js"));
              
-            bundles.Add(new Bundle("~/bundles/main").Include("~/Scripts/main.js")); //неверная минификация
+            bundles.Add(new Bundle("~/bundles/main").Include("~/src/main.js")); //неверная минификация
 
             /*CSS*/
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(

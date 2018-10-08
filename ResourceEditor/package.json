@@ -8,7 +8,11 @@
     "type": "git",
     "url": "git+https://github.com/Aliaksandr3by/ResourceEditorMy.git"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib --plugins=@babel/plugin-transform-arrow-functions --presets=@babel/env --presets minify",
+    "watch": "babel src --out-dir lib -w --plugins=@babel/plugin-transform-arrow-functions --presets=@babel/env"
+  },
   "dependencies": {
     "bootstrap": "^4.1.3",
     "jquery": "^3.3.1",
