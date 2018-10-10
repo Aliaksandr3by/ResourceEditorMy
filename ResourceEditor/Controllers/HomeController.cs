@@ -13,6 +13,20 @@ namespace ResourceEditor.Controllers
             return View();
         }
 
+        public ActionResult DataProtect(LangName itemExists, string Language)
+        {
+            string _pathSave = ResourceHelper.GetPath(Language);
+            var result = ResourceHelper.DataProtect(_pathSave, itemExists);
+            if (result != null)
+            {
+                return Json(result);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public ActionResult Read(List<LangName> list, string Language)
         {
             string _pathSave = ResourceHelper.GetPath(Language);

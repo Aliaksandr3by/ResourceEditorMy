@@ -15,6 +15,20 @@ namespace ResourceEditor.Models
     public class ResourceHelper
     {
         /// <summary>
+        /// This method checks if the item already exists.
+        /// </summary>
+        /// <param name="pathLoad">path find</param>
+        /// <param name="langName"></param>
+        /// <returns></returns>
+        public static LangName DataProtect(string pathLoad, LangName langName)
+        {
+            List<LangName> originalElement = ResourceHelper.Read(pathLoad);
+            var result = from item in originalElement where item.Id == langName.Id select item;
+
+            return result.FirstOrDefault<LangName>();
+        }
+
+        /// <summary>
         /// This method allows to get the path to save the Resource file
         /// </summary>
         /// <param name="id">id country in name file "Resource.*.resx", example "be", if this parameter equalce null, default "en"</param>
@@ -62,7 +76,7 @@ namespace ResourceEditor.Models
                         new LangName
                         {
                             Id = node.Name,
-                            Value = node.GetValue(assemblies).ToString() ?? null,
+                            Value = node.GetValue(assemblies).ToString() ?? "",
                             Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
                         });
                 }

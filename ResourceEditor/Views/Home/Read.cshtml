@@ -1,8 +1,9 @@
 ﻿@section scripts {
     <script type="text/javascript">
-        var urlControlActionDelete = "@Url.Action("Delete", "Home")";
-        var urlControlActionUpdate = "@Url.Action("Update", "Home")";
-        var urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
+        const urlControlActionDelete = "@Url.Action("Delete", "Home")";
+        const urlControlActionUpdate = "@Url.Action("Update", "Home")";
+        const urlControlActionDataProtect = "@Url.Action("DataProtect", "Home")";
+        const urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
 
     </script>
 }
@@ -13,6 +14,12 @@
 }
 
 @{
+    <div id="fileInput" class="form-group">
+        <label for="exampleInputFile">File input</label>
+        <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+        <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+    </div>
+
     <div class="mainTableResource">
         <form method="post" action="@Url.Action("Read", "Home")">
             <br />

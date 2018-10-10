@@ -65,6 +65,39 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
     a.attr('disabled', false);
 });
 
+//метод проверяет есть ли уже введенный ключ
+$("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
+    let that = $(e.target);
+    let tmpData = that.closest('tr').find('input');
+    let [id, value, comment] = tmpData;
+    $.ajax({
+        type: 'POST',
+        url: urlControlActionDataProtect,
+        data: {
+            Language: $('#countrySelect').val(),
+            itemExists: {
+                Id: $(id).val(),
+                Value: $(value).val(),
+                Comment: $(comment).val()
+            }
+        },
+        success: (data, textStatus) => {
+            if (data !== "") {
+                that.addClass('is-invalid');
+                that.closest('th').append('<div class="form-control-feedback">Sorry, that key taken.</div >');
+            } else {
+                that.removeClass('is-invalid');
+                that.closest('th').find('div').remove();
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
+});
+
 ///Method save row
 $("#rootMainTable").on('click', '.saveLineButton', null, e => {
     let that = $(e.target);
