@@ -55,26 +55,30 @@ let createTable$ = (data, count) => {
 
 
 
-let files;
-$("#FileResource").on('change', null, null, (e) => {
-    files = $(e.target).prop('files');
-});
+//let upload;
+//$("#FileResource").on('change', null, null, (e) => {
+//    upload = $(e.target).prop('files');
+//});
 
 $("#FileResourceSend").on('click', null, (e) => {
-    e.stopPropagation(); // Остановка происходящего
-    e.preventDefault();  // Полная остановка происходящего
+    //e.stopPropagation(); // Остановка происходящего
+    //e.preventDefault();  // Полная остановка происходящего
 
     let data = new FormData(); //с encoding установленным в "multipart/form-data".
-    $.each(files, (key, value) => {
-        data.append(key, value);
+
+    let uploadFile = $('#FileResource').prop('files');
+
+    $.each(uploadFile, (i, value) => {
+        data.append(`uploads[${i}]`, value);
     });
 
     $.ajax({
         url: urlControlUploadFile,
         type: 'POST',
         data: data,
-        cache: false,
-        dataType: 'json',
+        //cache: false,
+        //dataType: 'json',
+        //async: true,
         processData: false, // Не обрабатываем файлы (Don't process the files)
         contentType: false, // Так jQuery скажет серверу что это строковой запрос
         success: (respond, textStatus, jqXHR) => {

@@ -1,16 +1,13 @@
 ﻿using Newtonsoft.Json;
 using ResourceEditor.Entities;
 using ResourceEditor.Models;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
 namespace ResourceEditor.Controllers
 {
-    class respond
-    {
-        public string error { get; set; }
-    }
     public class HomeController : Controller
     {
 
@@ -18,16 +15,24 @@ namespace ResourceEditor.Controllers
         {
             return View();
         }
-        public ActionResult UploadFile(HttpPostedFileBase data)
+        public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
-            if (data != null)
+            foreach (var upload in uploads)
             {
-                return Json(new respond() { error = "undefined" });
+                if (upload != null)
+                {
+                    upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName));
+                }
             }
-            else
-            {
-                return Json(new respond() { error = "" });
-            }
+
+            return Json(new { result = "Файл сохранен!", JsonRequestBehavior.AllowGet });
+        }
+        public FileResult GetFile(string Language)
+        {
+            string file_path = ResourceHelper.GetPath(Language);
+            string file_type = "application/xml";
+            string file_name = System.IO.Path.GetFileName(file_path);
+            return File(file_path, file_type, file_name);
         }
         public ActionResult DataProtect(LangName itemExists, string Language)
         {
