@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace ResourceEditor.Controllers
 {
@@ -15,18 +16,28 @@ namespace ResourceEditor.Controllers
         {
             return View();
         }
+
+        [HttpPost]
         public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
+            var tmp = uploads.Select(x => (x.FileName));
+
             foreach (var upload in uploads)
             {
                 if (upload != null)
                 {
                     upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName));
                 }
+                else
+                {
+                    return Json(new { result = "File was not saved!", error = "upload is NUll" });
+                }
             }
 
-            return Json(new { result = "Файл сохранен!", JsonRequestBehavior.AllowGet });
+            return Json(new { result = "File saved!", fileName = string.Join(", ", tmp) });
         }
+
+        [HttpPost]
         public FileResult GetFile(string Language)
         {
             string file_path = ResourceHelper.GetPath(Language);
@@ -34,6 +45,7 @@ namespace ResourceEditor.Controllers
             string file_name = System.IO.Path.GetFileName(file_path);
             return File(file_path, file_type, file_name);
         }
+        [HttpPost]
         public ActionResult DataProtect(LangName itemExists, string Language)
         {
             string _pathSave = ResourceHelper.GetPath(Language);

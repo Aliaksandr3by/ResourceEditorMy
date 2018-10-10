@@ -61,6 +61,7 @@ let createTable$ = (data, count) => {
 //});
 
 $("#FileResourceSend").on('click', null, (e) => {
+    let that = $(e.target);
     //e.stopPropagation(); // Остановка происходящего
     //e.preventDefault();  // Полная остановка происходящего
 
@@ -82,15 +83,11 @@ $("#FileResourceSend").on('click', null, (e) => {
         processData: false, // Не обрабатываем файлы (Don't process the files)
         contentType: false, // Так jQuery скажет серверу что это строковой запрос
         success: (respond, textStatus, jqXHR) => {
-
-            // Если все ОК
-
             if (typeof respond.error === 'undefined') {
-                // Файлы успешно загружены, делаем что нибудь здесь
-
+                $("#FileResource").closest('div').append(`<div>${respond.fileName} is ok </div>`);
             }
             else {
-                console.log('ОШИБКИ ОТВЕТА сервера: ' + respond.error);
+                $("#FileResource").closest('div').append(`<div>${respond.error}</div>`);
             }
         },
         error: (jqXHR, textStatus, errorThrown) => {
