@@ -53,6 +53,49 @@ let createTable$ = (data, count) => {
     return count;
 };
 
+
+
+let files;
+$("#FileResource").on('change', null, null, (e) => {
+    files = $(e.target).prop('files');
+});
+
+$("#FileResourceSend").on('click', null, (e) => {
+    e.stopPropagation(); // Остановка происходящего
+    e.preventDefault();  // Полная остановка происходящего
+
+    let data = new FormData(); //с encoding установленным в "multipart/form-data".
+    $.each(files, (key, value) => {
+        data.append(key, value);
+    });
+
+    $.ajax({
+        url: urlControlUploadFile,
+        type: 'POST',
+        data: data,
+        cache: false,
+        dataType: 'json',
+        processData: false, // Не обрабатываем файлы (Don't process the files)
+        contentType: false, // Так jQuery скажет серверу что это строковой запрос
+        success: (respond, textStatus, jqXHR) => {
+
+            // Если все ОК
+
+            if (typeof respond.error === 'undefined') {
+                // Файлы успешно загружены, делаем что нибудь здесь
+
+            }
+            else {
+                console.log('ОШИБКИ ОТВЕТА сервера: ' + respond.error);
+            }
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('ОШИБКИ AJAX запроса: ' + textStatus);
+        }
+    });
+
+});
+
 $("#addTableRow").on('click', null, e => {
     createRow$({ Id: "", Value: "", Comment: "" }, countTableElement);
     countTableElement++;
@@ -84,9 +127,11 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
         success: (data, textStatus) => {
             if (data !== "") {
                 that.addClass('is-invalid');
-                that.closest('th').append('<div class="form-control-feedback">Sorry, that key taken.</div >');
+                that.closest('th').append('<div class="invalid-feedback">Sorry, that key taken.</div >');
+                $(value).attr('placeholder', data.Value).blur().css({ 'color': 'red', 'font-size': '80%' });
             } else {
                 that.removeClass('is-invalid');
+                $(value).removeAttr('placeholder');
                 that.closest('th').find('div').remove();
             }
         },

@@ -2,17 +2,33 @@
 using ResourceEditor.Entities;
 using ResourceEditor.Models;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ResourceEditor.Controllers
 {
+    class respond
+    {
+        public string error { get; set; }
+    }
     public class HomeController : Controller
     {
+
         public ActionResult Index()
         {
             return View();
         }
-
+        public ActionResult UploadFile(HttpPostedFileBase data)
+        {
+            if (data != null)
+            {
+                return Json(new respond() { error = "undefined" });
+            }
+            else
+            {
+                return Json(new respond() { error = "" });
+            }
+        }
         public ActionResult DataProtect(LangName itemExists, string Language)
         {
             string _pathSave = ResourceHelper.GetPath(Language);
