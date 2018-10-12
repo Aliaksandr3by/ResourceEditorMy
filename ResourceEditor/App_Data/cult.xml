@@ -1,9 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Lang>
   <LangName name="en">
-    <Id></Id>
+    <Id>
+    </Id>
     <Value>USA</Value>
-    <Comment></Comment>
+    <Comment>
+    </Comment>
   </LangName>
   <LangName name="pl">
     <Id>pl</Id>
@@ -19,5 +21,15 @@
     <Id>de</Id>
     <Value>Germany</Value>
     <Comment>Германия</Comment>
+  </LangName>
+  <LangName name="it">
+    <Id>it</Id>
+    <Value>Italian</Value>
+    <Comment>italiano</Comment>
+  </LangName>
+  <LangName name="fr">
+    <Id>fr</Id>
+    <Value>French</Value>
+    <Comment>français</Comment>
   </LangName>
 </Lang>

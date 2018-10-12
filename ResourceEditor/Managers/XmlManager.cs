@@ -47,33 +47,51 @@ namespace ResourceEditor.Managers
         {
             string pathXML = HostingEnvironment.MapPath("~/App_Data/cult.xml");
 
+            bool FinderLangSpec(XmlDocument docEx, CultureInfo myCIintlEx)
+            {
+                foreach (XmlNode xnode in docEx.DocumentElement)
+                {
+                    XmlNode attr = xnode.Attributes.GetNamedItem("name");
+                    string _langNameAttr = attr.Value;
+
+                    if (attr.Value == myCIintlEx.Name)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
             int _start = fileName.IndexOf('.') + 1;
             int _end = fileName.IndexOf('.', _start);
-            string lg = fileName.Substring(_start, _end - _start);
+            string lg = fileName.Substring(_start, _end - _start).ToLower();
 
             CultureInfo myCIintl = new CultureInfo(lg, false);
  
             XmlDocument doc = new XmlDocument();
             doc.Load(pathXML);
 
-            XmlNode root = doc.LastChild;
+            if (FinderLangSpec(doc, myCIintl))
+            {
+                XmlNode root = doc.LastChild;
 
-            XmlElement nod = doc.CreateElement("LangName");
-            nod.SetAttribute("name", lg);
+                XmlElement nod = doc.CreateElement("LangName");
+                nod.SetAttribute("name", myCIintl.Name);
 
-            XmlElement Id = doc.CreateElement("Id");
-            Id.InnerText = myCIintl.Name;
-            XmlElement Value = doc.CreateElement("Value");
-            Value.InnerText = myCIintl.EnglishName;
-            XmlElement Comment = doc.CreateElement("Comment");
-            Comment.InnerText = myCIintl.NativeName;
+                XmlElement Id = doc.CreateElement("Id");
+                Id.InnerText = myCIintl.Name;
+                XmlElement Value = doc.CreateElement("Value");
+                Value.InnerText = myCIintl.EnglishName;
+                XmlElement Comment = doc.CreateElement("Comment");
+                Comment.InnerText = myCIintl.NativeName;
 
-            nod.AppendChild(Id);
-            nod.AppendChild(Value);
-            nod.AppendChild(Comment);
+                nod.AppendChild(Id);
+                nod.AppendChild(Value);
+                nod.AppendChild(Comment);
 
-            root.AppendChild(nod);
-            doc.Save(pathXML);
+                root.AppendChild(nod);
+                doc.Save(pathXML);
+            }
         }
     }
 }
