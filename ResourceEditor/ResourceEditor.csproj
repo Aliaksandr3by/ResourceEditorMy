@@ -706,7 +706,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Read.cshtml" />
-    <Content Include="Views\Shared\SelectLanguage.cshtml" />
     <Content Include="Views\Shared\GetUserIP.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -868,7 +867,7 @@
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <Content Include="Views\Shared\LoadFile.cshtml" />
+    <Content Include="Views\Shared\SelectCountry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

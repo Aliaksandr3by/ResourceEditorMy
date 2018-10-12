@@ -117,22 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="erqweq" xml:space="preserve">
-    <value>1231</value>
-    <comment>123</comment>
-  </data>
   <data name="q1" xml:space="preserve">
-    <value>qwe</value>
-    <comment>qweq</comment>
+    <value>bel</value>
+    <comment>qweqe</comment>
   </data>
   <data name="q2" xml:space="preserve">
-    <value>qwe</value>
+    <value>йцуйцу</value>
   </data>
   <data name="q3" xml:space="preserve">
-    <value>qwe</value>
+    <value>уйцуцйу</value>
   </data>
-  <data name="q5" xml:space="preserve">
-    <value>eqwe</value>
-    <comment>qweqe</comment>
+  <data name="q4" xml:space="preserve">
+    <value>йцуйцу</value>
+  </data>
+  <data name="q55" xml:space="preserve">
+    <value>цукцу</value>
+  </data>
+  <data name="uiou" xml:space="preserve">
+    <value>йцуйцу</value>
   </data>
 </root>

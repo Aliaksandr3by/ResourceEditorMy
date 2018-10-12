@@ -32,4 +32,9 @@
     <Value>French</Value>
     <Comment>français</Comment>
   </LangName>
+  <LangName name="be">
+    <Id>be</Id>
+    <Value>Belarusian</Value>
+    <Comment>Беларуская</Comment>
+  </LangName>
 </Lang>

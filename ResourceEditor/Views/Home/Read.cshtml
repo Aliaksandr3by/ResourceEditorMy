@@ -14,48 +14,33 @@
     ViewBag.Title = "Main Table";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
-<div class="row">
-        @Html.Partial("LoadFile")
-</div>
-
-
-<div class="row">
-    <div class="col">
-        <div class="mainTableResource">
-            <form method="post" action="@Url.Action("Read", "Home")">
-                <br />
-                <p>
-                    <select class="form-control d-inline w-100" id="countrySelect" name="Id" required>
-                        <option disabled selected>Select language</option>
-                        @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
-                        {
-                            <option value="@item.Id">@item.Value</option>
-                        }
-                    </select>
-
-                    <a id="linkDownloads" href="@Url.Action("GetFile",  "Home", new { Language = "" })" name="Language" class="btn btn-info" download>Download</a>
-
-                    <button type="button" class="btn btn-dark" id="saveResxFile">Save</button>
-                </p>
-                <br />
-                <div id="rootMainTable">
-                    <table id="mainTable" class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Key</th>
-                                <th scope="col">Value</th>
-                                <th scope="col">Comment</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="mainDataBodyTable"></tbody>
-                    </table>
-                </div>
-                <p><button type="button" class="btn btn-warning d-inline w-100" id="addTableRow">+</button></p>
-            </form>
-        </div>
+<div class="col">
+    <input type="file" class="" id="FileResource" multiple required accept=".resx">
+    <button id="FileResourceSend" class="btn btn-secondary" type="button">Send</button>
+    <div class="mainTableResource">
+        <form method="post" action="@Url.Action("Read", "Home")">
+            <br />
+            <p>
+                @Html.Partial("SelectCountry")
+                <a id="linkDownloads" href="@Url.Action("GetFile",  "Home", new { Language = "" })" name="Language" class="btn btn-info" download>Download</a>
+                <button type="button" class="btn btn-dark" id="saveResxFile">Save</button>
+            </p>
+            <br />
+            <div id="rootMainTable">
+                <table id="mainTable" class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainDataBodyTable"></tbody>
+                </table>
+            </div>
+            <p><button type="button" class="btn btn-warning d-inline w-100" id="addTableRow">+</button></p>
+        </form>
     </div>
 </div>
