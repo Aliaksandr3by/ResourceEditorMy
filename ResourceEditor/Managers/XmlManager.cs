@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Xml;
+using System.Globalization;
 
 namespace ResourceEditor.Managers
 {
@@ -14,11 +15,8 @@ namespace ResourceEditor.Managers
         public static IEnumerable<Entities.LangName> GetLanguages()
         {
             List<LangName> result = new List<LangName>();
-            //string xmlFile = Path.GetFullPath(@"C:\\Users\\hole\\source\\repos\\ResourceEditorMy\\ResourceEditor\\App_Data\\cult.xml");
-            //string xmlFile = Server.MapPath("~/App_Data/cult.xml");
-            string xmlFile = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/cult.xml");
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(xmlFile);
+            xDoc.Load(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/cult.xml"));
 
             foreach (XmlNode xnode in xDoc.DocumentElement)
             {
@@ -44,6 +42,38 @@ namespace ResourceEditor.Managers
                 result.Add(country);
             }
             return result;
+        }
+        public static void SetLanguages(string fileName)
+        {
+            string pathXML = HostingEnvironment.MapPath("~/App_Data/cult.xml");
+
+            int _start = fileName.IndexOf('.') + 1;
+            int _end = fileName.IndexOf('.', _start);
+            string lg = fileName.Substring(_start, _end - _start);
+
+            CultureInfo myCIintl = new CultureInfo(lg, false);
+ 
+            XmlDocument doc = new XmlDocument();
+            doc.Load(pathXML);
+
+            XmlNode root = doc.LastChild;
+
+            XmlElement nod = doc.CreateElement("LangName");
+            nod.SetAttribute("name", lg);
+
+            XmlElement Id = doc.CreateElement("Id");
+            Id.InnerText = myCIintl.Name;
+            XmlElement Value = doc.CreateElement("Value");
+            Value.InnerText = myCIintl.EnglishName;
+            XmlElement Comment = doc.CreateElement("Comment");
+            Comment.InnerText = myCIintl.NativeName;
+
+            nod.AppendChild(Id);
+            nod.AppendChild(Value);
+            nod.AppendChild(Comment);
+
+            root.AppendChild(nod);
+            doc.Save(pathXML);
         }
     }
 }

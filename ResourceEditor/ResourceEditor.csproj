@@ -377,6 +377,7 @@
   <ItemGroup>
     <Content Include="App_Data\cult.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax">
@@ -421,6 +422,9 @@
     <Content Include="node_modules\bootstrap\js\src\tab.js" />
     <Content Include="node_modules\bootstrap\js\src\tooltip.js" />
     <Content Include="node_modules\bootstrap\js\src\util.js" />
+    <Content Include="node_modules\file-saver\dist\FileSaver.js" />
+    <Content Include="node_modules\file-saver\dist\FileSaver.min.js" />
+    <Content Include="node_modules\file-saver\src\FileSaver.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\LICENSE.txt" />
@@ -856,6 +860,10 @@
     <Content Include="node_modules\popper.js\index.js.flow" />
     <Content Include="node_modules\popper.js\package.json" />
     <Content Include="node_modules\popper.js\README.md" />
+    <Content Include="node_modules\file-saver\CHANGELOG.md" />
+    <Content Include="node_modules\file-saver\LICENSE.md" />
+    <Content Include="node_modules\file-saver\package.json" />
+    <Content Include="node_modules\file-saver\README.md" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />

@@ -34,6 +34,10 @@
                             <option value="@item.Id">@item.Value</option>
                         }
                     </select>
+
+                    <a id="linkDownloads" href="@Url.Action("GetFile",  "Home", new { Language = "" })" name="Language" class="btn btn-info" download>Download</a>
+
+                    <button type="button" class="btn btn-dark" id="saveResxFile">Save</button>
                 </p>
                 <br />
                 <div id="rootMainTable">

@@ -27,6 +27,11 @@ namespace ResourceEditor.Controllers
                 if (upload != null)
                 {
                     upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName));
+
+                    ResourceEditor.Managers.XmlManager.SetLanguages(upload.FileName);
+
+
+
                 }
                 else
                 {
@@ -36,8 +41,7 @@ namespace ResourceEditor.Controllers
 
             return Json(new { result = "File saved!", fileName = string.Join(", ", tmp) });
         }
-
-        [HttpPost]
+        
         public FileResult GetFile(string Language)
         {
             string file_path = ResourceHelper.GetPath(Language);
@@ -45,6 +49,7 @@ namespace ResourceEditor.Controllers
             string file_name = System.IO.Path.GetFileName(file_path);
             return File(file_path, file_type, file_name);
         }
+
         [HttpPost]
         public ActionResult DataProtect(LangName itemExists, string Language)
         {

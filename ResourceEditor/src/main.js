@@ -53,12 +53,27 @@ let createTable$ = (data, count) => {
     return count;
 };
 
+$("#saveResxFile").on('click', null, null, e => {
+    let that = $(e.target);
 
+    $.ajax({
+        type: 'GET',
+        url: urlControlGetFile,
+        data: {
+            Language: $('#countrySelect').val()
+        },
+        success: (data, textStatus) => {
+            let tmp = data;
+            location.href = urlControlGetFile + "?Language=" + $('#countrySelect').val();
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.error(xhr);
+            console.error(ajaxOptions);
+            console.error(thrownError);
+        }
+    });
+});
 
-//let upload;
-//$("#FileResource").on('change', null, null, (e) => {
-//    upload = $(e.target).prop('files');
-//});
 
 $("#FileResourceSend").on('click', null, (e) => {
     let that = $(e.target);
@@ -229,6 +244,7 @@ $('#countrySelect').on('change', null, null, e => {
         success: (data, textStatus) => {
             $('#mainDataBodyTable').empty();
             countTableElement = createTable$(data, countTableElement);
+            $('#linkDownloads').attr('href', urlControlGetFile + "?Language=" + that.val());
         },
         error: (xhr, ajaxOptions, thrownError) => {
             console.error(xhr);
