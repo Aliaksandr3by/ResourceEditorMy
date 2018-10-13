@@ -20,18 +20,12 @@ namespace ResourceEditor.Controllers
         [HttpPost]
         public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
-            var tmp = uploads.Select(x => (x.FileName));
-
             foreach (var upload in uploads)
             {
                 if (upload != null)
                 {
-                    upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName));
-
-                    ResourceEditor.Managers.XmlManager.SetLanguages(upload.FileName);
-
-
-
+                    upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName)); //файл перезаписывается
+                    ResourceEditor.Managers.XmlManager.SetLang(upload.FileName);
                 }
                 else
                 {
@@ -39,7 +33,7 @@ namespace ResourceEditor.Controllers
                 }
             }
 
-            return Json(new { result = "File saved!", fileName = string.Join(", ", tmp) });
+            return Json(new { result = "File saved!", fileName = string.Join(", ", uploads.Select(x => x.FileName)) });
         }
         
         public FileResult GetFile(string Language)

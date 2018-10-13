@@ -75,13 +75,9 @@ $("#saveResxFile").on('click', null, null, e => {
 });
 
 
-$("#FileResourceSend").on('click', null, (e) => {
+$("#ResourceUploads").on('click', null, (e) => {
     let that = $(e.target);
-    //e.stopPropagation(); // Остановка происходящего
-    //e.preventDefault();  // Полная остановка происходящего
-
     let data = new FormData(); //с encoding установленным в "multipart/form-data".
-
     let uploadFile = $('#FileResource').prop('files');
 
     $.each(uploadFile, (i, value) => {

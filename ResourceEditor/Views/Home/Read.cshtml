@@ -15,8 +15,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="col">
-    <input type="file" class="" id="FileResource" multiple required accept=".resx">
-    <button id="FileResourceSend" class="btn btn-secondary" type="button">Send</button>
+    <div>
+        <input type="file" class="" id="FileResource" multiple required accept=".resx">
+        <button id="ResourceUploads" class="btn btn-secondary" type="button">Send</button>
+    </div>
     <div class="mainTableResource">
         <form method="post" action="@Url.Action("Read", "Home")">
             <br />
