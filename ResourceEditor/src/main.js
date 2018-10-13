@@ -53,7 +53,7 @@ let createTable$ = (data, count) => {
     return count;
 };
 
-$("#saveResxFile").on('click', null, null, e => {
+$("#ResourceSave").on('click', null, null, e => {
     let that = $(e.target);
 
     $.ajax({
@@ -63,8 +63,11 @@ $("#saveResxFile").on('click', null, null, e => {
             Language: $('#countrySelect').val()
         },
         success: (data, textStatus) => {
-            let tmp = data;
-            location.href = urlControlGetFile + "?Language=" + $('#countrySelect').val();
+            if (data !== "") {
+                location.href = urlControlGetFile + "?Language=" + $('#countrySelect').val();
+            } else {
+                console.log("Please select language");
+            }
         },
         error: (xhr, ajaxOptions, thrownError) => {
             console.error(xhr);
@@ -96,6 +99,20 @@ $("#ResourceUploads").on('click', null, (e) => {
         success: (respond, textStatus, jqXHR) => {
             if (typeof respond.error === 'undefined') {
                 $("#FileResource").closest('div').append(`<div>${respond.fileName} is ok </div>`);
+
+                $.ajax({
+                    url: urlControlSelectCountry,
+                    type: 'POST',
+                    success: (respond, textStatus, jqXHR) => {
+                        $('#CountrySelect').empty();
+                        $(respond).appendTo('#CountrySelect');
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+
+                    }
+                });
+
+
             }
             else {
                 $("#FileResource").closest('div').append(`<div>${respond.error}</div>`);
@@ -137,20 +154,23 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
             }
         },
         success: (data, textStatus) => {
-            if (data !== "") {
+            if (data === "") {
+                that.removeClass('is-invalid');
+                $(value).removeAttr('placeholder');
+                that.closest('th').find('div').remove();//плохо
+            } else if (typeof data.error !== 'undefined'){
+                that.addClass('is-invalid');
+                that.closest('th').append(`<div class="invalid-feedback">${data.error}</div >`);
+            } else if (data !== ""){
                 that.addClass('is-invalid');
                 that.closest('th').append('<div class="invalid-feedback">Sorry, that key taken.</div >');
                 $(value).attr('placeholder', data.Value).blur().css({ 'color': 'red', 'font-size': '80%' });
-            } else {
-                that.removeClass('is-invalid');
-                $(value).removeAttr('placeholder');
-                that.closest('th').find('div').remove();
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
         }
     });
 });
@@ -173,11 +193,12 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
             }
         },
         success: (data, textStatus) => {
-            if (data !== "") {
+            if (data !== "" && typeof data.error !== 'undefined') {
                 that.removeClass('btn-warning');
                 $(id).removeClass('is-invalid');
-                that.attr('disabled', true);
+                that.attr('disabled', String(true));
             } else {
+                console.log(data.error);
                 that.addClass('btn-warning');
                 $(id).addClass('is-invalid');
             }
@@ -225,35 +246,41 @@ $('#rootMainTable').on('click', '.deleteLineButton', null, e => {
     }
 });
 
-$('#countrySelect').on('change', null, null, e => {
+$('#CountrySelect').on('change', '#countrySelect', null, e => {
     let that = $(e.target); //$(this);
-    if (that.val() !== "") {
-        localStorage.setItem("countrySelect", that.val().toString());
+    if (that.val() !== "" && window.localStorage) {
+        localStorage.setItem("countrySelect", String(that.val()));
     }
 
-    $.ajax({
-        type: 'POST',
-        url: urlControlSwitchLanguage,
-        data: {
-            Language: that.val()
-        },
-        success: (data, textStatus) => {
-            $('#mainDataBodyTable').empty();
-            countTableElement = createTable$(data, countTableElement);
-            $('#linkDownloads').attr('href', urlControlGetFile + "?Language=" + that.val());
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
-        }
-    });
+    if (that.val()) {
+        $.ajax({
+            type: 'POST',
+            url: urlControlSwitchLanguage,
+            data: {
+                Language: that.val()
+            },
+            success: (data, textStatus) => {
+                $('#mainDataBodyTable').empty();
+                countTableElement = createTable$(data, countTableElement);
+                $('#linkDownloads').attr('href', urlControlGetFile + "?Language=" + that.val());
+            },
+            error: (xhr, ajaxOptions, thrownError) => {
+                console.log(xhr);
+                console.log(ajaxOptions);
+                console.log(thrownError);
+            }
+        });
+    }
 });
 
 $(window).on('load', function () {
-    /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
-    let lsLang = localStorage.getItem("countrySelect");
-    $('#countrySelect').val(lsLang).trigger('change');
+    if (window.localStorage) {
+        /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
+        let lsLang = localStorage.getItem("countrySelect");
+        if (lsLang) {
+            $('#countrySelect').val(lsLang).trigger('change');
+        }
+    }
 });
 
 window.onload = () => {

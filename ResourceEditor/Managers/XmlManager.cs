@@ -66,7 +66,16 @@ namespace ResourceEditor.Managers
         {
             int _start = text.IndexOf('.') + 1;
             int _end = text.IndexOf('.', _start);
-            return text.Substring(_start, _end - _start).ToLower();
+            int _length = _end - _start;
+            if (_length > 0 )
+            {
+                return text.Substring(_start, _end - _start);
+            }
+            else
+            {
+                return "en";
+            }
+            
         }
 
         public static void SetLanguages(string fileName)

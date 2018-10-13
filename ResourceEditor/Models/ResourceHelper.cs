@@ -38,7 +38,7 @@ namespace ResourceEditor.Models
         {
             string _file = default(string); //name file
 
-            if (string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id) || id == "en")
             {
                 _file = "Resource.resx";
             }
@@ -48,10 +48,7 @@ namespace ResourceEditor.Models
             }
 
             string[] allFoundFiles = Directory.GetFiles(
-                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"),
-                _file,
-                SearchOption.AllDirectories
-                );
+                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"), _file, SearchOption.AllDirectories);
 
             return allFoundFiles.FirstOrDefault();
         }
@@ -63,25 +60,29 @@ namespace ResourceEditor.Models
         /// <returns>Edited data</returns>
         public static List<LangName> Read(string pathLoad)
         {
-            List<LangName> outLangNames = new List<LangName>();
-            using (ResXResourceReader rr = new ResXResourceReader(pathLoad))
+            if (System.IO.File.Exists(pathLoad))
             {
-                rr.UseResXDataNodes = true; //makes a comment resource item available
-                IDictionaryEnumerator dict = rr.GetEnumerator();
-                while (dict.MoveNext())
+                List<LangName> outLangNames = new List<LangName>();
+                using (ResXResourceReader rr = new ResXResourceReader(pathLoad))
                 {
-                    ResXDataNode node = (ResXDataNode)dict.Value;
-                    AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); //i do`t know
-                    outLangNames.Add(
-                        new LangName
-                        {
-                            Id = node.Name,
-                            Value = node.GetValue(assemblies).ToString() ?? "",
-                            Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
-                        });
+                    rr.UseResXDataNodes = true; //makes a comment resource item available
+                    IDictionaryEnumerator dict = rr.GetEnumerator();
+                    while (dict.MoveNext())
+                    {
+                        ResXDataNode node = (ResXDataNode)dict.Value;
+                        AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); //i do`t know
+                        outLangNames.Add(
+                            new LangName
+                            {
+                                Id = node.Name,
+                                Value = node.GetValue(assemblies).ToString() ?? "",
+                                Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
+                            });
+                    }
                 }
+                return outLangNames.OrderBy(e => e.Id).ToList();
             }
-            return outLangNames.OrderBy(e => e.Id).ToList();
+            return null;
         }
 
         /// <summary>

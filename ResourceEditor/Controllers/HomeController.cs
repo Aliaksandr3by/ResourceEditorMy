@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using System.IO;
 
 namespace ResourceEditor.Controllers
 {
@@ -18,44 +19,69 @@ namespace ResourceEditor.Controllers
         }
 
         [HttpPost]
+        public ActionResult SelectCountry()
+        {
+
+
+            return PartialView();
+        }
+
+        [HttpPost]
         public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
-            foreach (var upload in uploads)
+            if (uploads != null)
             {
-                if (upload != null)
+                foreach (var upload in uploads)
                 {
-                    upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName)); //файл перезаписывается
-                    ResourceEditor.Managers.XmlManager.SetLang(upload.FileName);
+                    if (upload != null)
+                    {
+                        upload.SaveAs(Server.MapPath("~/App_LocalResources/" + upload.FileName)); //файл перезаписывается
+                        ResourceEditor.Managers.XmlManager.SetLang(upload.FileName);
+                    }
+                    else
+                    {
+                        return Json(new { result = "File was not saved!", error = "upload is NUll" });
+                    }
                 }
-                else
-                {
-                    return Json(new { result = "File was not saved!", error = "upload is NUll" });
-                }
+                return Json(new { result = "File saved!", fileName = string.Join(", ", uploads.Select(x => x.FileName)) });
             }
-
-            return Json(new { result = "File saved!", fileName = string.Join(", ", uploads.Select(x => x.FileName)) });
+            return Json(new { error = $"File was not found!" });
         }
         
         public FileResult GetFile(string Language)
         {
-            string file_path = ResourceHelper.GetPath(Language);
-            string file_type = "application/xml";
-            string file_name = System.IO.Path.GetFileName(file_path);
-            return File(file_path, file_type, file_name);
+            string _pathSave = ResourceHelper.GetPath(Language);
+            if (System.IO.File.Exists(_pathSave))
+            {
+                string _fileType = "application/xml";
+                string _fileName = System.IO.Path.GetFileName(_pathSave);
+                return File(_pathSave, _fileType, _fileName);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [HttpPost]
         public ActionResult DataProtect(LangName itemExists, string Language)
         {
             string _pathSave = ResourceHelper.GetPath(Language);
-            var result = ResourceHelper.DataProtect(_pathSave, itemExists);
-            if (result != null)
+            if (System.IO.File.Exists(_pathSave))
             {
-                return Json(result);
+                var result = ResourceHelper.DataProtect(_pathSave, itemExists);
+                if (result != null)
+                {
+                    return Json(result);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
-                return null;
+                return Json(new { error = $"{System.IO.Path.GetFileName(_pathSave)} was not found!" });
             }
         }
 
@@ -84,9 +110,15 @@ namespace ResourceEditor.Controllers
             if (ModelState.IsValid)
             {
                 string _pathSave = ResourceHelper.GetPath(Language);
-                var tmp = ResourceHelper.Update(_pathSave, rowUpdate);
-                var tmpJson = JsonConvert.SerializeObject((ResourceHelper.Update(_pathSave, rowUpdate)));
-                return Json(tmp);
+                if (System.IO.File.Exists(_pathSave))
+                {
+                    var tmp = ResourceHelper.Update(_pathSave, rowUpdate);
+                    return Json(tmp);
+                }
+                else
+                {
+                    return Json(new { error = System.IO.Path.GetFileName(_pathSave) + " was not found!"});
+                }
             }
             else
             {

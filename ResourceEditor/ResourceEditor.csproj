@@ -873,28 +873,10 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_LocalResources\Resource.pl.resx">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\test\Resource.de.resx">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\Resource.ru-RU.resx">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\Resource1.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\Resource.resx" />
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="node_modules\popper.js\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_LocalResources\test\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

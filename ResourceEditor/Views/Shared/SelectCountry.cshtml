@@ -2,6 +2,6 @@
     <option disabled selected>Select language</option>
     @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
     {
-        <option value="@item.Id">@item.Value</option>
+    <option value="@item.Id">@item.Id - @item.Value (@item.Comment)</option>
     }
 </select>

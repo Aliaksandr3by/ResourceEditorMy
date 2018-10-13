@@ -6,6 +6,7 @@
         const urlControlSwitchLanguage = "@Url.Action("Switch", "Home")";
         const urlControlUploadFile = "@Url.Action("UploadFile", "Home")";
         const urlControlGetFile = "@Url.Action("GetFile", "Home")";
+        const urlControlSelectCountry = "@Url.Action("SelectCountry", "Home")";
 
     </script>
 }
@@ -23,9 +24,11 @@
         <form method="post" action="@Url.Action("Read", "Home")">
             <br />
             <p>
-                @Html.Partial("SelectCountry")
+                <div id="CountrySelect">
+                    @Html.Partial("SelectCountry")
+                </div>
                 <a id="linkDownloads" href="@Url.Action("GetFile",  "Home", new { Language = "" })" name="Language" class="btn btn-info" download>Download</a>
-                <button type="button" class="btn btn-dark" id="saveResxFile">Save</button>
+                <button type="button" class="btn btn-dark" id="ResourceSave">Save</button>
             </p>
             <br />
             <div id="rootMainTable">

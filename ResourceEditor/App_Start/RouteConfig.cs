@@ -41,7 +41,14 @@ namespace ResourceEditor
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Delete", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "HomeSelectCountry",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "SelectCountry", id = UrlParameter.Optional }
+            );
             
+
         }
     }
 }
