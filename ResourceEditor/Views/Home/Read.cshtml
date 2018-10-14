@@ -1,4 +1,5 @@
-﻿@section scripts {
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@section scripts {
     <script type="text/javascript">
         const urlControlActionDelete = "@Url.Action("Delete", "Home")";
         const urlControlActionUpdate = "@Url.Action("Update", "Home")";
@@ -20,27 +21,27 @@
         <input type="file" class="" id="FileResource" multiple required accept=".resx">
         <button id="ResourceUploads" class="btn btn-secondary" type="button">Send</button>
     </div>
-    <div class="mainTableResource">
-        <form method="post" action="@Url.Action("Read", "Home")">
-            <br />
-                <div id="CountrySelect">@Html.Partial("SelectCountry")</div>
-                <div><button type="button" class="btn btn-dark" id="ResourceSave">Download</button></div>
-            <br />
-            <div id="rootMainTable">
-                <table id="mainTable" class="table table-striped">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Key</th>
-                            <th scope="col">Value</th>
-                            <th scope="col">Comment</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="mainDataBodyTable"></tbody>
-                </table>
-            </div>
-            <p><button type="button" class="btn btn-warning d-inline w-100" id="addTableRow">+</button></p>
-        </form>
+    <div>
+        <br />
+        <div id="CountrySelect">
+            @Html.Partial("SelectCountry")
+        </div>
+        <div><button type="button" class="btn btn-dark" id="ResourceSave">Download</button></div>
+        <br />
+        <div id="rootMainTable">
+            <table id="mainTable" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Key</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="mainDataBodyTable"></tbody>
+            </table>
+        </div>
+        <p><button type="button" class="btn btn-warning d-inline w-100" id="addTableRow">+</button></p>
     </div>
 </div>

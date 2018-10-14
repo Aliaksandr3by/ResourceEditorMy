@@ -1,146 +1,191 @@
-﻿using ResourceEditor.Entities;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Hosting;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="XmlManager.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The xml manager.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace ResourceEditor.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Web;
+    using System.Web.Hosting;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Serialization;
+
+    using ResourceEditor.Entities;
+
+    /// <summary>
+    /// The xml manager.
+    /// </summary>
     public static class XmlManager
     {
+        /// <summary>
+        /// The get languages.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
         public static IEnumerable<Entities.LangName> GetLanguages()
         {
-            List<LangName> result = new List<LangName>();
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/cult.xml"));
+            var result = new List<LangName>();
+            var xDoc = new XmlDocument();
+            xDoc.Load(HostingEnvironment.MapPath("~/App_Data/cult.xml") ?? throw new InvalidOperationException());
 
-            foreach (XmlNode xnode in xDoc.DocumentElement)
+            if (xDoc.DocumentElement != null)
             {
-                LangName country = new LangName();
-                XmlNode attr = xnode.Attributes.GetNamedItem("name");
-                string _langNameAttr = attr.Value;
-
-                foreach (XmlNode item in xnode.ChildNodes)
+                foreach (XmlNode items in xDoc.DocumentElement)
                 {
-                    if (item.Name == nameof(LangName.Id))
+                    var country = new LangName();
+
+                    foreach (XmlNode item in items.ChildNodes)
                     {
-                        country.Id = item.InnerText;
+                        switch (item.Name)
+                        {
+                            case nameof(LangName.Id):
+                                country.Id = item.InnerText;
+                                break;
+                            case nameof(LangName.Value):
+                                country.Value = item.InnerText;
+                                break;
+                            case nameof(LangName.Comment):
+                                country.Comment = item.InnerText;
+                                break;
+                        }
                     }
-                    if (item.Name == nameof(LangName.Value))
-                    {
-                        country.Value = item.InnerText;
-                    }
-                    if (item.Name == nameof(LangName.Comment))
-                    {
-                        country.Comment = item.InnerText;
-                    }
+
+                    result.Add(country);
                 }
-                result.Add(country);
+
             }
-            return result.OrderBy(e=>e.Id).ToList();
+            return result.OrderBy(e => e.Id).ToList();
         }
 
-        static bool FinderLangSpec(XmlDocument docEx, CultureInfo myCIintlEx)
+        /// <summary>
+        /// poip
+        /// </summary>
+        /// <param name="docEx"></param>
+        /// <param name="myCIintlEx"></param>
+        /// <returns></returns>
+        public static bool FinderLangSpec(XmlDocument docEx, CultureInfo myCIintlEx)
         {
-            foreach (XmlNode xnode in docEx.DocumentElement)
-            {
-                XmlNode attr = xnode.Attributes.GetNamedItem("name");
-                string _langNameAttr = attr.Value;
-
-                if (attr.Value == myCIintlEx.Name)
+            if (docEx.DocumentElement != null)
+                foreach (XmlNode item in docEx.DocumentElement)
                 {
-                    return false;
+                    if (item.Attributes != null)
+                    {
+                        var attr = item.Attributes.GetNamedItem("name");
+
+                        if (attr.Value == myCIintlEx.Name)
+                        {
+                            return false;
+                        }
+                    }
                 }
-            }
+
             return true;
         }
 
-        static string CopyTextBetweenСharacters(char start, char end, string text)
+        /// <summary>
+        /// Copy Text Between Character
+        /// </summary>
+        /// <param name="start">first symbol</param>
+        /// <param name="end">second symbol</param>
+        /// <param name="text">base text</param>
+        /// <returns>new text between symbols</returns>
+        public static string CopyTextBetweenSymbols(char start, char end, string text)
         {
-            int _start = text.IndexOf('.') + 1;
-            int _end = text.IndexOf('.', _start);
-            int _length = _end - _start;
-            if (_length > 0 )
-            {
-                return text.Substring(_start, _end - _start);
-            }
-            else
-            {
-                return "en";
-            }
-            
+            var startPosition = text.IndexOf('.') + 1;
+            var endPosition = text.IndexOf('.', startPosition);
+            var length = endPosition - startPosition;
+
+            return length > 0 ? text.Substring(startPosition, endPosition - startPosition) : "en";
         }
 
-        public static void SetLanguages(string fileName)
+        /// <summary>
+        /// This method add language
+        /// </summary>
+        /// <param name="fileName">path to file name</param>
+        public static void AddLanguages(string fileName)
         {
-            string pathXML = HostingEnvironment.MapPath("~/App_Data/cult.xml");
+            var pathXml = HostingEnvironment.MapPath("~/App_Data/cult.xml");
 
-            string lg = CopyTextBetweenСharacters('.', '.', fileName);
+            var lg = CopyTextBetweenSymbols('.', '.', fileName);
 
-            CultureInfo myCIintl = new CultureInfo(lg, false);
+            var cultureInfo = new CultureInfo(lg, false);
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(pathXML);
+            var doc = new XmlDocument();
+            doc.Load(pathXml ?? throw new InvalidOperationException());
 
-            if (FinderLangSpec(doc, myCIintl))
+            if (FinderLangSpec(doc, cultureInfo))
             {
                 XmlNode root = doc.LastChild;
 
                 XmlElement nod = doc.CreateElement("LangName");
-                nod.SetAttribute("name", myCIintl.Name);
+                nod.SetAttribute("name", cultureInfo.Name);
 
-                XmlElement Id = doc.CreateElement("Id");
-                Id.InnerText = myCIintl.Name;
-                XmlElement Value = doc.CreateElement("Value");
-                Value.InnerText = myCIintl.EnglishName;
-                XmlElement Comment = doc.CreateElement("Comment");
-                Comment.InnerText = myCIintl.NativeName;
+                XmlElement id = doc.CreateElement("Id");
+                id.InnerText = cultureInfo.Name;
+                XmlElement value = doc.CreateElement("Value");
+                value.InnerText = cultureInfo.EnglishName;
+                XmlElement comment = doc.CreateElement("Comment");
+                comment.InnerText = cultureInfo.NativeName;
 
-                nod.AppendChild(Id);
-                nod.AppendChild(Value);
-                nod.AppendChild(Comment);
+                nod.AppendChild(id);
+                nod.AppendChild(value);
+                nod.AppendChild(comment);
 
                 root.AppendChild(nod);
-                doc.Save(pathXML);
+                doc.Save(pathXml);
             }
         }
 
+        /// <summary>
+        /// The set lang.
+        /// </summary>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public static bool SetLang(string fileName)
         {
-            string pathXML = HostingEnvironment.MapPath("~/App_Data/cult.xml");
+            var pathXml = HostingEnvironment.MapPath("~/App_Data/cult.xml");
 
-            string lg = CopyTextBetweenСharacters('.', '.', fileName);
+            if (!File.Exists(pathXml)) return false;
 
-            CultureInfo myCIintl = new CultureInfo(lg, false);
+            var lg = CopyTextBetweenSymbols('.', '.', fileName);
 
-            XElement xDoc = XElement.Load(pathXML);
+            var cultureInfo = new CultureInfo(lg, false);
 
-            var findLang = xDoc.Elements("LangName").FirstOrDefault(e => e.Attribute("name").Value == lg);
+            var xDoc = XElement.Load(pathXml ?? throw new InvalidOperationException());
+
+            var findLang = xDoc.Elements("LangName").FirstOrDefault(e => e.Attribute("name")?.Value == lg);
 
             if (findLang == null)
             {
-                XElement doc = new XElement("LangName", new XAttribute("name", myCIintl.Name),
-                    new XElement("Id", myCIintl.Name),
-                    new XElement("Value", myCIintl.EnglishName),
-                    new XElement("Comment", myCIintl.NativeName));
+                var doc = new XElement("LangName", new XAttribute("name", cultureInfo.Name),
+                    new XElement("Id", cultureInfo.Name),
+                    new XElement("Value", cultureInfo.EnglishName),
+                    new XElement("Comment", cultureInfo.NativeName));
 
                 xDoc.Add(doc);
 
-                xDoc.Save(pathXML);
+                xDoc.Save(pathXml);
 
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
     }
 }
