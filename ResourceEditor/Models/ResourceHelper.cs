@@ -161,11 +161,10 @@ namespace ResourceEditor.Models
             }
             else
             {
-                ResourceHelper.Insert(pathSave, new List<LangName>() { updateElement });
+                originalElement.Add(updateElement);
+                ResourceHelper.Create(pathSave, originalElement);
                 return originalElement;
             }
-
-
         }
 
         public static IEnumerable<LangName> Insert(string pathSave, List<LangName> newItemList)
@@ -176,9 +175,13 @@ namespace ResourceEditor.Models
                 originalElement = ResourceHelper.Read(pathSave);
                 originalElement.AddRange(newItemList);
                 ResourceHelper.Create(pathSave, originalElement);
+                return originalElement;
             }
-
-            return originalElement;
+            else
+            {
+                return null;
+            }
+            
         }
 
         //test

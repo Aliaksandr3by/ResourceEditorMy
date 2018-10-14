@@ -99,7 +99,6 @@ $("#ResourceUploads").on('click', null, (e) => {
         success: (respond, textStatus, jqXHR) => {
             if (typeof respond.error === 'undefined') {
                 $("#FileResource").closest('div').append(`<div>${respond.fileName} is ok </div>`);
-
                 $.ajax({
                     url: urlControlSelectCountry,
                     type: 'POST',
@@ -111,8 +110,6 @@ $("#ResourceUploads").on('click', null, (e) => {
 
                     }
                 });
-
-
             }
             else {
                 $("#FileResource").closest('div').append(`<div>${respond.error}</div>`);
@@ -130,11 +127,9 @@ $("#addTableRow").on('click', null, e => {
     countTableElement++;
 });
 
-///Method
+///Method при редактировании input метод активирует кнопку сохранить
 $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
-    let that = $(e.target); //$(this);
-    let a = that.closest('tr').children('td').children('button');
-    a.attr('disabled', false);
+    $(e.target).closest('tr').children('td').children('button.saveLineButton').attr('disabled', false);
 });
 
 //метод проверяет есть ли уже введенный ключ
@@ -154,17 +149,19 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
             }
         },
         success: (data, textStatus) => {
-            if (data === "") {
+            if (data === "" && typeof data.error === 'undefined') {
                 that.removeClass('is-invalid');
                 $(value).removeAttr('placeholder');
-                that.closest('th').find('div').remove();//плохо
+                that.closest('th').find('div.dataError').remove();
+                that.closest('tr').children('td').children('button.saveLineButton').attr('disabled', false);
             } else if (typeof data.error !== 'undefined'){
                 that.addClass('is-invalid');
-                that.closest('th').append(`<div class="invalid-feedback">${data.error}</div >`);
+                that.closest('th').append(`<div class="dataError invalid-feedback">${data.error}</div >`);
             } else if (data !== ""){
                 that.addClass('is-invalid');
-                that.closest('th').append('<div class="invalid-feedback">Sorry, that key taken.</div >');
-                $(value).attr('placeholder', data.Value).blur().css({ 'color': 'red', 'font-size': '80%' });
+                that.closest('th').append('<div class="dataError invalid-feedback">Sorry, that key taken.</div >');
+                $(value).attr('placeholder', data.Value);
+                $(e.target).closest('tr').children('td').children('button.saveLineButton').attr('disabled', true);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
@@ -193,14 +190,17 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
             }
         },
         success: (data, textStatus) => {
-            if (data !== "" && typeof data.error !== 'undefined') {
-                that.removeClass('btn-warning');
+            if (data !== "" && typeof data.error === 'undefined') {
+                that.removeClass('btn-danger');
                 $(id).removeClass('is-invalid');
-                that.attr('disabled', String(true));
-            } else {
-                console.log(data.error);
-                that.addClass('btn-warning');
+                that.attr('disabled', true);
+                that.closest('th').append(`<div class="dataUpdate">Updated</div >`);
+            } else if (data.error !== 'undefined') {
+                that.addClass('btn-danger');
                 $(id).addClass('is-invalid');
+                that.closest('th').append(`<div class="dataError invalid-feedback">${data.error}</div >`);
+            } else {
+                console.error("null");
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {

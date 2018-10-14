@@ -112,8 +112,7 @@ namespace ResourceEditor.Controllers
                 string _pathSave = ResourceHelper.GetPath(Language);
                 if (System.IO.File.Exists(_pathSave))
                 {
-                    var tmp = ResourceHelper.Update(_pathSave, rowUpdate);
-                    return Json(tmp);
+                    return Json(ResourceHelper.Update(_pathSave, rowUpdate));
                 }
                 else
                 {
@@ -122,7 +121,7 @@ namespace ResourceEditor.Controllers
             }
             else
             {
-                return null;
+                return Json(new { error = "ModelState inValid" });
             }
         }
 

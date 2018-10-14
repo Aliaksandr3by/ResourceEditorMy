@@ -23,13 +23,8 @@
     <div class="mainTableResource">
         <form method="post" action="@Url.Action("Read", "Home")">
             <br />
-            <p>
-                <div id="CountrySelect">
-                    @Html.Partial("SelectCountry")
-                </div>
-                <a id="linkDownloads" href="@Url.Action("GetFile",  "Home", new { Language = "" })" name="Language" class="btn btn-info" download>Download</a>
-                <button type="button" class="btn btn-dark" id="ResourceSave">Save</button>
-            </p>
+            <div id="CountrySelect">@Html.Partial("SelectCountry")</div>
+            <div><button type="button" class="btn btn-dark" id="ResourceSave">Download</button></div>
             <br />
             <div id="rootMainTable">
                 <table id="mainTable" class="table table-striped">
