@@ -121,7 +121,12 @@ namespace ResourceEditor.Controllers
             }
             else
             {
-                return Json(new { error = "ModelState inValid" });
+                var errors = new List<string>();
+                foreach (var modelStateVal in ViewData.ModelState.Values)
+                {
+                    errors.AddRange(modelStateVal.Errors.Select(error => error.ErrorMessage));
+                }
+                return Json(new { status = "validationerror", error = errors });
             }
         }
 

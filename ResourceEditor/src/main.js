@@ -198,7 +198,24 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
             } else if (data.error !== 'undefined') {
                 that.addClass('btn-danger');
                 $(id).addClass('is-invalid');
-                that.closest('th').append(`<div class="dataError invalid-feedback">${data.error}</div >`);
+
+
+
+                if (data.status !== 'undefined') {
+                    $.each(data.error, (i, value) => {
+
+                        let errDiv = $('<div></div>', {
+                            class: `dataError invalid-feedback`,
+                            id: `id${i}dataError`,
+                            text: value
+                        });
+
+                        that.closest('tr').find('th').append(errDiv);
+                    });
+                } else {
+                    alert(data.status);
+                }
+
             } else {
                 console.error("null");
             }

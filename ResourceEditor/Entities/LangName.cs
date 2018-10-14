@@ -19,12 +19,12 @@ namespace ResourceEditor.Entities
     {
 
         [Required(ErrorMessage = "Please enter Id")]
-        [RegularExpression(@"\w*", ErrorMessage = "Please enter a valid")]
+        [RegularExpression(@"\w*", ErrorMessage = @"Please enter a valid key - \w*")]
         [Display(Name = "Id")]
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Please Value")]
-        [RegularExpression(@"\w*", ErrorMessage = "Please enter a valid")]
+        [RegularExpression(@"\w*", ErrorMessage = @"Please enter a valid - \w*")]
         [Display(Name = "Value")]
         public string Value { get; set; }
 
