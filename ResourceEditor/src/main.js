@@ -1,6 +1,6 @@
 var countTableElement = 0;
 
-let parseBool = el => {
+const parseBool = el => {
     if (el.toLowerCase() === "true") {
         return true;
     } else if (el.toLowerCase() === "false") {
@@ -10,9 +10,9 @@ let parseBool = el => {
     }
 };
 
-let createInput$ = (purpose, count, className, readOnly = false, val = "") => {
-    return $('<input></input>', {
-        type: 'text',
+const createInput$ = (purpose, count, className, readOnly = false, val = "") => {
+    return $("<input></input>", {
+        type: "text",
         class: `${className} form-control d-inline w-100`,
         id: `id${purpose}_${count}`,
         name: `${purpose}_${count}`,
@@ -21,9 +21,9 @@ let createInput$ = (purpose, count, className, readOnly = false, val = "") => {
     });
 };
 
-let createButton$ = (purpose, count, className) => {
+const createButton$ = (purpose, count, className) => {
     return $(`<button></button>`, {
-        type: 'button',
+        type: "button",
         class: `${className}`,
         id: `id${purpose}_${count}`,
         name: `button${purpose}_${count}`,
@@ -35,14 +35,14 @@ let createButton$ = (purpose, count, className) => {
 let createRow$ = (data, count) => {
     if (!$.isEmptyObject(data)) {
 
-        const lastTR = $('#mainTable').children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
+        let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
-        lastTR.append('<th scope="row"></th>').children('th').last().append(createInput$("Id", count, 'inputResourseData', (String(data.Id).length > 0), data.Id));
-        lastTR.append('<td></td>').children('td').last().append(createInput$("Value", count, 'inputResourseData', false, data.Value));
-        lastTR.append('<td></td>').children('td').last().append(createInput$("Comment", count, 'inputResourseData', false, data.Comment));
+        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment));
 
-        lastTR.append('<td></td>').children('td').last().append(createButton$("Save", count, "saveLineButton btn btn-success d-inline w-100"));
-        lastTR.append('<td></td>').children('td').last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("Save", count, "saveLineButton btn btn-success d-inline w-100"));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
     }
 };
 
@@ -61,108 +61,13 @@ $("#ResourceSave").on("click", null, null, e => {
         type: "GET",
         url: urlControlGetFile,
         data: {
-            language: $('#countrySelect').val()
+            language: $("#countrySelect").val()
         },
         success: (data, textStatus) => {
             if (data !== "") {
-                location.href = urlControlGetFile + "?language=" + $('#countrySelect').val();
+                location.href = urlControlGetFile + "?language=" + $("#countrySelect").val();
             } else {
                 console.log("Please select language");
-            }
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.error(xhr);
-            console.error(ajaxOptions);
-            console.error(thrownError);
-        }
-    });
-});
-
-
-$("#ResourceUploads").on('click', null, (e) => {
-    let that = $(e.target);
-    let data = new FormData(); //с encoding установленным в "multipart/form-data".
-    let uploadFile = $('#FileResource').prop('files');
-
-    $.each(uploadFile, (i, value) => {
-        data.append(`uploads[${i}]`, value);
-    });
-
-    $.ajax({
-        url: urlControlUploadFile,
-        type: 'POST',
-        data: data,
-        //cache: false,
-        //dataType: 'json',
-        //async: true,
-        processData: false, // Не обрабатываем файлы (Don't process the files)
-        contentType: false, // Так jQuery скажет серверу что это строковой запрос
-        success: (respond, textStatus, jqXHR) => {
-            if (typeof respond.error === 'undefined') {
-                $("#FileResource").closest('div').append(`<div>${respond.fileName} is ok </div>`);
-                $.ajax({
-                    url: urlControlSelectCountry,
-                    type: 'POST',
-                    success: (respond, textStatus, jqXHR) => {
-                        $('#CountrySelect').empty();
-                        $(respond).appendTo('#CountrySelect');
-                    },
-                    error: (jqXHR, textStatus, errorThrown) => {
-
-                    }
-                });
-            }
-            else {
-                $("#FileResource").closest("div").append(`<div>${respond.error}</div>`);
-            }
-        },
-        error: (jqXHR, textStatus, errorThrown) => {
-            console.error('ОШИБКИ AJAX запроса: ' + textStatus);
-        }
-    });
-
-});
-
-$("#addTableRow").on('click', null, e => {
-    createRow$({ Id: "", Value: "", Comment: "" }, countTableElement);
-    countTableElement++;
-});
-
-///Method при редактировании input метод активирует кнопку сохранить
-$("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
-    $(e.target).closest('tr').children('td').children('button.saveLineButton').attr('disabled', false);
-});
-
-//метод проверяет есть ли уже введенный ключ
-$("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
-    let that = $(e.target);
-    let tmpData = that.closest('tr').find('input');
-    let [id, value, comment] = tmpData;
-    $.ajax({
-        type: 'POST',
-        url: urlControlActionDataProtect,
-        data: {
-            language: $('#countrySelect').val(),
-            itemExists: {
-                Id: $(id).val(),
-                Value: $(value).val(),
-                Comment: $(comment).val()
-            }
-        },
-        success: (data, textStatus) => {
-            if (data === "" && typeof data.error === 'undefined') {
-                that.removeClass('is-invalid');
-                $(value).removeAttr('placeholder');
-                that.closest('th').find('div.dataError').remove();
-                that.closest('tr').children('td').children('button.saveLineButton').attr('disabled', false);
-            } else if (typeof data.error !== 'undefined'){
-                that.addClass('is-invalid');
-                that.closest('th').append(`<div class="dataError invalid-feedback">${data.error}</div >`);
-            } else if (data !== ""){
-                that.addClass('is-invalid');
-                that.closest('th').append('<div class="dataError invalid-feedback">Sorry, that key taken.</div >');
-                $(value).attr('placeholder', data.Value);
-                $(e.target).closest('tr').children('td').children('button.saveLineButton').attr('disabled', true);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
@@ -173,46 +78,143 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
     });
 });
 
-///Method save row
-$("#rootMainTable").on('click', '.saveLineButton', null, e => {
+
+$("#ResourceUploads").on("click", null, (e) => {
     let that = $(e.target);
-    let tmpData = that.closest('tr').find('input');
+    let data = new FormData(); //с encoding установленным в "multipart/form-data".
+    let uploadFile = $("#FileResource").prop("files");
+
+    $.each(uploadFile, (i, value) => {
+        data.append(`uploads[${i}]`, value);
+    });
+
+    $.ajax({
+        url: urlControlUploadFile,
+        type: "POST",
+        data: data,
+        //cache: false,
+        //dataType: "json",
+        //async: true,
+        processData: false, // Не обрабатываем файлы (Don"t process the files)
+        contentType: false, // Так jQuery скажет серверу что это строковой запрос
+        success: (respond, textStatus, jqXHR) => {
+            if (typeof respond.error === "undefined") {
+                $("#FileResource").closest("div").append(`<div>${respond.fileName} is ok </div>`);
+                $.ajax({
+                    url: urlControlSelectCountry,
+                    type: "POST",
+                    success: (respond) => {
+                        $("#CountrySelect").empty();
+                        $(respond).appendTo("#CountrySelect");
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+
+                    }
+                });
+            }
+            else {
+                $("#FileResource").closest("div").append(`<div>${respond.error}</div>`);
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
+        }
+    });
+
+});
+
+$("#addTableRow").on("click", null, e => {
+    createRow$({ Id: "", Value: "", Comment: "" }, countTableElement);
+    countTableElement++;
+});
+
+$("#rootMainTable").on("change", ".inputDataId", null, function (e) {
+    $(e.target).closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
+});
+
+/**
+ * Method protects exist node of resource
+ */
+$("#rootMainTable").on("change", ".inputDataId", null, function (e) {
+    let that = $(e.target);
+    let tmpData = that.closest("tr").find("input");
+    let [id, value, comment] = tmpData;
+    $.ajax({
+        type: "POST",
+        url: urlControlActionDataProtect,
+        data: {
+            language: $("#countrySelect").val(),
+            itemExists: {
+                Id: $(id).val(),
+                Value: $(value).val(),
+                Comment: $(comment).val()
+            }
+        },
+        success: (data) => {
+            if (data === "" && typeof data.error === "undefined") {
+                that.removeClass("is-invalid");
+                $(value).removeAttr("placeholder");
+                that.closest("th").find("div.dataError").remove();
+                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
+            } else if (typeof data.error !== "undefined"){
+                that.addClass("is-invalid");
+                that.closest("th").append(`<div class="dataError invalid-feedback">${data.error}</div >`);
+            } else if (data !== ""){
+                that.addClass("is-invalid");
+                that.closest("th").append(`<div class='dataError invalid-feedback'>Sorry, that key taken.</div >`);
+                $(value).attr("placeholder", data.Value);
+                $(e.target).closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
+        }
+    });
+});
+
+$("#rootMainTable").on("click", ".saveLineButton", null, e => {
+    let that = $(e.target);
+    let tmpData = that.closest("tr").find("input");
     let [id, value, comment] = tmpData;
 
     $.ajax({
-        type: 'POST',
+        type: "POST",
         url: urlControlActionUpdate,
         data: {
-            language: $('#countrySelect').val(),
+            language: $("#countrySelect").val(),
             rowUpdate: {
                 Id: $(id).val(),
                 Value: $(value).val(),
                 Comment: $(comment).val()
             }
         },
-        success: (data, textStatus) => {
-            if (data !== "" && typeof data.error === 'undefined') {
-                that.removeClass('btn-danger');
-                $(id).removeClass('is-invalid');
-                that.attr('disabled', true);
-                that.parents('tr').find('th').first().append(`<div class="dataUpdate">Updated</div >`);
-                that.parents('tr').find('th').find('input').prop("readonly", true);
-            } else if (data.error !== 'undefined') {
-                that.addClass('btn-danger');
-                $(id).addClass('is-invalid');
+        success: (data) => {
+            if (data !== "" && typeof data.error === "undefined") {
+                that.removeClass("btn-danger");
+                $(id).removeClass("is-invalid");
+                that.attr("disabled", true);
+                that.parents("tr").find("th").first().append(`<div class="dataUpdate">Updated</div >`);
+                that.parents("tr").find("th").find("input").prop("readonly", true);
+            } else if (data.error !== "undefined") {
+                that.addClass("btn-danger");
+                $(id).addClass("is-invalid");
 
 
 
-                if (data.status !== 'undefined') {
+                if (data.status !== "undefined") {
                     $.each(data.error, (i, value) => {
 
-                        let errDiv = $('<div></div>', {
+                        let errDiv = $("<div></div>", {
                             class: `dataError invalid-feedback`,
                             id: `id${i}dataError`,
                             text: value
                         });
 
-                        that.closest('tr').find('th').append(errDiv);
+                        that.closest("tr").find("th").append(errDiv);
                     });
                 } else {
                     alert(data.status);
@@ -230,20 +232,19 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
     });
 });
 
-///Method delete row
-$('#rootMainTable').on('click', '.deleteLineButton', null, e => {
+$("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     if (confirm("Delete?")) {
         let that = $(e.target); //$(this);
-        let tmpData = that.closest('tr').find('input');
+        let tmpData = that.closest("tr").find("input");
         let id = $(tmpData[0]);
         let value = $(tmpData[1]);
         let comment = $(tmpData[2]);
 
         $.ajax({
-            type: 'POST',
+            type: "POST",
             url: urlControlActionDelete,
             data: {
-                language: $('#countrySelect').val(),
+                language: $("#countrySelect").val(),
                 rowDelete: {
                     Id: id.val(),
                     Value: value.val(),
@@ -253,7 +254,7 @@ $('#rootMainTable').on('click', '.deleteLineButton', null, e => {
             success: (data, textStatus) => {
                 console.log(textStatus);
                 if ($(data)) {
-                    that.closest('tr').empty();
+                    that.closest("tr").empty();
                 }
             },
             error: (xhr, ajaxOptions, thrownError) => {
@@ -265,7 +266,7 @@ $('#rootMainTable').on('click', '.deleteLineButton', null, e => {
     }
 });
 
-$('#CountrySelect').on('change', '#countrySelect', null, e => {
+$("#CountrySelect").on("change", "#countrySelect", null, e => {
     let that = $(e.target); //$(this);
     if (that.val() !== "" && window.localStorage) {
         localStorage.setItem("countrySelect", String(that.val()));
@@ -273,15 +274,15 @@ $('#CountrySelect').on('change', '#countrySelect', null, e => {
 
     if (that.val()) {
         $.ajax({
-            type: 'POST',
+            type: "POST",
             url: urlControlSwitchLanguage,
             data: {
                 language: that.val()
             },
-            success: (data, textStatus) => {
-                $('#mainDataBodyTable').empty();
+            success: (data) => {
+                $("#mainDataBodyTable").empty();
                 countTableElement = createTable$(data, countTableElement);
-                $('#linkDownloads').attr('href', urlControlGetFile + "?language=" + that.val());
+                $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
             },
             error: (xhr, ajaxOptions, thrownError) => {
                 console.log(xhr);
@@ -292,12 +293,12 @@ $('#CountrySelect').on('change', '#countrySelect', null, e => {
     }
 });
 
-$(window).on('load', function () {
+$(window).on("load", function () {
     if (window.localStorage) {
         /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
         let lsLang = localStorage.getItem("countrySelect");
         if (lsLang) {
-            $('#countrySelect').val(lsLang).trigger('change');
+            $("#countrySelect").val(lsLang).trigger("change");
         }
     }
 });

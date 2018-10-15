@@ -133,7 +133,7 @@ namespace ResourceEditor.Controllers
         /// The read.
         /// </summary>
         /// <param name="list">
-        /// The list.
+        /// The rowInsert.
         /// </param>
         /// <param name="language">
         /// The language.
@@ -188,9 +188,10 @@ namespace ResourceEditor.Controllers
             if (this.ModelState.IsValid)
             {
                 var pathSave = ResourceHelper.GetPath(language);
-                return System.IO.File.Exists(pathSave) ? 
-                           this.Json(ResourceHelper.Update(pathSave, rowUpdate)) : 
-                           this.Json(new { error = System.IO.Path.GetFileName(pathSave) + " was not found!" });
+
+                return ResourceHelper.DataProtect(pathSave, rowUpdate) != null
+                           ? this.Json(ResourceHelper.Update(pathSave, rowUpdate)) 
+                           : this.Json(ResourceHelper.Insert(pathSave, rowUpdate));
             }
 
             var errors = new List<string>();
@@ -206,8 +207,8 @@ namespace ResourceEditor.Controllers
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="list">
-        /// The list.
+        /// <param name="rowInsert">
+        /// The rowInsert.
         /// </param>
         /// <param name="language">
         /// The language.
@@ -216,11 +217,11 @@ namespace ResourceEditor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Insert(List<LangName> list, string language)
+        public ActionResult Insert(LangName rowInsert, string language)
         {
             var pathSave = ResourceHelper.GetPath(language);
 
-            return list != null ? this.Json(ResourceHelper.Insert(pathSave, list)) : null;
+            return rowInsert != null ? this.Json(ResourceHelper.Insert(pathSave, rowInsert)) : null;
         }
 
         /// <summary>

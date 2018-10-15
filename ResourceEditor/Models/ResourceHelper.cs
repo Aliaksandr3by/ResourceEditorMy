@@ -171,14 +171,12 @@ namespace ResourceEditor.Models
 
             var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
 
-            if (findIndex >= 0)
+            if (findIndex < 0)
             {
-                originalElement[findIndex] = updatedItem;
-                Create(pathSave, originalElement);
-                return originalElement;
+                return null;
             }
 
-            originalElement.Add(updatedItem);
+            originalElement[findIndex] = updatedItem;
             Create(pathSave, originalElement);
             return originalElement;
         }
@@ -187,22 +185,20 @@ namespace ResourceEditor.Models
         /// This method insert node to resource file
         /// </summary>
         /// <param name="pathSave">Path resource file</param>
-        /// <param name="newItems">Node to be inserted</param>
+        /// <param name="newItem">Node to be inserted</param>
         /// <returns>Updated item</returns>
-        public static IEnumerable<LangName> Insert(string pathSave, List<LangName> newItems)
+        public static IEnumerable<LangName> Insert(string pathSave, LangName newItem)
         {
-            if (newItems == null)
+            if (newItem == null)
             {
                 return null;
             }
 
             var originalElement = Read(pathSave);
 
-            originalElement.AddRange(newItems);
+            originalElement.Add(newItem);
 
-            Create(pathSave, originalElement);
-
-            return originalElement;
+            return Create(pathSave, originalElement) ? originalElement : null;
         }
 
         /// <summary>
