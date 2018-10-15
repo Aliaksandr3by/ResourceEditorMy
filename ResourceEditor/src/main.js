@@ -138,9 +138,9 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
  * Method protects exist node of resource
  */
 $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
-    let that = $(e.target);
-    let tmpData = that.closest("tr").find("input");
-    let [id, value, comment] = tmpData;
+    const that = $(e.target);
+    const tmpData = that.closest("tr").find("input");
+    const [id, value, comment] = tmpData;
     $.ajax({
         type: "POST",
         url: urlControlActionDataProtect,
@@ -153,19 +153,18 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
             }
         },
         success: (data) => {
-            if (data === "" && typeof data.error === "undefined") {
+            if ("error" in data) {
                 that.removeClass("is-invalid");
                 $(value).removeAttr("placeholder");
                 that.closest("th").find("div.dataError").remove();
+                that.closest("th").append(`<div class="dataSuccess">${data.error}</div >`);
                 that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
-            } else if (typeof data.error !== "undefined"){
+            } else {
                 that.addClass("is-invalid");
-                that.closest("th").append(`<div class="dataError invalid-feedback">${data.error}</div >`);
-            } else if (data !== ""){
-                that.addClass("is-invalid");
-                that.closest("th").append(`<div class='dataError invalid-feedback'>Sorry, that key taken.</div >`);
                 $(value).attr("placeholder", data.Value);
-                $(e.target).closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
+                that.closest("th").find("div.dataSuccess").remove();
+                that.closest("th").append(`<div class="dataError">${data.Id} error</div >`);
+                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {

@@ -9,6 +9,7 @@
 
 namespace ResourceEditor.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
@@ -120,13 +121,10 @@ namespace ResourceEditor.Controllers
         {
             var pathSave = ResourceHelper.GetPath(language);
 
-            if (System.IO.File.Exists(pathSave))
-            {
-                var result = ResourceHelper.DataProtect(pathSave, itemExists);
-                return result != null ? this.Json(result) : null;
-            }
-
-            return this.Json(new { error = $"{System.IO.Path.GetFileName(pathSave)} was not found!" });
+            var result = ResourceHelper.DataProtect(pathSave, itemExists);
+            return result != null 
+                       ? this.Json(result) 
+                       : this.Json(new { error = $"{itemExists.Id} was not found!" });
         }
 
         /// <summary>

@@ -35,11 +35,17 @@ namespace ResourceEditor.Models
         /// <returns>return result</returns>
         public static LangName DataProtect(string pathLoad, LangName langName)
         {
+            if (!File.Exists(pathLoad))
+            {
+                throw new InvalidOperationException();
+            }
+
             var originalElement = Read(pathLoad);
 
             var result = from item in originalElement where item.Id == langName.Id select item;
 
             return result.FirstOrDefault();
+
         }
 
         /// <summary>
