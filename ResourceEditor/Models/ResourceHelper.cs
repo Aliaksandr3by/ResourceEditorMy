@@ -1,54 +1,69 @@
-﻿using ResourceEditor.Entities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Text;
-using System.Web;
-using System.Web.Script.Serialization;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ResourceHelper.cs" company="Alex">
+//   free
+// </copyright>
+// <summary>
+//   Defines the ResourceHelper type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace ResourceEditor.Models
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Resources;
+    using System.Text;
+    using System.Web.Hosting;
+    using System.Web.Script.Serialization;
+
+    using ResourceEditor.Entities;
+
+    /// <summary>
+    /// Resource Helper
+    /// </summary>
     public class ResourceHelper
     {
         /// <summary>
         /// This method checks if the item already exists.
         /// </summary>
         /// <param name="pathLoad">path find</param>
-        /// <param name="langName"></param>
-        /// <returns></returns>
+        /// <param name="langName">object lang name</param>
+        /// <returns>return result</returns>
         public static LangName DataProtect(string pathLoad, LangName langName)
         {
-            List<LangName> originalElement = ResourceHelper.Read(pathLoad);
+            var originalElement = Read(pathLoad);
+
             var result = from item in originalElement where item.Id == langName.Id select item;
 
-            return result.FirstOrDefault<LangName>();
+            return result.FirstOrDefault();
         }
 
         /// <summary>
         /// This method allows to get the path to save the Resource file
         /// </summary>
-        /// <param name="id">id country in name file "Resource.*.resx", example "be", if this parameter equalce null, default "en"</param>
+        /// <param name="id">id country in name file "Resource.*.resx", example "be", if this parameter equal null, default "en"</param>
         /// <param name="pathSave">Directory lode/save *.resx file, default "App_LocalResources"</param>
-        /// <returns></returns>
+        /// <returns>Full resource path</returns>
         public static string GetPath(string id = null, string pathSave = "App_LocalResources")
         {
-            string _file = default(string); //name file
+            string file;
 
             if (string.IsNullOrWhiteSpace(id) || id == "en")
             {
-                _file = "Resource.resx";
+                file = "Resource.resx";
             }
             else
             {
-                _file = $"Resource.{id}.resx";
+                file = $"Resource.{id}.resx";
             }
 
-            string[] allFoundFiles = Directory.GetFiles(
-                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"), _file, SearchOption.AllDirectories);
+            var fullPath = HostingEnvironment.MapPath($"~/{pathSave}/") ?? throw new InvalidOperationException();
+
+            var allFoundFiles = Directory.GetFiles(fullPath, file, SearchOption.AllDirectories);
 
             return allFoundFiles.FirstOrDefault();
         }
@@ -60,142 +75,152 @@ namespace ResourceEditor.Models
         /// <returns>Edited data</returns>
         public static List<LangName> Read(string pathLoad)
         {
-            if (System.IO.File.Exists(pathLoad))
-            {
-                List<LangName> outLangNames = new List<LangName>();
-                using (ResXResourceReader rr = new ResXResourceReader(pathLoad))
-                {
-                    rr.UseResXDataNodes = true; //makes a comment resource item available
-                    IDictionaryEnumerator dict = rr.GetEnumerator();
-                    while (dict.MoveNext())
-                    {
-                        ResXDataNode node = (ResXDataNode)dict.Value;
-                        AssemblyName[] assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); //i do`t know
-                        outLangNames.Add(
-                            new LangName
-                            {
-                                Id = node.Name,
-                                Value = node.GetValue(assemblies).ToString() ?? "",
-                                Comment = !String.IsNullOrEmpty(node.Comment) ? node.Comment : ""
-                            });
-                    }
-                }
-                return outLangNames.OrderBy(e => e.Id).ToList();
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// This method create a Node element of resourse file
-        /// </summary>
-        /// <param name="rw">Object ResXDataNode</param>
-        /// <param name="id">id</param>
-        /// <param name="value">value</param>
-        /// <param name="comment">comment</param>
-        /// <returns></returns>
-        private static ResXDataNode _createNodeElement(ResXResourceWriter rw, string id, string value, string comment = "")
-        {
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                ResXDataNode _node = new ResXDataNode(id, value)
-                {
-                    Comment = comment
-                };
-                return _node;
-            }
-            else
+            if (!File.Exists(pathLoad))
             {
                 return null;
             }
+
+            var outLangNames = new List<LangName>();
+
+            using (var rr = new ResXResourceReader(pathLoad))
+            {
+                rr.UseResXDataNodes = true; /*makes a comment resource item available*/
+                var dict = rr.GetEnumerator();
+                while (dict.MoveNext())
+                {
+                    var node = (ResXDataNode)dict.Value;
+                    var assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); ////i do`t know
+                    outLangNames.Add(
+                        new LangName
+                            {
+                                Id = node.Name,
+                                Value = node.GetValue(assemblies).ToString(),
+                                Comment = !string.IsNullOrEmpty(node.Comment) ? node.Comment : string.Empty
+                            });
+                }
+            }
+
+            return outLangNames.OrderBy(e => e.Id).ToList();
+        }
+
+        /// <summary>
+        /// This method create a Node element of resource file
+        /// </summary>
+        /// <param name="langName">Object of class LangName</param>
+        /// <returns>New node item</returns>
+        public static ResXDataNode CreateNodeElement(LangName langName)
+        {
+            if (!string.IsNullOrWhiteSpace(langName.Id) && !string.IsNullOrWhiteSpace(langName.Value))
+            {
+                return new ResXDataNode(langName.Id, langName.Value) { Comment = langName.Comment };
+            }
+
+            return null;
         }
 
         /// <summary>
         /// This method need to create a ResX file
         /// </summary>
-        /// <param name="langName">Object with data</param>
-        /// <param name="pathSave">path save Resx</param>
-        public static bool Create(string pathSave, List<LangName> langName)
+        /// <param name="pathSave">
+        /// path save Resx 
+        /// </param>
+        /// <param name="langNames">
+        /// Object with data 
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/> result operation.
+        /// </returns>
+        public static bool Create(string pathSave, List<LangName> langNames)
         {
-            if (langName != null)
-            {
-                using (ResXResourceWriter rw = new ResXResourceWriter(pathSave))
-                {
-                    for (int ctr = 0; ctr < langName.Count; ctr++)
-                    {
-                        if (!string.IsNullOrWhiteSpace(langName[ctr].Id))
-                        {
-                            var node = _createNodeElement(rw, langName[ctr].Id, langName[ctr].Value, langName[ctr].Comment);
-                            if (node != null)
-                            {
-                                rw.AddResource(node);
-                            }
-                        }
-                    }
-                    rw.Generate();
-                    return true;
-                }
-            }
-            else
+            if (langNames == null)
             {
                 return false;
+            }
+
+            using (var rw = new ResXResourceWriter(pathSave))
+            {
+                foreach (var item in langNames)
+                {
+                    var node = CreateNodeElement(item);
+                    if (node != null)
+                    {
+                        rw.AddResource(node);
+                    }
+                }
+
+                rw.Generate();
+                return true;
             }
         }
 
         /// <summary>
         /// This method need to update Resx
         /// </summary>
-        /// <param name="pathSave">path load/save a Resx file</param>
-        /// <param name="updateElement">Object with data</param>
-        /// <param name="StatusUpdate">error status</param>
-        public static IEnumerable<LangName> Update(string pathSave, LangName updateElement)
+        /// <param name="pathSave">
+        /// path load/save a Resx file
+        /// </param>
+        /// <param name="updatedItem">
+        /// Object with data
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/> result update data.
+        /// </returns>
+        public static IEnumerable<LangName> Update(string pathSave, LangName updatedItem)
         {
-            List<LangName> originalElement = ResourceHelper.Read(pathSave);
+            var originalElement = Read(pathSave);
 
-            int _index = originalElement.FindIndex((e) => e.Id == updateElement.Id);
+            var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
 
-            if (_index >= 0)
+            if (findIndex >= 0)
             {
-                originalElement[_index] = updateElement;
-                ResourceHelper.Create(pathSave, originalElement);
+                originalElement[findIndex] = updatedItem;
+                Create(pathSave, originalElement);
                 return originalElement;
             }
-            else
-            {
-                originalElement.Add(updateElement);
-                ResourceHelper.Create(pathSave, originalElement);
-                return originalElement;
-            }
+
+            originalElement.Add(updatedItem);
+            Create(pathSave, originalElement);
+            return originalElement;
         }
 
-        public static IEnumerable<LangName> Insert(string pathSave, List<LangName> newItemList)
+        /// <summary>
+        /// This method insert node to resource file
+        /// </summary>
+        /// <param name="pathSave">Path resource file</param>
+        /// <param name="newItems">Node to be inserted</param>
+        /// <returns>Updated item</returns>
+        public static IEnumerable<LangName> Insert(string pathSave, List<LangName> newItems)
         {
-            List<LangName> originalElement = default;
-            if (newItemList != null)
-            {
-                originalElement = ResourceHelper.Read(pathSave);
-                originalElement.AddRange(newItemList);
-                ResourceHelper.Create(pathSave, originalElement);
-                return originalElement;
-            }
-            else
+            if (newItems == null)
             {
                 return null;
             }
-            
+
+            var originalElement = Read(pathSave);
+
+            originalElement.AddRange(newItems);
+
+            Create(pathSave, originalElement);
+
+            return originalElement;
         }
 
-        //test
-        public static string[] DeleteAllEntitiesEN(LangName deleteElement, string pathSave = "App_LocalResources", string file = "Resource.resx")
+        /// <summary>
+        /// This method deletes an element in all resources if the element has been deleted in the main resource.
+        /// </summary>
+        /// <param name="deleteElement">delete element</param>
+        /// <param name="pathSave">path file</param>
+        /// <param name="file">file name</param>
+        /// <returns>Path all found files</returns>
+        public static string[] DeleteAllEntitiesEn(LangName deleteElement, string pathSave, string file = "Resource.resx")
         {
-            //exclude Resource.resx
-            string[] allFoundFiles = Directory.GetFiles(
-                System.Web.Hosting.HostingEnvironment.MapPath($"~/{pathSave}/"), "Resource.*.resx", SearchOption.AllDirectories);
-            string result = default;
+            var allFoundFiles = Directory.GetFiles(pathSave, "Resource.*.resx", SearchOption.AllDirectories);
+            
             foreach (var item in allFoundFiles)
             {
                 if (file != Path.GetFileName(item))
                 {
-                    ResourceHelper.Delete(item, deleteElement, out result);
+                    Delete(item, deleteElement);
                 }
             }
 
@@ -205,60 +230,44 @@ namespace ResourceEditor.Models
         /// <summary>
         /// This method need for delete node in Resx file
         /// </summary>
-        /// <param name="pathSave">Path save file</param>
-        /// <param name="deleteElementID">Deleted item ID</param>
-        /// <returns>Update collection</returns>
-        public static IEnumerable<LangName> Delete(string pathSave, LangName langNameID, out string messageResult)
+        /// <param name="pathSave"> Path save file </param>
+        /// <param name="langNameId"> The lang Name ID. </param>
+        /// <returns> Update collection </returns>
+        public static IEnumerable<LangName> Delete(string pathSave, LangName langNameId)
         {
-            List<LangName> originalElement = ResourceHelper.Read(pathSave);
+            var originalElement = Read(pathSave);
 
-            try
+            var index = originalElement.FindIndex(e => e.Id == langNameId.Id);
+
+            if (index >= 0)
             {
-                int _index = originalElement.FindIndex((e) => e.Id == langNameID.Id);
-
-                if (_index >= 0)
-                {
-                    originalElement.RemoveAt(_index);
-                    ResourceHelper.Create(pathSave, originalElement);
-                }
-
-                if (pathSave.Contains("Resource.resx"))
-                {
-                    if (DeleteAllEntitiesEN(langNameID) == null)
-                    {
-                        messageResult = "unknown error";
-                        return originalElement;
-                    }
-                }
-
-                messageResult = $"Delete {langNameID.Id} - {langNameID.Value} is complete";
-
-                return originalElement;
+                originalElement.RemoveAt(index);
+                Create(pathSave, originalElement);
             }
-            catch (ArgumentOutOfRangeException ex)
+
+            if (pathSave.Contains("Resource.resx"))
             {
-                messageResult = ex.Message;
-                return null;
+                if (DeleteAllEntitiesEn(langNameId, HostingEnvironment.MapPath("~/App_LocalResources/")) == null)
+                {
+                    return originalElement;
+                }
             }
-            catch (Exception ex)
-            {
-                messageResult = ex.Message;
-                return null;
-            }   
+
+            return originalElement;
         }
 
         /// <summary>
         /// This method need to parse collection object to JSON format
         /// </summary>
-        /// <param name="langNames"></param>
-        /// <returns></returns>
-        public static string ParceToJSON(List<LangName> langNames)
+        /// <param name="langNames">lang Names</param>
+        /// <returns>Json formatted object</returns>
+        public static string ParceToJson(List<LangName> langNames)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var stringBuilder = new StringBuilder();
 
-            var _tempLangname = langNames.Select(x => serializer.Serialize(x));
-            stringBuilder.Append(string.Join(",", _tempLangname));
+            var serializer = new JavaScriptSerializer();
+
+            stringBuilder.Append(string.Join(",", langNames.Select(x => serializer.Serialize(x))));
 
             return $"[{stringBuilder}]";
         }

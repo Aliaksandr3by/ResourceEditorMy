@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlManager.cs" company="">
-//   
+// <copyright file="XmlManager.cs" company="Alex">
+//   free
 // </copyright>
 // <summary>
 //   The xml manager.
@@ -14,12 +14,9 @@ namespace ResourceEditor.Managers
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using System.Web;
     using System.Web.Hosting;
     using System.Xml;
     using System.Xml.Linq;
-    using System.Xml.Serialization;
 
     using ResourceEditor.Entities;
 
@@ -32,9 +29,12 @@ namespace ResourceEditor.Managers
         /// The get languages.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see>
+        ///         <cref>IEnumerable</cref>
+        ///     </see>
+        ///     lang list.
         /// </returns>
-        public static IEnumerable<Entities.LangName> GetLanguages()
+        public static IEnumerable<LangName> GetLanguages()
         {
             var result = new List<LangName>();
             var xDoc = new XmlDocument();
@@ -64,32 +64,26 @@ namespace ResourceEditor.Managers
 
                     result.Add(country);
                 }
-
             }
+
             return result.OrderBy(e => e.Id).ToList();
         }
 
         /// <summary>
-        /// poip
+        /// Checks for a language in the list
         /// </summary>
-        /// <param name="docEx"></param>
-        /// <param name="myCIintlEx"></param>
-        /// <returns></returns>
-        public static bool FinderLangSpec(XmlDocument docEx, CultureInfo myCIintlEx)
+        /// <param name="xDoc">Xml Document</param>
+        /// <param name="culture">Culture info</param>
+        /// <returns>true if language not found</returns>
+        public static bool? FinderLang(XmlDocument xDoc, CultureInfo culture)
         {
-            if (docEx.DocumentElement != null)
-                foreach (XmlNode item in docEx.DocumentElement)
+            foreach (XmlNode item in xDoc.DocumentElement ?? throw new InvalidOperationException())
+            {
+                if (item.Attributes?.GetNamedItem("name").Value == culture.Name)
                 {
-                    if (item.Attributes != null)
-                    {
-                        var attr = item.Attributes.GetNamedItem("name");
-
-                        if (attr.Value == myCIintlEx.Name)
-                        {
-                            return false;
-                        }
-                    }
+                    return false;
                 }
+            }
 
             return true;
         }
@@ -114,6 +108,7 @@ namespace ResourceEditor.Managers
         /// This method add language
         /// </summary>
         /// <param name="fileName">path to file name</param>
+        [Obsolete]
         public static void AddLanguages(string fileName)
         {
             var pathXml = HostingEnvironment.MapPath("~/App_Data/cult.xml");
@@ -125,7 +120,7 @@ namespace ResourceEditor.Managers
             var doc = new XmlDocument();
             doc.Load(pathXml ?? throw new InvalidOperationException());
 
-            if (FinderLangSpec(doc, cultureInfo))
+            if (FinderLang(doc, cultureInfo) ?? false)
             {
                 XmlNode root = doc.LastChild;
 
@@ -161,28 +156,38 @@ namespace ResourceEditor.Managers
         {
             var pathXml = HostingEnvironment.MapPath("~/App_Data/cult.xml");
 
-            if (!File.Exists(pathXml)) return false;
-
-            var lg = CopyTextBetweenSymbols('.', '.', fileName);
-
-            var cultureInfo = new CultureInfo(lg, false);
-
-            var xDoc = XElement.Load(pathXml ?? throw new InvalidOperationException());
-
-            var findLang = xDoc.Elements("LangName").FirstOrDefault(e => e.Attribute("name")?.Value == lg);
-
-            if (findLang == null)
+            if (File.Exists(pathXml))
             {
-                var doc = new XElement("LangName", new XAttribute("name", cultureInfo.Name),
-                    new XElement("Id", cultureInfo.Name),
-                    new XElement("Value", cultureInfo.EnglishName),
-                    new XElement("Comment", cultureInfo.NativeName));
+                var lg = CopyTextBetweenSymbols('.', '.', fileName);
 
-                xDoc.Add(doc);
+                var cultureInfo = new CultureInfo(lg, false);
 
-                xDoc.Save(pathXml);
+                var xDoc = XElement.Load(pathXml ?? throw new InvalidOperationException());
 
-                return true;
+                var findLang = xDoc.Elements("LangName").FirstOrDefault(e => e.Attribute("name")?.Value == lg);
+
+                if (findLang == null)
+                {
+                    var newLang = new LangName()
+                                      {
+                                          Id = cultureInfo.Name,
+                                          Value = cultureInfo.EnglishName,
+                                          Comment = cultureInfo.NativeName
+                                      };
+
+                    var doc = new XElement(
+                        nameof(LangName),
+                        new XAttribute("name", cultureInfo.Name),
+                        new XElement(nameof(newLang.Id), newLang.Id),
+                        new XElement(nameof(newLang.Value), newLang.Value),
+                        new XElement(nameof(newLang.Comment), newLang.Comment));
+
+                    xDoc.Add(doc);
+
+                    xDoc.Save(pathXml);
+
+                    return true;
+                }
             }
 
             return false;

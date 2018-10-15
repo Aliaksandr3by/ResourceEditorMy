@@ -10,12 +10,13 @@ let parseBool = el => {
     }
 };
 
-let createInput$ = (purpose, count, className, val = "") => {
+let createInput$ = (purpose, count, className, readOnly = false, val = "") => {
     return $('<input></input>', {
         type: 'text',
         class: `${className} form-control d-inline w-100`,
         id: `id${purpose}_${count}`,
         name: `${purpose}_${count}`,
+        readonly: readOnly,
         value: val
     });
 };
@@ -34,11 +35,11 @@ let createButton$ = (purpose, count, className) => {
 let createRow$ = (data, count) => {
     if (!$.isEmptyObject(data)) {
 
-        let lastTR = $('#mainTable').children('tbody').append(`<tr id="tableRow_${count}"></tr>`).children('tr').last();
+        const lastTR = $('#mainTable').children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
-        lastTR.append('<th scope="row"></th>').children('th').last().append(createInput$("Id", count, 'inputResourseData', data.Id));
-        lastTR.append('<td></td>').children('td').last().append(createInput$("Value", count, 'inputResourseData', data.Value));
-        lastTR.append('<td></td>').children('td').last().append(createInput$("Comment", count, 'inputResourseData', data.Comment));
+        lastTR.append('<th scope="row"></th>').children('th').last().append(createInput$("Id", count, 'inputResourseData', (String(data.Id).length > 0), data.Id));
+        lastTR.append('<td></td>').children('td').last().append(createInput$("Value", count, 'inputResourseData', false, data.Value));
+        lastTR.append('<td></td>').children('td').last().append(createInput$("Comment", count, 'inputResourseData', false, data.Comment));
 
         lastTR.append('<td></td>').children('td').last().append(createButton$("Save", count, "saveLineButton btn btn-success d-inline w-100"));
         lastTR.append('<td></td>').children('td').last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
@@ -53,18 +54,18 @@ let createTable$ = (data, count) => {
     return count;
 };
 
-$("#ResourceSave").on('click', null, null, e => {
+$("#ResourceSave").on("click", null, null, e => {
     let that = $(e.target);
 
     $.ajax({
-        type: 'GET',
+        type: "GET",
         url: urlControlGetFile,
         data: {
-            Language: $('#countrySelect').val()
+            language: $('#countrySelect').val()
         },
         success: (data, textStatus) => {
             if (data !== "") {
-                location.href = urlControlGetFile + "?Language=" + $('#countrySelect').val();
+                location.href = urlControlGetFile + "?language=" + $('#countrySelect').val();
             } else {
                 console.log("Please select language");
             }
@@ -112,7 +113,7 @@ $("#ResourceUploads").on('click', null, (e) => {
                 });
             }
             else {
-                $("#FileResource").closest('div').append(`<div>${respond.error}</div>`);
+                $("#FileResource").closest("div").append(`<div>${respond.error}</div>`);
             }
         },
         error: (jqXHR, textStatus, errorThrown) => {
@@ -141,7 +142,7 @@ $("#rootMainTable").on('change', '.inputResourseData', null, function (e) {
         type: 'POST',
         url: urlControlActionDataProtect,
         data: {
-            Language: $('#countrySelect').val(),
+            language: $('#countrySelect').val(),
             itemExists: {
                 Id: $(id).val(),
                 Value: $(value).val(),
@@ -182,7 +183,7 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
         type: 'POST',
         url: urlControlActionUpdate,
         data: {
-            Language: $('#countrySelect').val(),
+            language: $('#countrySelect').val(),
             rowUpdate: {
                 Id: $(id).val(),
                 Value: $(value).val(),
@@ -194,7 +195,8 @@ $("#rootMainTable").on('click', '.saveLineButton', null, e => {
                 that.removeClass('btn-danger');
                 $(id).removeClass('is-invalid');
                 that.attr('disabled', true);
-                that.closest('th').append(`<div class="dataUpdate">Updated</div >`);
+                that.parents('tr').find('th').first().append(`<div class="dataUpdate">Updated</div >`);
+                that.parents('tr').find('th').find('input').prop("readonly", true);
             } else if (data.error !== 'undefined') {
                 that.addClass('btn-danger');
                 $(id).addClass('is-invalid');
@@ -241,7 +243,7 @@ $('#rootMainTable').on('click', '.deleteLineButton', null, e => {
             type: 'POST',
             url: urlControlActionDelete,
             data: {
-                Language: $('#countrySelect').val(),
+                language: $('#countrySelect').val(),
                 rowDelete: {
                     Id: id.val(),
                     Value: value.val(),
@@ -274,12 +276,12 @@ $('#CountrySelect').on('change', '#countrySelect', null, e => {
             type: 'POST',
             url: urlControlSwitchLanguage,
             data: {
-                Language: that.val()
+                language: that.val()
             },
             success: (data, textStatus) => {
                 $('#mainDataBodyTable').empty();
                 countTableElement = createTable$(data, countTableElement);
-                $('#linkDownloads').attr('href', urlControlGetFile + "?Language=" + that.val());
+                $('#linkDownloads').attr('href', urlControlGetFile + "?language=" + that.val());
             },
             error: (xhr, ajaxOptions, thrownError) => {
                 console.log(xhr);
