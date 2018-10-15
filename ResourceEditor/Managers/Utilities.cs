@@ -1,16 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Utilities.cs" company="Alex">
+//   free
+// </copyright>
+// <summary>
+//   Defines the Utilities type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace ResourceEditor.Managers
 {
+    using System.Web;
+
+    /// <summary>
+    /// The utilities.
+    /// </summary>
     public static class Utilities
     {
-        public static string GetIPAddress()
+        /// <summary>
+        /// The get ip address.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetIpAddress()
         {
-            System.Web.HttpContext context = System.Web.HttpContext.Current;
-            string ipAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            var context = HttpContext.Current;
+            var ipAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
             if (!string.IsNullOrEmpty(ipAddress))
             {
@@ -24,16 +39,20 @@ namespace ResourceEditor.Managers
             return context.Request.ServerVariables["REMOTE_ADDR"];
         }
 
-        public static string GetUserIP(HttpRequestBase Request)
+        /// <summary>
+        /// The get user ip.
+        /// </summary>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetUserIp(HttpRequestBase request)
         {
-            string ipList = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            var ipList = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
-            if (!string.IsNullOrEmpty(ipList))
-            {
-                return ipList.Split(',')[0];
-            }
-
-            return Request.ServerVariables["REMOTE_ADDR"];
+            return !string.IsNullOrEmpty(ipList) ? ipList.Split(',')[0] : request.ServerVariables["REMOTE_ADDR"];
         }
     }
 }
