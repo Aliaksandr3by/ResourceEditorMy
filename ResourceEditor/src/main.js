@@ -33,7 +33,9 @@ const createButton$ = (purpose, count, className) => {
 };
 
 let createRow$ = (data, count) => {
-    if (!$.isEmptyObject(data)) {
+    if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
+
+        let buttonName = data.Id !== "" ? "Save" : "Insert";
 
         let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
@@ -41,7 +43,7 @@ let createRow$ = (data, count) => {
         lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value));
         lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment));
 
-        lastTr.append("<td></td>").children("td").last().append(createButton$("Save", count, "saveLineButton btn btn-success d-inline w-100"));
+        lastTr.append("<td></td>").children("td").last().append(createButton$(buttonName, count, "saveLineButton btn btn-success d-inline w-100"));
         lastTr.append("<td></td>").children("td").last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
     }
 };
@@ -153,17 +155,17 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
             }
         },
         success: (data) => {
-            if ("error" in data) {
+            if ("status" in data) {
                 that.removeClass("is-invalid");
                 $(value).removeAttr("placeholder");
                 that.closest("th").find("div.dataError").remove();
-                that.closest("th").append(`<div class="dataSuccess">${data.error}</div >`);
+                that.closest("th").append(`<div class="dataSuccess">${data.status}</div >`);
                 that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
             } else {
                 that.addClass("is-invalid");
                 $(value).attr("placeholder", data.Value);
                 that.closest("th").find("div.dataSuccess").remove();
-                that.closest("th").append(`<div class="dataError">${data.Id} error</div >`);
+                that.closest("th").append(`<div class="dataError">${data.Id} was found!</div >`);
                 that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
             }
         },
@@ -192,19 +194,18 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
             }
         },
         success: (data) => {
-            if (data !== "" && typeof data.error === "undefined") {
+            if (data.hasOwnProperty('status') && !data.hasOwnProperty('error')) {
                 that.removeClass("btn-danger");
                 $(id).removeClass("is-invalid");
                 that.attr("disabled", true);
-                that.parents("tr").find("th").first().append(`<div class="dataUpdate">Updated</div >`);
+                that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
                 that.parents("tr").find("th").find("input").prop("readonly", true);
-            } else if (data.error !== "undefined") {
+            } else if ("error" in data) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
 
-
-
-                if (data.status !== "undefined") {
+                if ("status" in data) {
+                    //Велидация
                     $.each(data.error, (i, value) => {
 
                         let errDiv = $("<div></div>", {
@@ -291,6 +292,12 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
         });
     }
 });
+
+//$("#rootMainTable").on("DOMSubtreeModified", null, null, (e) => {
+//    let that = $(e.target); //$(this);
+
+//    console.log(that);
+//});
 
 $(window).on("load", function () {
     if (window.localStorage) {

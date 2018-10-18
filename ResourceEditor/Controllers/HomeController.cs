@@ -9,7 +9,6 @@
 
 namespace ResourceEditor.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
@@ -75,7 +74,7 @@ namespace ResourceEditor.Controllers
                 }
                 else
                 {
-                    return this.Json(new { result = "File was not saved!", error = "upload is NUll" });
+                    return this.Json(new { result = "File was not saved!", error = "upload is NUll" });//обрыв если хоть один файл не загрузился
                 }
             }
 
@@ -122,9 +121,15 @@ namespace ResourceEditor.Controllers
             var pathSave = ResourceHelper.GetPath(language);
 
             var result = ResourceHelper.DataProtect(pathSave, itemExists);
-            return result != null 
-                       ? this.Json(result) 
-                       : this.Json(new { error = $"{itemExists.Id} was not found!" });
+
+            if (result != null)
+            {
+                return this.Json(result);
+            }
+            else
+            {
+                return this.Json(new { status = $"{itemExists.Id} was not found!" });
+            }
         }
 
         /// <summary>
@@ -186,10 +191,16 @@ namespace ResourceEditor.Controllers
             if (this.ModelState.IsValid)
             {
                 var pathSave = ResourceHelper.GetPath(language);
-
-                return ResourceHelper.DataProtect(pathSave, rowUpdate) != null
-                           ? this.Json(ResourceHelper.Update(pathSave, rowUpdate)) 
-                           : this.Json(ResourceHelper.Insert(pathSave, rowUpdate));
+                if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
+                {
+                    ResourceHelper.Update(pathSave, rowUpdate);
+                    return this.Json(new { status = "Update" });
+                }
+                else
+                {
+                    ResourceHelper.Insert(pathSave, rowUpdate);
+                    return this.Json(new { status = "Insert" });
+                }
             }
 
             var errors = new List<string>();

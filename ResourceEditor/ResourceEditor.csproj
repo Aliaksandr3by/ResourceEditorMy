@@ -422,9 +422,6 @@
     <Content Include="node_modules\bootstrap\js\src\tab.js" />
     <Content Include="node_modules\bootstrap\js\src\tooltip.js" />
     <Content Include="node_modules\bootstrap\js\src\util.js" />
-    <Content Include="node_modules\file-saver\dist\FileSaver.js" />
-    <Content Include="node_modules\file-saver\dist\FileSaver.min.js" />
-    <Content Include="node_modules\file-saver\src\FileSaver.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js" />
     <Content Include="node_modules\jquery-validation-unobtrusive\LICENSE.txt" />
@@ -859,10 +856,6 @@
     <Content Include="node_modules\popper.js\index.js.flow" />
     <Content Include="node_modules\popper.js\package.json" />
     <Content Include="node_modules\popper.js\README.md" />
-    <Content Include="node_modules\file-saver\CHANGELOG.md" />
-    <Content Include="node_modules\file-saver\LICENSE.md" />
-    <Content Include="node_modules\file-saver\package.json" />
-    <Content Include="node_modules\file-saver\README.md" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -873,10 +866,10 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="node_modules\popper.js\index.d.ts" />
+    <Folder Include="App_LocalResources\test\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_LocalResources\test\" />
+    <TypeScriptCompile Include="node_modules\popper.js\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
