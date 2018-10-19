@@ -6,14 +6,7 @@
 
     <title>@ViewBag.Title - ResX Editor</title>
 
-    <script crossorigin
-            src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
-    <script crossorigin
-            src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-
-    @Styles.Render("~/Content/materialize-css")
-    @*@Styles.Render("~/Content/bootstrap")*@
+    @Styles.Render("~/Content/materialize")
     @Styles.Render("~/Content/site")
 
     @RenderSection("scripts", required: false)
@@ -21,7 +14,7 @@
 </head>
 <body>
     <div class="container">
-        <header class="row">
+        <header class="row center">
             <nav>
                 <div class="nav-wrapper">
                     <a href="#!" class="brand-logo">Logo</a>
@@ -43,7 +36,7 @@
             @RenderBody()
         </main>
 
-        <footer class="row">
+        <footer class="row center">
             <div class="alert alert-secondary" role="alert">
                 @Html.Partial("GetUserIP")
             </div>
@@ -53,13 +46,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryvalunob")
-
-    @Scripts.Render("~/bundles/materialize-css")
-
-    @*@Scripts.Render("~/bundles/bootstrap")*@
-
+    @Scripts.Render("~/bundles/materialize")
     @Scripts.Render("~/bundles/main")
-
 
 </body>
 </html>
