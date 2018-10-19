@@ -1,7 +1,9 @@
-﻿<select class="form-control d-inline w-100" id="countrySelect" name="Id" required>
-    <option disabled selected>Select language</option>
-    @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
-    {
-    <option value="@item.Id">@item.Id - @item.Value (@item.Comment)</option>
-    }
-</select>
+﻿<div class="input-field col">
+    <select id="countrySelect" name="Id" required>
+        <option disabled selected>Select language</option>
+        @foreach (var item in ResourceEditor.Managers.XmlManager.GetLanguages())
+        {
+            <option value="@item.Id">@item.Id - @item.Value (@item.Comment)</option>
+        }
+    </select>
+</div>

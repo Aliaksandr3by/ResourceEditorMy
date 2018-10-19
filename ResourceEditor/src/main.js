@@ -56,6 +56,90 @@ let createTable$ = (data, count) => {
     return count;
 };
 
+function countryResolver(opt) {
+    let sel = $(`<select></select>`, {
+        class: `browser-default`,
+        id: `countrySelect`,
+        name: `Id`
+    });
+
+    sel.append($("<option>").attr("disabled", true).text("Select language"));
+
+    $(opt).each((i, e) => {
+        sel.append($("<option>").attr("value", e.Id).text(`${i + 1}. ${e.Id} - ${e.Value}(${e.Comment})`));
+    });
+
+    return sel;
+}
+
+function GetCountrySet() {
+    let lsLang = localStorage.getItem("countrySelect") || "en";
+    $.ajax({
+        type: "POST",
+        url: urlControlSelectCountry,
+        data: {
+        },
+        success: (data, textStatus) => {
+            if (data !== "") {
+                $("#CountrySelect").empty();
+                $("#CountrySelect").append(countryResolver(data));
+                $("#countrySelect").val(lsLang).trigger("change");
+                //$("#countrySelect").formSelect();
+            } else {
+                console.log("error");
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
+        }
+    });
+}
+
+$("#countrySelectRefresh").on("click", null, null, e => {
+    let that = $(e.target);
+    GetCountrySet();
+});
+
+$("#ResourceUploads").on("click", null, (e) => {
+    let that = $(e.target);
+    let data = new FormData(); //с encoding установленным в "multipart/form-data".
+    let uploadFile = $("#FileResource").prop("files");
+
+    $.each(uploadFile, (i, value) => {
+        data.append(`uploads[${i}]`, value);
+    });
+
+    $.ajax({
+        url: urlControlUploadFile,
+        type: "POST",
+        data: data,
+        //cache: false,
+        //dataType: "json",
+        //async: true,
+        processData: false, // Не обрабатываем файлы (Don"t process the files)
+        contentType: false, // Так jQuery скажет серверу что это строковой запрос
+        success: (respond, textStatus, jqXHR) => {
+            if (!("error" in respond) && "fileName" in respond) {
+                that.siblings("div").remove();
+                that.closest("div").append(`<div>${respond.fileName} is ok </div>`);
+                GetCountrySet();
+            }
+            else {
+                that.siblings("div").remove();
+                that.closest("div").append(`<div>${respond.error}</div>`);
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
+        }
+    });
+
+});
+
 $("#ResourceSave").on("click", null, null, e => {
     let that = $(e.target);
 
@@ -78,53 +162,6 @@ $("#ResourceSave").on("click", null, null, e => {
             console.log(thrownError);
         }
     });
-});
-
-
-$("#ResourceUploads").on("click", null, (e) => {
-    let that = $(e.target);
-    let data = new FormData(); //с encoding установленным в "multipart/form-data".
-    let uploadFile = $("#FileResource").prop("files");
-
-    $.each(uploadFile, (i, value) => {
-        data.append(`uploads[${i}]`, value);
-    });
-
-    $.ajax({
-        url: urlControlUploadFile,
-        type: "POST",
-        data: data,
-        //cache: false,
-        //dataType: "json",
-        //async: true,
-        processData: false, // Не обрабатываем файлы (Don"t process the files)
-        contentType: false, // Так jQuery скажет серверу что это строковой запрос
-        success: (respond, textStatus, jqXHR) => {
-            if (typeof respond.error === "undefined") {
-                $("#FileResource").closest("div").append(`<div>${respond.fileName} is ok </div>`);
-                $.ajax({
-                    url: urlControlSelectCountry,
-                    type: "POST",
-                    success: (respond) => {
-                        $("#CountrySelect").empty();
-                        $(respond).appendTo("#CountrySelect");
-                    },
-                    error: (jqXHR, textStatus, errorThrown) => {
-
-                    }
-                });
-            }
-            else {
-                $("#FileResource").closest("div").append(`<div>${respond.error}</div>`);
-            }
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.log(xhr);
-            console.log(ajaxOptions);
-            console.log(thrownError);
-        }
-    });
-
 });
 
 $("#addTableRow").on("click", null, e => {
@@ -280,9 +317,15 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
                 language: that.val()
             },
             success: (data) => {
-                $("#mainDataBodyTable").empty();
-                countTableElement = createTable$(data, countTableElement);
-                $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
+                if ("error" in data) {
+                    $("#mainDataBodyTable").empty();
+                    $("#mainDataBodyTable").append(`<div>${data.error}</div>`);
+                    console.error(data.error);
+                } else {
+                    $("#mainDataBodyTable").empty();
+                    countTableElement = createTable$(data, countTableElement);
+                    $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
+                }
             },
             error: (xhr, ajaxOptions, thrownError) => {
                 console.log(xhr);
@@ -300,13 +343,10 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
 //});
 
 $(window).on("load", function () {
-    if (window.localStorage) {
-        /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
-        let lsLang = localStorage.getItem("countrySelect");
-        if (lsLang) {
-            $("#countrySelect").val(lsLang).trigger("change");
-        }
-    }
+    /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
+    let lsLang = localStorage.getItem("countrySelect") || "en";
+    $("#countrySelectRefresh").trigger("click");
+
 });
 
 window.onload = () => {
@@ -314,3 +354,15 @@ window.onload = () => {
 
     //}, false);
 };
+
+$(document).ready(function () {
+    //$("#countrySelect").formSelect();
+    //$('.sidenav').sidenav();
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    let elems = document.querySelectorAll('.sidenav');
+    let instances = M.Sidenav.init(elems, null);
+});

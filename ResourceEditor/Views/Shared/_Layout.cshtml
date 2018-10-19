@@ -12,7 +12,8 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
 
-    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/materialize-css")
+    @*@Styles.Render("~/Content/bootstrap")*@
     @Styles.Render("~/Content/site")
 
     @RenderSection("scripts", required: false)
@@ -20,44 +21,42 @@
 </head>
 <body>
     <div class="container">
-
         <header class="row">
-            <div class="col">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        @Html.ActionLink("Index", "Index", "Home", null, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Main Table", "read", "Home", null, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                </ul>
-            </div>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="#!" class="brand-logo">Logo</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li>@Html.ActionLink("Index", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Main Table", "read", "Home")</li>
+                    </ul>
+                </div>
+            </nav>
+
+            <ul class="sidenav" id="mobile-demo">
+                <li>@Html.ActionLink("Index", "Index", "Home")</li>
+                <li>@Html.ActionLink("Main Table", "read", "Home")</li>
+            </ul>
         </header>
 
         <main>
-            <div class="row">
-                @RenderBody()
-            </div>
+            @RenderBody()
         </main>
 
         <footer class="row">
-            <div class="col">
-                <div class="alert alert-secondary" role="alert">
-                    @Html.Partial("GetUserIP")
-                </div>
+            <div class="alert alert-secondary" role="alert">
+                @Html.Partial("GetUserIP")
             </div>
         </footer>
-
     </div>
-
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryvalunob")
-    @Scripts.Render("~/bundles/bootstrap")
+
+    @Scripts.Render("~/bundles/materialize-css")
+
+    @*@Scripts.Render("~/bundles/bootstrap")*@
 
     @Scripts.Render("~/bundles/main")
 

@@ -10,11 +10,13 @@ namespace ResourceEditor
         {
             bundles.UseCdn = true;   //enable CDN support
 
+            bundles.Add(new ScriptBundle("~/bundles/materialize-css").Include(
+                "~/node_modules/materialize-css/dist/js/materialize.js"));
+
             /*JS*/
             bundles.Add(new ScriptBundle("~/bundles/jquery", @"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js").Include(
                 "~/node_modules/jquery/dist/jquery.js",
-                "~/node_modules/jquery.cookie/jquery.cookie.js")
-                );
+                "~/node_modules/jquery.cookie/jquery.cookie.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/node_modules/jquery-validation/dist/jquery.validate.js"));
@@ -28,6 +30,10 @@ namespace ResourceEditor
             bundles.Add(new Bundle("~/bundles/main").Include("~/src/main.js")); //неверная минификация
 
             /*CSS*/
+
+            bundles.Add(new StyleBundle("~/Content/materialize-css").Include(
+                "~/node_modules/materialize-css/dist/css/materialize.css"));
+
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
                 "~/node_modules/bootstrap/dist/css/bootstrap.css"));
 

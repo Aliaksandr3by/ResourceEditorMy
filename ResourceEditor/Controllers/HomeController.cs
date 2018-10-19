@@ -35,18 +35,6 @@ namespace ResourceEditor.Controllers
         }
 
         /// <summary>
-        /// The select country.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpPost]
-        public ActionResult SelectCountry()
-        {
-            return this.PartialView();
-        }
-
-        /// <summary>
         /// The upload file.
         /// </summary>
         /// <param name="uploads">
@@ -243,11 +231,31 @@ namespace ResourceEditor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Switch(string language)
+        public ActionResult SwitchLanguage(string language)
         {
             var pathSave = ResourceHelper.GetPath(language);
 
+            if (pathSave == null)
+            {
+                return this.Json(new { error = "File was not found" });
+            }
+
             return this.Json(ResourceHelper.Read(pathSave));
+        }
+
+
+        /// <summary>
+        /// The select country.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult SelectCountry()
+        {
+            var selectCountry = ResourceEditor.Managers.XmlManager.GetLanguages();
+
+            return this.Json(selectCountry);
         }
     }
 }

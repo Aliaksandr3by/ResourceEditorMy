@@ -45,7 +45,6 @@ namespace ResourceEditor.Models
             var result = from item in originalElement where item.Id == langName.Id select item;
 
             return result.FirstOrDefault();
-
         }
 
         /// <summary>
