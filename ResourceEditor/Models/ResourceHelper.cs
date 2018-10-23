@@ -55,6 +55,7 @@ namespace ResourceEditor.Models
         /// <returns>Full resource path</returns>
         public static string GetPath(string id = null, string pathSave = "App_LocalResources")
         {
+            
             string file;
 
             if (string.IsNullOrWhiteSpace(id) || id == "en")
@@ -68,6 +69,10 @@ namespace ResourceEditor.Models
 
             var fullPath = HostingEnvironment.MapPath($"~/{pathSave}/") ?? throw new InvalidOperationException();
 
+            if (!System.IO.Directory.Exists(fullPath))
+                System.IO.Directory.CreateDirectory(fullPath);
+
+            Directory.CreateDirectory(fullPath);
             var allFoundFiles = Directory.GetFiles(fullPath, file, SearchOption.AllDirectories);
 
             return allFoundFiles.FirstOrDefault();

@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
+﻿
 @section scripts {
     <script type="text/javascript">
         const urlControlActionDelete = "@Url.Action("Delete", "Home")";
@@ -17,12 +17,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row center">
-    <div class="col s9">
-        <input type="file" id="FileResource" multiple required accept=".resx">
+<div class="row">
+    <div class="col s12">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input type="file" id="FileResource" multiple required accept=".resx">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload one or more files">
+            </div>
+        </div>
     </div>
-    <div class="col s3">
-        <button id="ResourceUploads" class="btn" type="button">Send</button>
+    <div class="col s12">
+        <div>
+            <button id="ResourceUploads" class="btn" type="button">Send</button>
+        </div>
     </div>
 </div>
 <div class="row center">
@@ -53,7 +63,7 @@
             </table>
         </div>
         <div>
-            <button type="button" class="btn" id="addTableRow">+</button>
+            <button type="button" class="btn-floating btn-large waves-effect waves-light red" id="addTableRow"><i class="material-icons">add</i></button>
         </div>
     </div>
 </div>
