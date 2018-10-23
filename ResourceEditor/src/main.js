@@ -10,13 +10,14 @@ const parseBool = el => {
     }
 };
 
-const createInput$ = (purpose, count, className, readOnly = false, val = "") => {
+const createInput$ = (purpose, count, className, readOnly = false, val = "", titleText = "NoN") => {
     return $("<input></input>", {
         type: "text",
         class: `${className} form-control d-inline w-100`,
         id: `id${purpose}_${count}`,
         name: `${purpose}_${count}`,
         readonly: readOnly,
+        title: titleText,
         value: val
     });
 };
@@ -32,7 +33,7 @@ const createButton$ = (purpose, count, className) => {
     });
 };
 
-let createRow$ = (data, count) => {
+let createRow$ = (data, count, titleText) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
@@ -40,18 +41,22 @@ let createRow$ = (data, count) => {
         let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
         lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value, titleText.Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment, titleText.Comment));
 
         lastTr.append("<td></td>").children("td").last().append(createButton$(buttonName, count, "saveLineButton btn btn-success d-inline w-100"));
         lastTr.append("<td></td>").children("td").last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
     }
 };
 
-let createTable$ = (data, count) => {
+let createTable$ = (data, count, titleText) => {
     for (let prop of data) {
-        createRow$(prop, count);
-        count++;
+        for (var item of titleText) {
+            if (prop.Id === item.Id) {
+                createRow$(prop, count, item);
+                count++;
+            }
+        }
     }
     return count;
 };
@@ -316,14 +321,15 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
             data: {
                 language: that.val()
             },
-            success: (data) => {
+            success: async (data) => {
                 if ("error" in data) {
                     $("#mainDataBodyTable").empty();
                     $("#mainDataBodyTable").append(`<div>${data.error}</div>`);
                     console.error(data.error);
                 } else {
                     $("#mainDataBodyTable").empty();
-                    countTableElement = createTable$(data, countTableElement);
+
+                    countTableElement = createTable$(data, countTableElement, await DataEng());
                     $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
                 }
             },
@@ -335,6 +341,29 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
         });
     }
 });
+
+async function DataEng() {
+    return await $.ajax({
+        type: "POST",
+        //async: false,
+        url: urlControlSwitchLanguage,
+        data: {
+            language: "en"
+        },
+        success: (data) => {
+            if ("error" in data) {
+                console.error(data.error);
+            } else {
+                console.log(data);
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => {
+            console.log(xhr);
+            console.log(ajaxOptions);
+            console.log(thrownError);
+        }
+    });
+}
 
 //$("#rootMainTable").on("DOMSubtreeModified", null, null, (e) => {
 //    let that = $(e.target); //$(this);
