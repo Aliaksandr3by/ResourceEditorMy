@@ -36,13 +36,16 @@ const createButton$ = (purpose, count, className) => {
 let createRow$ = (data, count, titleText) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
+        let Value = !!titleText && "Value" in titleText ? titleText.Value : "";
+        let Comment = !!titleText && "Comment" in titleText ? titleText.Comment : "";
+
         let buttonName = data.Id !== "" ? "Save" : "Insert";
 
         let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
         lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value, titleText.Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment, titleText.Comment));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value, Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment, Comment));
 
         lastTr.append("<td></td>").children("td").last().append(createButton$(buttonName, count, "saveLineButton btn btn-success d-inline w-100"));
         lastTr.append("<td></td>").children("td").last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
@@ -147,16 +150,16 @@ $("#ResourceUploads").on("click", null, (e) => {
 
 $("#ResourceSave").on("click", null, null, e => {
     let that = $(e.target);
-
+    const lng = $("#countrySelect").val();
     $.ajax({
         type: "GET",
         url: urlControlGetFile,
         data: {
             language: $("#countrySelect").val()
         },
-        success: (data, textStatus) => {
+        success: (data) => {
             if (data !== "") {
-                location.href = urlControlGetFile + "?language=" + $("#countrySelect").val();
+                location.href = `${urlControlGetFile}?${encodeURIComponent('language')}=${encodeURIComponent(lng)}`;
             } else {
                 console.log("Please select language");
             }
@@ -247,7 +250,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                 $(id).addClass("is-invalid");
 
                 if ("status" in data) {
-                    //Велидация
+                    //Велидация - выпоняется асинхронно, ничего не должно зависеть.
                     $.each(data.error, (i, value) => {
 
                         let errDiv = $("<div></div>", {
