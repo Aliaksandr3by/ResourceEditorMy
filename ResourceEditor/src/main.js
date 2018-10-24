@@ -52,9 +52,9 @@ let createRow$ = (data, count, titleText) => {
     }
 };
 
-let createTable$ = (data, count, titleText) => {
+let createTable$ = (data, count, title) => {
     for (let prop of data) {
-        for (var item of titleText) {
+        for (var item of title) {
             if (prop.Id === item.Id) {
                 createRow$(prop, count, item);
                 count++;
