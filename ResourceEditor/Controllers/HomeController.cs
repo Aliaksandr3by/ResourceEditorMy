@@ -13,9 +13,35 @@ namespace ResourceEditor.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-
+    using Newtonsoft.Json;
     using ResourceEditor.Entities;
     using ResourceEditor.Models;
+
+    public class AllowCrossSiteJsonAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var ctx = filterContext.RequestContext.HttpContext;
+            var origin = ctx.Request.Headers["Origin"];
+            var allowOrigin = !string.IsNullOrWhiteSpace(origin) ? origin : "*";
+            ctx.Response.AddHeader("Access-Control-Allow-Origin", allowOrigin);
+            ctx.Response.AddHeader("Access-Control-Allow-Headers", "*");
+            ctx.Response.AddHeader("Access-Control-Allow-Methods", "*");
+            ctx.Response.AddHeader("Access-Control-Allow-Credentials", "false");
+            base.OnActionExecuting(filterContext);
+        }
+    }
+    public class ContentTypeAttributeAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            //filterContext.RequestContext.HttpContext.Response.AddHeader("Content-Type", "application/json;charset=UTF-8");
+            //filterContext.RequestContext.HttpContext.Response.AddHeader("Content-Type", "application/xml;charset=UTF-8");
+            //filterContext.RequestContext.HttpContext.Response.AddHeader("Content-Type", "text/html;charset=UTF-8");
+            filterContext.RequestContext.HttpContext.Response.AddHeader("Content-Type", "text/plain;charset=UTF-8");
+            base.OnActionExecuting(filterContext);
+        }
+    }
 
     /// <inheritdoc />
     /// <summary>
@@ -231,6 +257,8 @@ namespace ResourceEditor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentTypeAttribute]
         public ActionResult SwitchLanguage(string language)
         {
             var pathSave = ResourceHelper.GetPath(language);
@@ -239,7 +267,7 @@ namespace ResourceEditor.Controllers
             {
                 return this.Json(new { error = "File was not found" });
             }
-
+            //return JsonConvert.SerializeObject(ResourceHelper.Read(pathSave));
             return this.Json(ResourceHelper.Read(pathSave));
         }
 

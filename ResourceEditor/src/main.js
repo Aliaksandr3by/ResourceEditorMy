@@ -410,4 +410,60 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function () {
     let elems = document.querySelectorAll('.sidenav');
     let instances = M.Sidenav.init(elems, null);
+
+    const el = document.getElementById("buttonASP");
+    if (!!el) {
+        buttonASPSet(el, "it");
+    }
 });
+
+
+let buttonASPSet = (el, lang) => el.addEventListener("click", (e) => {
+    const that = e.target;
+    const data = {
+        "language": lang
+    };
+    postAjax("/Home/SwitchLanguage", data,
+        (result) => {
+            let json = JSON.parse(result);
+            that.textContent = JSON.stringify(json);
+            console.log(json);
+        },
+        (error) => {
+            console.error(error);
+        }
+    );
+}, false);
+
+function postAjax(url, object, success, error) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+    xhr.timeout = 5000;
+    xhr.ontimeout = () => {
+        console.error("Request did not return i n а second.");
+    };
+
+    xhr.send(JSON.stringify(object));
+
+    xhr.onerror = (e) => {
+        console.error(e.target);
+    };
+
+    xhr.onreadystatechange = () => { //onload для замены события readystatechange
+        if (xhr.readyState === 4) {
+            if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+                console.log(xhr.responseType);
+                success(xhr.responseText);
+            }
+        }
+        if (xhr.response === null) {
+            error(xhr);
+        }
+    };
+
+    return xhr;
+}
