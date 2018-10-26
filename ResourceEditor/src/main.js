@@ -1,5 +1,3 @@
-var countTableElement = 0;
-
 const parseBool = el => {
     if (el.toLowerCase() === "true") {
         return true;
@@ -36,6 +34,7 @@ const createButton$ = (purpose, count, className) => {
 let createRow$ = (data, count, titleText) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
+        let ID = !!titleText && "Id" in titleText ? titleText.Id : "";
         let Value = !!titleText && "Value" in titleText ? titleText.Value : "";
         let Comment = !!titleText && "Comment" in titleText ? titleText.Comment : "";
 
@@ -43,7 +42,7 @@ let createRow$ = (data, count, titleText) => {
 
         let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
 
-        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id));
+        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id, ID));
         lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value, Value));
         lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment, Comment));
 
@@ -52,17 +51,29 @@ let createRow$ = (data, count, titleText) => {
     }
 };
 
-let createTable$ = (data, count, title) => {
-    for (let prop of data) {
-        for (var item of title) {
-            if (prop.Id === item.Id) {
-                createRow$(prop, count, item);
+let createTable$ = function(datum, titles) {
+    let count = 0;
+    return function () {
+        if (Array.isArray(datum) && Array.isArray(titles)) {
+            for (let data of datum) {
+                let _title = { Id: "Missing item EN", Value: "Missing item EN", Comment: "Missing item EN" };
+                for (var title of titles) {
+                    if (data.Id === title.Id) {
+                        _title = title;
+                    } 
+                }
+                createRow$(data, count, _title);
                 count++;
             }
+        } else if (typeof datum === "object" && typeof titles === "object") {
+            createRow$(datum, count, titles);
+            count++;
+        } else {
+            console.error("unknown");
         }
-    }
-    return count;
-};
+
+    };
+}
 
 function countryResolver(opt) {
     let sel = $(`<select></select>`, {
@@ -173,8 +184,8 @@ $("#ResourceSave").on("click", null, null, e => {
 });
 
 $("#addTableRow").on("click", null, e => {
-    createRow$({ Id: "", Value: "", Comment: "" }, countTableElement);
-    countTableElement++;
+    //TODO не работает счетчик
+    (createTable$({ Id: "", Value: "", Comment: "" }, { Id: "", Value: "", Comment: "" }))();
 });
 
 $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
@@ -311,6 +322,7 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     }
 });
 
+
 $("#CountrySelect").on("change", "#countrySelect", null, e => {
     let that = $(e.target); //$(this);
     if (that.val() !== "" && window.localStorage) {
@@ -332,7 +344,8 @@ $("#CountrySelect").on("change", "#countrySelect", null, e => {
                 } else {
                     $("#mainDataBodyTable").empty();
 
-                    countTableElement = createTable$(data, countTableElement, await DataEng());
+                    (createTable$(data, await DataEng()))();
+
                     $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
                 }
             },
@@ -357,7 +370,7 @@ async function DataEng() {
             if ("error" in data) {
                 console.error(data.error);
             } else {
-                console.log(data);
+                //console.log(data);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
