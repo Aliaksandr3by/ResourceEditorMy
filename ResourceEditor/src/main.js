@@ -51,7 +51,7 @@ let createRow$ = (data, count, titleText) => {
     }
 };
 
-let createTable$ = function(datum, titles) {
+let createTable$ = function (datum, titles) {
     let count = 0;
     return function () {
         if (Array.isArray(datum) && Array.isArray(titles)) {
@@ -60,7 +60,7 @@ let createTable$ = function(datum, titles) {
                 for (var title of titles) {
                     if (data.Id === title.Id) {
                         _title = title;
-                    } 
+                    }
                 }
                 createRow$(data, count, _title);
                 count++;
@@ -73,7 +73,7 @@ let createTable$ = function(datum, titles) {
         }
 
     };
-}
+};
 
 function countryResolver(opt) {
     let sel = $(`<select></select>`, {
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let instances = M.Sidenav.init(elems, null);
 
     const el = document.getElementById("buttonASP");
-    if (!!el) {
+    if (el) {
         buttonASPSet(el, "it");
     }
 });
