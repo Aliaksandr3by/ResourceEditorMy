@@ -31,7 +31,7 @@ namespace ResourceEditor.Controllers
             base.OnActionExecuting(filterContext);
         }
     }
-    public class ContentTypeAttributeAttribute : ActionFilterAttribute
+    public class ContentTypeAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -258,7 +258,7 @@ namespace ResourceEditor.Controllers
         /// </returns>
         [HttpPost]
         [AllowCrossSiteJson]
-        [ContentTypeAttribute]
+        [ContentType]
         public ActionResult SwitchLanguage(string language)
         {
             var pathSave = ResourceHelper.GetPath(language);

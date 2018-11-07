@@ -51,7 +51,7 @@ let createRow$ = (data, count, titleText) => {
     }
 };
 
-let createTable$ = function (datum, titles) {
+const createTable$ = function (datum, titles) {
     let count = 0;
     return function () {
         if (Array.isArray(datum) && Array.isArray(titles)) {
@@ -91,8 +91,8 @@ function countryResolver(opt) {
     return sel;
 }
 
-function GetCountrySet() {
-    let lsLang = localStorage.getItem("countrySelect") || "en";
+function GetCountrySet(lang) {
+    let lsLang = lang || localStorage.getItem("countrySelect") || "en";
     $.ajax({
         type: "POST",
         url: urlControlSelectCountry,
@@ -322,70 +322,42 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     }
 });
 
-
-$("#CountrySelect").on("change", "#countrySelect", null, e => {
-    let that = $(e.target); //$(this);
-    if (that.val() !== "" && window.localStorage) {
-        localStorage.setItem("countrySelect", String(that.val()));
-    }
-
-    if (that.val()) {
-        $.ajax({
-            type: "POST",
-            url: urlControlSwitchLanguage,
-            data: {
-                language: that.val()
-            },
-            success: async (data) => {
-                if ("error" in data) {
-                    $("#mainDataBodyTable").empty();
-                    $("#mainDataBodyTable").append(`<div>${data.error}</div>`);
-                    console.error(data.error);
-                } else {
-                    $("#mainDataBodyTable").empty();
-
-                    (createTable$(data, await DataEng()))();
-
-                    $("#linkDownloads").attr("href", urlControlGetFile + "?language=" + that.val());
-                }
-            },
-            error: (xhr, ajaxOptions, thrownError) => {
-                console.log(xhr);
-                console.log(ajaxOptions);
-                console.log(thrownError);
-            }
-        });
-    }
-});
-
-async function DataEng() {
-    return await $.ajax({
-        type: "POST",
-        //async: false,
-        url: urlControlSwitchLanguage,
-        data: {
-            language: "en"
-        },
-        success: (data) => {
+function CountrySelectUpdate(event) {
+    const that = event.target.value;
+    const mainDataBodyTable = document.getElementById("mainDataBodyTable");
+    const data = {
+        "language": that
+    };
+    AjaxPOST(
+        urlControlSwitchLanguage,
+        data,
+        async (data) => {
             if ("error" in data) {
+                while (mainDataBodyTable.firstChild) {
+                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+                }
+                let divError = document.createElement("div");
+                divError.textContent = data.error;
+                divError.className = "error";
+                mainDataBodyTable.appendChild(divError);
                 console.error(data.error);
             } else {
-                //console.log(data);
+                localStorage.setItem("countrySelect", JSON.stringify(that));
+                while (mainDataBodyTable.firstChild) {
+                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+                }
+                history.pushState(that, that, event.target.baseURI.toString());
+                AjaxPOSTAsync(urlControlSwitchLanguage, { "language": "en" }).then((datas) => {
+                    (createTable$(data, datas))();
+                }).catch((error) => {
+                    console.error(error);
+                });
             }
         },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.log(xhr);
-            console.log(ajaxOptions);
-            console.log(thrownError);
-        }
-    });
+        (xhr) => {
+            console.error(xhr);
+        });
 }
-
-//$("#rootMainTable").on("DOMSubtreeModified", null, null, (e) => {
-//    let that = $(e.target); //$(this);
-
-//    console.log(that);
-//});
 
 $(window).on("load", function () {
     /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
@@ -394,50 +366,27 @@ $(window).on("load", function () {
 
 });
 
-window.onload = () => {
-    //document.getElementById('countrySelect').addEventListener('select', () => {
-
-    //}, false);
-};
-
-$(document).ready(function () {
-    //$("#countrySelect").formSelect();
-    //$('.sidenav').sidenav();
-});
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
     let elems = document.querySelectorAll('.sidenav');
     let instances = M.Sidenav.init(elems, null);
 
-    const el = document.getElementById("buttonASP");
-    if (el) {
-        buttonASPSet(el, "it");
-    }
+    window.addEventListener('popstate', (e) => {
+        console.log(e.state);
+        localStorage.setItem("countrySelect", e.state);
+        $("#countrySelect").val(e.state).trigger("change");
+
+    });
+
+    document.getElementById("CountrySelect").addEventListener("change", (e) => {
+        CountrySelectUpdate(e);
+    });
+
 });
 
-
-let buttonASPSet = (el, lang) => el.addEventListener("click", (e) => {
-    const that = e.target;
-    const data = {
-        "language": lang
-    };
-    postAjax("/Home/SwitchLanguage", data,
-        (result) => {
-            let json = JSON.parse(result);
-            that.textContent = JSON.stringify(json);
-            console.log(json);
-        },
-        (error) => {
-            console.error(error);
-        }
-    );
-}, false);
-
-function postAjax(url, object, success, error) {
+function AjaxPOST(url, object, success, error) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
+
+    xhr.open('POST', url, true);
 
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -449,21 +398,32 @@ function postAjax(url, object, success, error) {
 
     xhr.send(JSON.stringify(object));
 
-    xhr.onerror = (e) => {
-        console.error(e.target);
-    };
+    xhr.addEventListener("load", (e) => {
+        const that = e.target;
+        if (that.status >= 200 && that.status < 300 || that.status === 304) {
+            success(JSON.parse(that.responseText));
+        }
+    }, false);
 
-    xhr.onreadystatechange = () => { //onload для замены события readystatechange
-        if (xhr.readyState === 4) {
-            if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
-                console.log(xhr.responseType);
-                success(xhr.responseText);
+    xhr.addEventListener("error", (e) => {
+        const that = e.target;
+        error(that);
+    }, false);
+}
+
+function AjaxPOSTAsync(url, object) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.onload = (e) => {
+            const that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                resolve(JSON.parse(xhr.responseText));
             }
-        }
-        if (xhr.response === null) {
-            error(xhr);
-        }
-    };
-
-    return xhr;
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(JSON.stringify(object));
+    });
 }

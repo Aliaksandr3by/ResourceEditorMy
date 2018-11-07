@@ -27,3 +27,7 @@ textarea {
 input {
     min-width: 50px
 }
+
+.error {
+    color: red;
+}

@@ -1,24 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Lang>
-  <LangName name="be">
-    <Id>be</Id>
-    <Value>Belarusian</Value>
-    <Comment>Беларуская</Comment>
-  </LangName>
   <LangName name="de">
     <Id>de</Id>
     <Value>German</Value>
     <Comment>Deutsch</Comment>
-  </LangName>
-  <LangName name="fr">
-    <Id>fr</Id>
-    <Value>French</Value>
-    <Comment>français</Comment>
-  </LangName>
-  <LangName name="it">
-    <Id>it</Id>
-    <Value>Italian</Value>
-    <Comment>italiano</Comment>
   </LangName>
   <LangName name="pl">
     <Id>pl</Id>
@@ -34,5 +19,20 @@
     <Id>ru-RU</Id>
     <Value>Russian (Russia)</Value>
     <Comment>русский (Россия)</Comment>
+  </LangName>
+  <LangName name="be">
+    <Id>be</Id>
+    <Value>Belarusian</Value>
+    <Comment>Беларуская</Comment>
+  </LangName>
+  <LangName name="fr">
+    <Id>fr</Id>
+    <Value>French</Value>
+    <Comment>français</Comment>
+  </LangName>
+  <LangName name="it">
+    <Id>it</Id>
+    <Value>Italian</Value>
+    <Comment>italiano</Comment>
   </LangName>
 </Lang>
