@@ -31,7 +31,7 @@ const createButton$ = (purpose, count, className) => {
     });
 };
 
-let createRow$ = (data, count, titleText) => {
+const createRow$ = (data, count, titleText) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let ID = !!titleText && "Id" in titleText ? titleText.Id : "";
@@ -259,9 +259,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
             } else if ("error" in data) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
-
                 if ("status" in data) {
-                    //Велидация - выпоняется асинхронно, ничего не должно зависеть.
                     $.each(data.error, (i, value) => {
 
                         let errDiv = $("<div></div>", {
@@ -322,8 +320,8 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     }
 });
 
-function CountrySelectUpdate(event) {
-    const that = event.target.value;
+function CountrySelectUpdate(lang, url) {
+    const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
     const data = {
         "language": that
@@ -342,16 +340,15 @@ function CountrySelectUpdate(event) {
                 mainDataBodyTable.appendChild(divError);
                 console.error(data.error);
             } else {
-                localStorage.setItem("countrySelect", JSON.stringify(that));
                 while (mainDataBodyTable.firstChild) {
                     mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
                 }
-                history.pushState(that, that, event.target.baseURI.toString());
                 AjaxPOSTAsync(urlControlSwitchLanguage, { "language": "en" }).then((datas) => {
                     (createTable$(data, datas))();
                 }).catch((error) => {
                     console.error(error);
-                });
+                    });
+                localStorage.setItem("countrySelect", String(that));
             }
         },
         (xhr) => {
@@ -372,39 +369,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('popstate', (e) => {
         console.log(e.state);
-        localStorage.setItem("countrySelect", e.state);
+        localStorage.setItem("countrySelect", String(e.state));
         $("#countrySelect").val(e.state).trigger("change");
-
+        CountrySelectUpdate(e.state, window.location);
     });
 
     document.getElementById("CountrySelect").addEventListener("change", (e) => {
-        CountrySelectUpdate(e);
+        CountrySelectUpdate(event.target.value, event.target.baseURI);
+        history.pushState(event.target.value, event.target.value, event.target.baseURI.toString());
     });
 
+    CountrySelectUpdate(localStorage.getItem("countrySelect"), window.location);
 });
 
 function AjaxPOST(url, object, success, error) {
     let xhr = new XMLHttpRequest();
-
     xhr.open('POST', url, true);
-
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
     xhr.timeout = 5000;
     xhr.ontimeout = () => {
         console.error("Request did not return i n а second.");
     };
-
     xhr.send(JSON.stringify(object));
-
     xhr.addEventListener("load", (e) => {
         const that = e.target;
         if (that.status >= 200 && that.status < 300 || that.status === 304) {
             success(JSON.parse(that.responseText));
         }
     }, false);
-
     xhr.addEventListener("error", (e) => {
         const that = e.target;
         error(that);
