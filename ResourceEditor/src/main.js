@@ -1,37 +1,23 @@
-const parseBool = el => {
-    if (el.toLowerCase() === "true") {
-        return true;
-    } else if (el.toLowerCase() === "false") {
-        return false;
-    } else {
-        return false;
-    }
-};
-
-const createInput$ = (purpose, count, className, readOnly = false, val = "", titleText = "NoN") => {
+const createInput$ = (className, readOnly = false, val = "", titleText = "...") => {
     return $("<input></input>", {
         type: "text",
-        class: `${className} form-control d-inline w-100`,
-        id: `id${purpose}_${count}`,
-        name: `${purpose}_${count}`,
+        class: `${className}`,
+        name: `${className}`,
         readonly: readOnly,
         title: titleText,
         value: val
     });
 };
 
-const createButton$ = (purpose, count, className) => {
+const createButton$ = (className, purpose) => {
     return $(`<button></button>`, {
         type: "button",
         class: `${className}`,
-        id: `id${purpose}_${count}`,
-        name: `button${purpose}_${count}`,
-        value: `id${purpose}_${count}`,
         text: `${purpose}`
     });
 };
 
-const createRow$ = (data, count, titleText) => {
+const createRow$ = (data, titleText) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let ID = !!titleText && "Id" in titleText ? titleText.Id : "";
@@ -40,39 +26,33 @@ const createRow$ = (data, count, titleText) => {
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
 
-        let lastTr = $("#mainTable").children("tbody").append(`<tr id="tableRow_${count}"></tr>`).children("tr").last();
+        let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("Id", count, "inputDataId", String(data.Id).length > 0, data.Id, ID));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Value", count, "inputDataValue", false, data.Value, Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("Comment", count, "inputDataComment", false, data.Comment, Comment));
+        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-inline w-100", String(data.Id).length > 0, data.Id, ID));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-inline w-100", false, data.Value, Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-inline w-100", false, data.Comment, Comment));
 
-        lastTr.append("<td></td>").children("td").last().append(createButton$(buttonName, count, "saveLineButton btn btn-success d-inline w-100"));
-        lastTr.append("<td></td>").children("td").last().append(createButton$("Delete", count, "deleteLineButton btn btn-danger d-inline w-100"));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-inline w-100", buttonName));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-inline w-100", "Delete"));
     }
 };
 
 const createTable$ = function (datum, titles) {
-    let count = 0;
-    return function () {
-        if (Array.isArray(datum) && Array.isArray(titles)) {
-            for (let data of datum) {
-                let _title = { Id: "Missing item EN", Value: "Missing item EN", Comment: "Missing item EN" };
-                for (var title of titles) {
-                    if (data.Id === title.Id) {
-                        _title = title;
-                    }
+    if (Array.isArray(datum) && Array.isArray(titles)) {
+        for (let data of datum) {
+            let _title = { Id: "Missing item EN", Value: "Missing item EN", Comment: "Missing item EN" };
+            for (var title of titles) {
+                if (data.Id === title.Id) {
+                    _title = title;
                 }
-                createRow$(data, count, _title);
-                count++;
             }
-        } else if (typeof datum === "object" && typeof titles === "object") {
-            createRow$(datum, count, titles);
-            count++;
-        } else {
-            console.error("unknown");
+            createRow$(data, _title);
         }
-
-    };
+    } else if (typeof datum === "object" && typeof titles === "object") {
+        createRow$(datum, titles);
+    } else {
+        console.error("unknown");
+    }
 };
 
 function countryResolver(opt) {
@@ -82,7 +62,7 @@ function countryResolver(opt) {
         name: `Id`
     });
 
-    sel.append($("<option>").attr("disabled", true).text("Select language"));
+    sel.append($("<option>").attr("disabled", "disabled").text("Select language"));
 
     $(opt).each((i, e) => {
         sel.append($("<option>").attr("value", e.Id).text(`${i + 1}. ${e.Id} - ${e.Value}(${e.Comment})`));
@@ -183,9 +163,8 @@ $("#ResourceSave").on("click", null, null, e => {
     });
 });
 
-$("#addTableRow").on("click", null, e => {
-    //TODO не работает счетчик
-    (createTable$({ Id: "", Value: "", Comment: "" }, { Id: "", Value: "", Comment: "" }))();
+$("#addTableRow").on("click", null, () => {
+    createTable$({ Id: "", Value: "", Comment: "" }, { Id: "", Value: "", Comment: "" });
 });
 
 $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
@@ -344,7 +323,7 @@ function CountrySelectUpdate(lang, url) {
                 mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
             }
             AjaxPOSTAsync(url, dataEN).then((datas) => {
-                (createTable$(data, datas))();
+                createTable$(data, datas);
             }).catch((error) => {
                 console.error(error);
             });
@@ -371,14 +350,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const CountrySelect = document.getElementById("CountrySelect");
+
     if (CountrySelect) {
         CountrySelect.addEventListener("change", (event) => {
             CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
-            history.pushState(event.target.value, event.target.value, urlControlSwitchLanguage);
+            history.pushState(event.target.value, event.target.value, urlControlRead);
         });
     }
-
-    CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+    if (urlControlSwitchLanguage) {
+        CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+    }
 });
 
 function AjaxPOST(url, object, success, error) {

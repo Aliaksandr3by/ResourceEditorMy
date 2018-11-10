@@ -267,7 +267,7 @@ namespace ResourceEditor.Controllers
             {
                 return this.Json(new { error = "File was not found" });
             }
-            //return JsonConvert.SerializeObject(ResourceHelper.Read(pathSave));
+
             return this.Json(ResourceHelper.Read(pathSave));
         }
 
