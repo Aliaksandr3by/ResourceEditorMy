@@ -323,63 +323,62 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
 function CountrySelectUpdate(lang, url) {
     const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
-    const data = {
-        "language": that
+    const dataLG = {
+        language: that
     };
-    AjaxPOST(
-        urlControlSwitchLanguage,
-        data,
-        async (data) => {
-            if ("error" in data) {
-                while (mainDataBodyTable.firstChild) {
-                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-                }
-                let divError = document.createElement("div");
-                divError.textContent = data.error;
-                divError.className = "error";
-                mainDataBodyTable.appendChild(divError);
-                console.error(data.error);
-            } else {
-                while (mainDataBodyTable.firstChild) {
-                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-                }
-                AjaxPOSTAsync(urlControlSwitchLanguage, { "language": "en" }).then((datas) => {
-                    (createTable$(data, datas))();
-                }).catch((error) => {
-                    console.error(error);
-                    });
-                localStorage.setItem("countrySelect", String(that));
+    const dataEN = {
+        language: "en"
+    };
+    AjaxPOSTAsync(url, dataLG).then((data) => {
+        if ("error" in data) {
+            while (mainDataBodyTable.firstChild) {
+                mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
             }
-        },
-        (xhr) => {
-            console.error(xhr);
-        });
+            let divError = document.createElement("div");
+            divError.textContent = data.error;
+            divError.className = "error";
+            mainDataBodyTable.appendChild(divError);
+            console.error(data.error);
+        } else {
+            while (mainDataBodyTable.firstChild) {
+                mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+            }
+            AjaxPOSTAsync(url, dataEN).then((datas) => {
+                (createTable$(data, datas))();
+            }).catch((error) => {
+                console.error(error);
+            });
+            localStorage.setItem("countrySelect", String(that));
+        }
+
+    }).catch((error) => {
+        console.error(error);
+    });
 }
-
-$(window).on("load", function () {
-    /** код будет запущен когда страница будет полностью загружена, включая все фреймы, объекты и изображения **/
-    let lsLang = localStorage.getItem("countrySelect") || "en";
-    $("#countrySelectRefresh").trigger("click");
-
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     let elems = document.querySelectorAll('.sidenav');
     let instances = M.Sidenav.init(elems, null);
 
-    window.addEventListener('popstate', (e) => {
-        console.log(e.state);
-        localStorage.setItem("countrySelect", String(e.state));
-        $("#countrySelect").val(e.state).trigger("change");
-        CountrySelectUpdate(e.state, window.location);
+    let lsLang = localStorage.getItem("countrySelect") || "en";
+    $("#countrySelectRefresh").trigger("click");
+
+    window.addEventListener('popstate', (event) => {
+        console.log(event.state);
+        localStorage.setItem("countrySelect", String(event.state));
+        $("#countrySelect").val(event.state).trigger("change");
+        CountrySelectUpdate(event.state, urlControlSwitchLanguage);
     });
 
-    document.getElementById("CountrySelect").addEventListener("change", (e) => {
-        CountrySelectUpdate(event.target.value, event.target.baseURI);
-        history.pushState(event.target.value, event.target.value, event.target.baseURI.toString());
-    });
+    const CountrySelect = document.getElementById("CountrySelect");
+    if (CountrySelect) {
+        CountrySelect.addEventListener("change", (event) => {
+            CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
+            history.pushState(event.target.value, event.target.value, urlControlSwitchLanguage);
+        });
+    }
 
-    CountrySelectUpdate(localStorage.getItem("countrySelect"), window.location);
+    CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
 });
 
 function AjaxPOST(url, object, success, error) {
