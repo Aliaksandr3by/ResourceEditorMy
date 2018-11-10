@@ -1,4 +1,6 @@
-const createInput$ = (className, readOnly = false, val = "", titleText = "...") => {
+"use strict";
+
+const createInput$ = (className = "", readOnly = false, val = "", titleText = "...") => {
     return $("<input></input>", {
         type: "text",
         class: `${className}`,
@@ -9,7 +11,7 @@ const createInput$ = (className, readOnly = false, val = "", titleText = "...") 
     });
 };
 
-const createButton$ = (className, purpose) => {
+const createButton$ = (className = "", purpose = "") => {
     return $(`<button></button>`, {
         type: "button",
         class: `${className}`,
@@ -17,20 +19,16 @@ const createButton$ = (className, purpose) => {
     });
 };
 
-const createRow$ = (data, titleText) => {
+const createRow$ = (data = { Id: "", Value: "", Comment: "" }, titleText = { Id: "", Value: "", Comment: "" }) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
-
-        let ID = !!titleText && "Id" in titleText ? titleText.Id : "";
-        let Value = !!titleText && "Value" in titleText ? titleText.Value : "";
-        let Comment = !!titleText && "Comment" in titleText ? titleText.Comment : "";
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
 
         let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-inline w-100", String(data.Id).length > 0, data.Id, ID));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-inline w-100", false, data.Value, Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-inline w-100", false, data.Comment, Comment));
+        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-inline w-100", String(data.Id).length > 0, data.Id, titleText.Id));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-inline w-100", false, data.Value, titleText.Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-inline w-100", false, data.Comment, titleText.Comment));
 
         lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-inline w-100", buttonName));
         lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-inline w-100", "Delete"));
@@ -55,7 +53,7 @@ const createTable$ = function (datum, titles) {
     }
 };
 
-function countryResolver(opt) {
+function countryResolver(data = {}) {
     let sel = $(`<select></select>`, {
         class: `browser-default`,
         id: `countrySelect`,
@@ -64,15 +62,14 @@ function countryResolver(opt) {
 
     sel.append($("<option>").attr("disabled", "disabled").text("Select language"));
 
-    $(opt).each((i, e) => {
+    $(data).each((i, e) => {
         sel.append($("<option>").attr("value", e.Id).text(`${i + 1}. ${e.Id} - ${e.Value}(${e.Comment})`));
     });
 
     return sel;
 }
 
-function GetCountrySet(lang) {
-    let lsLang = lang || localStorage.getItem("countrySelect") || "en";
+function GetCountrySet(lang = "en") {
     $.ajax({
         type: "POST",
         url: urlControlSelectCountry,
@@ -82,7 +79,7 @@ function GetCountrySet(lang) {
             if (data !== "") {
                 $("#CountrySelect").empty();
                 $("#CountrySelect").append(countryResolver(data));
-                $("#countrySelect").val(lsLang).trigger("change");
+                $("#countrySelect").val(lang).trigger("change");
                 //$("#countrySelect").formSelect();
             } else {
                 console.log("error");
@@ -336,34 +333,38 @@ function CountrySelectUpdate(lang, url) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    let elems = document.querySelectorAll('.sidenav');
-    let instances = M.Sidenav.init(elems, null);
+    try {
+        let elems = document.querySelectorAll('.sidenav');
+        let instances = M.Sidenav.init(elems, null);
 
-    let lsLang = localStorage.getItem("countrySelect") || "en";
-    $("#countrySelectRefresh").trigger("click");
+        let lsLang = localStorage.getItem("countrySelect") || "en";
+        $("#countrySelectRefresh").trigger("click");
 
-    window.addEventListener('popstate', (event) => {
-        console.log(event.state);
-        localStorage.setItem("countrySelect", String(event.state));
-        $("#countrySelect").val(event.state).trigger("change");
-        CountrySelectUpdate(event.state, urlControlSwitchLanguage);
-    });
-
-    const CountrySelect = document.getElementById("CountrySelect");
-
-    if (CountrySelect) {
-        CountrySelect.addEventListener("change", (event) => {
-            CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
-            history.pushState(event.target.value, event.target.value, urlControlRead);
+        window.addEventListener('popstate', (event) => {
+            console.log(event.state);
+            localStorage.setItem("countrySelect", String(event.state));
+            $("#countrySelect").val(event.state).trigger("change");
+            CountrySelectUpdate(event.state, urlControlSwitchLanguage);
         });
-    }
-    if (urlControlSwitchLanguage) {
-        CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+
+        const CountrySelect = document.getElementById("CountrySelect");
+
+        if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
+            CountrySelect.addEventListener("change", (event) => {
+                CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
+                history.pushState(event.target.value, event.target.value, urlControlRead);
+            });
+        }
+        if (urlControlSwitchLanguage !== null && typeof urlControlSwitchLanguage !== "undefined") {
+            CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+        }
+    } catch (e) {
+        console.log(e);
     }
 });
 
 function AjaxPOST(url, object, success, error) {
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
