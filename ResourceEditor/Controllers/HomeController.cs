@@ -13,7 +13,6 @@ namespace ResourceEditor.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-    using Newtonsoft.Json;
     using ResourceEditor.Entities;
     using ResourceEditor.Models;
 
@@ -263,12 +262,11 @@ namespace ResourceEditor.Controllers
         {
             var pathSave = ResourceHelper.GetPath(language);
 
-            if (pathSave == null)
-            {
-                return this.Json(new { error = "File was not found" });
-            }
+            var result = (pathSave == null) 
+                ? this.Json(new { error = "File was not found" }) 
+                : this.Json(ResourceHelper.Read(pathSave));
 
-            return this.Json(ResourceHelper.Read(pathSave));
+            return result;
         }
 
 

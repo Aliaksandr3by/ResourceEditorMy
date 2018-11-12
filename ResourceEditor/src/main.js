@@ -19,7 +19,7 @@ const createButton$ = (className = "", purpose = "") => {
     });
 };
 
-const createRow$ = (data = { Id: "", Value: "", Comment: "" }, titleText = { Id: "", Value: "", Comment: "" }) => {
+const createRow$ = (data = { "Id": "", "Value": "", "Comment": ""  }, titleText = { "Id": "", "Value": "", "Comment": "" }) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
@@ -35,11 +35,15 @@ const createRow$ = (data = { Id: "", Value: "", Comment: "" }, titleText = { Id:
     }
 };
 
-const createTable$ = function (datum, titles) {
+const createTable$ = function (datum = [{}], titles = [{}]) {
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
-            let _title = { Id: "Missing item EN", Value: "Missing item EN", Comment: "Missing item EN" };
-            for (var title of titles) {
+            let _title = {
+                "Id": "Missing item EN",
+                "Value": "Missing item EN",
+                "Comment": "Missing item EN"
+            };
+            for (let title of titles) {
                 if (data.Id === title.Id) {
                     _title = title;
                 }
@@ -95,7 +99,9 @@ function GetCountrySet(lang = "en") {
 
 $("#countrySelectRefresh").on("click", null, null, e => {
     let that = $(e.target);
-    GetCountrySet();
+    let lsLang = localStorage.getItem("countrySelect") || "en";
+    GetCountrySet(lsLang);
+    CountrySelectUpdate(lsLang, urlControlSwitchLanguage);
 });
 
 $("#ResourceUploads").on("click", null, (e) => {
@@ -160,14 +166,6 @@ $("#ResourceSave").on("click", null, null, e => {
     });
 });
 
-$("#addTableRow").on("click", null, () => {
-    createTable$({ Id: "", Value: "", Comment: "" }, { Id: "", Value: "", Comment: "" });
-});
-
-$("#rootMainTable").on("change", ".inputDataId", null, function (e) {
-    $(e.target).closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
-});
-
 /**
  * Method protects exist node of resource
  */
@@ -192,13 +190,13 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
                 $(value).removeAttr("placeholder");
                 that.closest("th").find("div.dataError").remove();
                 that.closest("th").append(`<div class="dataSuccess">${data.status}</div >`);
-                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", false);
+                that.closest("tr").children("td").children("button.saveLineButton").removeAttr("disabled");
             } else {
                 that.addClass("is-invalid");
                 $(value).attr("placeholder", data.Value);
                 that.closest("th").find("div.dataSuccess").remove();
                 that.closest("th").append(`<div class="dataError">${data.Id} was found!</div >`);
-                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
+                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", "disabled");
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
@@ -300,10 +298,10 @@ function CountrySelectUpdate(lang, url) {
     const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
     const dataLG = {
-        language: that
+        "language": that
     };
     const dataEN = {
-        language: "en"
+        "language": "en"
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
         if ("error" in data) {
@@ -337,7 +335,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let elems = document.querySelectorAll('.sidenav');
         let instances = M.Sidenav.init(elems, null);
 
-        let lsLang = localStorage.getItem("countrySelect") || "en";
         $("#countrySelectRefresh").trigger("click");
 
         window.addEventListener('popstate', (event) => {
@@ -351,13 +348,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
             CountrySelect.addEventListener("change", (event) => {
+
+                while (mainDataBodyTable.firstChild) {
+                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+                }
+
                 CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
+
                 history.pushState(event.target.value, event.target.value, urlControlRead);
+
             });
         }
-        if (urlControlSwitchLanguage !== null && typeof urlControlSwitchLanguage !== "undefined") {
-            CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+
+        //if (urlControlSwitchLanguage !== null && typeof urlControlSwitchLanguage !== "undefined") {
+        //    while (mainDataBodyTable.firstChild) {
+        //        mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+        //    }
+        //    CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
+        //}
+
+        const addTableRow = document.getElementById("addTableRow");
+
+        if (addTableRow !== null && typeof addTableRow !== "undefined") {
+            addTableRow.addEventListener("click", (event) => {
+
+                createTable$({ "Id": "", "Value": "", "Comment": "" }, { "Id": "", "Value": "", "Comment": "" });
+
+            });
         }
+
+        //const rootMainTable = document.getElementById("rootMainTable");
+
+        //if (rootMainTable !== null && typeof rootMainTable !== "undefined") {
+        //    rootMainTable.addEventListener("change", (event) => {
+
+        //        event.target.closest("tr").querySelector("button.saveLineButton").setAttribute("disabled", false);
+
+        //    });
+        //}
+
+
     } catch (e) {
         console.log(e);
     }
@@ -385,6 +415,12 @@ function AjaxPOST(url, object, success, error) {
     }, false);
 }
 
+/**
+ * Ajax function
+ * @param {string} url адрес контроллера
+ * @param {object} object содержит идентификатор language языка
+ * @returns {Promise} object
+ */
 function AjaxPOSTAsync(url, object) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
