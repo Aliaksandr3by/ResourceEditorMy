@@ -19,7 +19,7 @@ const createButton$ = (className = "", purpose = "") => {
     });
 };
 
-const createRow$ = (data = { "Id": "", "Value": "", "Comment": ""  }, titleText = { "Id": "", "Value": "", "Comment": "" }) => {
+const createRow$ = (data = { "Id": "", "Value": "", "Comment": "" }, titleText = { "Id": "", "Value": "", "Comment": "" }) => {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        
+
         const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
         if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
             mainDataHeadFilterTable.addEventListener("keyup", (event) => {
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        
+
         const BtnClear = document.getElementById("BtnClear");
         if (BtnClear !== null && typeof BtnClear !== "undefined") {
             BtnClear.addEventListener("click", (event) => {
@@ -427,6 +427,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
         }
+
+        if (mainDataBodyTable !== null && typeof mainDataBodyTable !== "undefined") {
+            mainDataBodyTable.addEventListener("change", (event) => {
+
+                event.target.closest("tr").querySelector("button.saveLineButton").removeAttribute("disabled");
+
+            });
+        }
+
 
     } catch (e) {
         console.log(e);

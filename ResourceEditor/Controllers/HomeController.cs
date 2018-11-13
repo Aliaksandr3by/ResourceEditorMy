@@ -204,6 +204,7 @@ namespace ResourceEditor.Controllers
             if (this.ModelState.IsValid)
             {
                 var pathSave = ResourceHelper.GetPath(language);
+   
                 if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
                 {
                     ResourceHelper.Update(pathSave, rowUpdate);
@@ -211,8 +212,19 @@ namespace ResourceEditor.Controllers
                 }
                 else
                 {
-                    ResourceHelper.Insert(pathSave, rowUpdate);
-                    return this.Json(new { status = "Insert" });
+
+                    if (language == "en")
+                    {
+                        ResourceHelper.InsertInAllFile(pathSave, rowUpdate);
+                        return this.Json(new { status = "Insert all resource file" });
+                    }
+                    else
+                    {
+                        ResourceHelper.Insert(pathSave, rowUpdate);
+                        return this.Json(new { status = "Insert" });
+                    }
+
+                    
                 }
             }
 

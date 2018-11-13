@@ -78,6 +78,23 @@ namespace ResourceEditor.Models
             return allFoundFiles.FirstOrDefault();
         }
 
+        public static void Logging(LangName langName, string path, string status)
+        {
+            
+            JsonSerializer serializer = new JsonSerializer();
+            string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
+            using (FileStream fs = new FileStream(fileName, FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+            {
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    sw.WriteLine($@"    {status}    {DateTime.Now}  {Path.GetFileName(path)}");
+                    serializer.Serialize(writer, langName);
+                    sw.WriteLine(System.Environment.NewLine);
+                }
+            }
+        }
+
         /// <summary>
         /// Get all the data from the file
         /// </summary>
@@ -196,6 +213,8 @@ namespace ResourceEditor.Models
         /// </returns>
         public static IEnumerable<LangName> Update(string pathSave, LangName updatedItem)
         {
+            Logging(updatedItem, pathSave, nameof(updatedItem));
+
             var originalElement = Read(pathSave);
 
             var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
@@ -210,6 +229,31 @@ namespace ResourceEditor.Models
             return originalElement;
         }
 
+        public static IEnumerable<LangName> InsertInAllFile(string pathSave, LangName newItem)
+        {
+            
+            var allFoundFiles = Directory.GetFiles(HostingEnvironment.MapPath("~/App_LocalResources/"), "Resource.*.resx", SearchOption.AllDirectories);
+
+            foreach (var item in allFoundFiles)
+            {
+                if ("Resource.resx" != Path.GetFileName(item))
+                {
+                    Insert(item, newItem);
+                }
+            }
+
+            if (newItem == null)
+            {
+                return null;
+            }
+
+            var originalElement = Read(pathSave);
+
+            originalElement.Add(newItem);
+
+            return Create(pathSave, originalElement) ? originalElement : null;
+        }
+
         /// <summary>
         /// This method insert node to resource file
         /// </summary>
@@ -218,6 +262,8 @@ namespace ResourceEditor.Models
         /// <returns>Updated item</returns>
         public static IEnumerable<LangName> Insert(string pathSave, LangName newItem)
         {
+            Logging(newItem, pathSave, nameof(newItem));
+
             if (newItem == null)
             {
                 return null;
