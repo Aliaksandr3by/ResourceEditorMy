@@ -309,18 +309,14 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
         if ("error" in data) {
-            while (mainDataBodyTable.firstChild) {
-                mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-            }
+            EmptyElement(mainDataBodyTable);
             let divError = document.createElement("div");
             divError.textContent = data.error;
             divError.className = "error";
             mainDataBodyTable.appendChild(divError);
             console.error(data.error);
         } else {
-            while (mainDataBodyTable.firstChild) {
-                mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-            }
+            EmptyElement(mainDataBodyTable);
             //(async function() {
             //    createTable$(data, await AjaxPOSTAsync(url, dataEN));
             //})();
@@ -344,6 +340,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $("#countrySelectRefresh").trigger("click");
 
+        const mainDataBodyTable = document.getElementById("mainDataBodyTable");
+
         window.addEventListener('popstate', (event) => {
             console.log(event.state);
             localStorage.setItem("countrySelect", String(event.state));
@@ -352,13 +350,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const CountrySelect = document.getElementById("CountrySelect");
-
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
             CountrySelect.addEventListener("change", (event) => {
 
-                while (mainDataBodyTable.firstChild) {
-                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-                }
+                EmptyElement(mainDataBodyTable);
 
                 CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
 
@@ -368,15 +363,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const BtnSort = document.querySelectorAll(".BtnSort");
-
         if (BtnSort !== null && typeof BtnSort !== "undefined") {
             document.getElementById("mainDataHeadTable").addEventListener("click", (event) => {
                 const lang = document.getElementById("countrySelect");
                 const sort = event.target;
 
-                while (mainDataBodyTable.firstChild) {
-                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-                }
+                EmptyElement(mainDataBodyTable);
 
                 CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
 
@@ -387,7 +379,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         
         const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
-
         if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
             mainDataHeadFilterTable.addEventListener("keyup", (event) => {
 
@@ -402,10 +393,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     findTextAll[element.name] = element.value;
                 });
 
-
-                while (mainDataBodyTable.firstChild) {
-                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-                }
+                EmptyElement(mainDataBodyTable);
 
                 CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort, JSON.stringify(findTextAll));
 
@@ -414,8 +402,24 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        const addTableRow = document.getElementById("addTableRow");
+        
+        const BtnClear = document.getElementById("BtnClear");
+        if (BtnClear !== null && typeof BtnClear !== "undefined") {
+            BtnClear.addEventListener("click", (event) => {
 
+                const inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
+                const lang = document.getElementById("countrySelect");
+
+                EmptyElement(mainDataBodyTable);
+                inputSearchAll.forEach((element) => {
+                    element.value = "";
+                });
+                CountrySelectUpdate(lang.value, urlControlSwitchLanguage);
+
+            });
+        }
+
+        const addTableRow = document.getElementById("addTableRow");
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
             addTableRow.addEventListener("click", (event) => {
 
@@ -428,6 +432,12 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(e);
     }
 });
+
+function EmptyElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
 
 function AjaxPOST(url, object, success, error) {
     const xhr = new XMLHttpRequest();
