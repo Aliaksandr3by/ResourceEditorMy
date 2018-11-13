@@ -51,11 +51,20 @@
     <div class="col s12">
         <div id="rootMainTable">
             <table id="mainTable" class="highlight centered responsive-table">
-                <thead>
+                <thead id="mainDataHeadTable">
                     <tr>
-                        <th scope="col">Key</th>
-                        <th scope="col">Value</th>
-                        <th scope="col">Comment</th>
+                        <th scope="col"><button class="BtnSort btn-flat" value="Id" id="BtnSortId" type="button">Id</button></th>
+                        <th scope="col"><button class="BtnSort btn-flat" value="Value" id="BtnSortValue" type="button">Value</button></th>
+                        <th scope="col"><button class="BtnSort btn-flat" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <thead id="mainDataHeadFilterTable">
+                    <tr>
+                        <th scope="col"><input type="search" class="inputSearch" name="Id" placeholder="Filter by Id" /></th>
+                        <th scope="col"><input type="search" class="inputSearch" name="Value" placeholder="Filter by Value" /></th>
+                        <th scope="col"><input type="search" class="inputSearch" name="Comment" placeholder="Filter by Comment" /></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>

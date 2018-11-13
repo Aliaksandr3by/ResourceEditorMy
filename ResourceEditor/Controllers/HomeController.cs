@@ -258,13 +258,13 @@ namespace ResourceEditor.Controllers
         [HttpPost]
         [AllowCrossSiteJson]
         [ContentType]
-        public ActionResult SwitchLanguage(string language)
+        public ActionResult SwitchLanguage(string language, string sort, string filter)
         {
             var pathSave = ResourceHelper.GetPath(language);
 
             var result = (pathSave == null) 
                 ? this.Json(new { error = "File was not found" }) 
-                : this.Json(ResourceHelper.Read(pathSave));
+                : this.Json(ResourceHelper.Read(pathSave, sort, filter));
 
             return result;
         }

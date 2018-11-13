@@ -9,6 +9,8 @@
 
 namespace ResourceEditor.Models
 {
+    using Newtonsoft.Json;
+    using ResourceEditor.Entities;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -19,8 +21,6 @@ namespace ResourceEditor.Models
     using System.Text;
     using System.Web.Hosting;
     using System.Web.Script.Serialization;
-
-    using ResourceEditor.Entities;
 
     /// <summary>
     /// Resource Helper
@@ -55,7 +55,7 @@ namespace ResourceEditor.Models
         /// <returns>Full resource path</returns>
         public static string GetPath(string id = null, string pathSave = "App_LocalResources")
         {
-            
+
             string file;
 
             if (string.IsNullOrWhiteSpace(id) || id == "en")
@@ -83,13 +83,13 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="pathLoad">Full path by explore file</param>
         /// <returns>Edited data</returns>
-        public static List<LangName> Read(string pathLoad)
+        public static List<LangName> Read(string pathLoad, string sort = "", string filter = "")
         {
             if (!File.Exists(pathLoad))
             {
                 return null;
             }
-
+            var _filter = JsonConvert.DeserializeObject<LangName>(filter);
             var outLangNames = new List<LangName>();
 
             using (var rr = new ResXResourceReader(pathLoad))
@@ -100,17 +100,36 @@ namespace ResourceEditor.Models
                 {
                     var node = (ResXDataNode)dict.Value;
                     var assemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies(); ////i do`t know
-                    outLangNames.Add(
-                        new LangName
-                            {
-                                Id = node.Name,
-                                Value = node.GetValue(assemblies).ToString(),
-                                Comment = !string.IsNullOrEmpty(node.Comment) ? node.Comment : string.Empty
-                            });
+                    var tmp = new LangName
+                    {
+                        Id = node.Name,
+                        Value = node.GetValue(assemblies).ToString(),
+                        Comment = !string.IsNullOrEmpty(node.Comment) ? node.Comment : string.Empty
+                    };
+                    if (_filter != null)
+                    {
+                        if (tmp.Id.Contains(_filter.Id) && tmp.Value.Contains(_filter.Value) && tmp.Comment.Contains(_filter.Comment))
+                        {
+                            outLangNames.Add(tmp);
+                        }
+                    }
+                    else
+                    {
+                        outLangNames.Add(tmp);
+                    }
                 }
             }
-
-            return outLangNames.OrderBy(e => e.Id).ToList();
+            switch (sort)
+            {
+                case "Id":
+                    return outLangNames.OrderBy(e => e.Id).ToList();
+                case "Value":
+                    return outLangNames.OrderBy(e => e.Value).ToList();
+                case "Comment":
+                    return outLangNames.OrderBy(e => e.Comment).ToList();
+                default:
+                    return outLangNames.OrderBy(e => e.Id).ToList();
+            }
         }
 
         /// <summary>
@@ -221,7 +240,7 @@ namespace ResourceEditor.Models
         public static string[] DeleteAllEntitiesEn(LangName deleteElement, string pathSave, string file = "Resource.resx")
         {
             var allFoundFiles = Directory.GetFiles(pathSave, "Resource.*.resx", SearchOption.AllDirectories);
-            
+
             foreach (var item in allFoundFiles)
             {
                 if (file != Path.GetFileName(item))

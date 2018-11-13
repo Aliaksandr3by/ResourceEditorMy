@@ -35,7 +35,7 @@ const createRow$ = (data = { "Id": "", "Value": "", "Comment": ""  }, titleText 
     }
 };
 
-const createTable$ = function (datum = [{}], titles = [{}]) {
+function createTable$(datum = [{}], titles = [{}]) {
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
             let _title = {
@@ -294,14 +294,18 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     }
 });
 
-function CountrySelectUpdate(lang, url) {
+function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
     const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
     const dataLG = {
-        "language": that
+        "language": that,
+        "sort": sort,
+        "filter": filter
     };
     const dataEN = {
-        "language": "en"
+        "language": "en",
+        "sort": sort,
+        "filter": filter
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
         if ("error" in data) {
@@ -317,6 +321,9 @@ function CountrySelectUpdate(lang, url) {
             while (mainDataBodyTable.firstChild) {
                 mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
             }
+            //(async function() {
+            //    createTable$(data, await AjaxPOSTAsync(url, dataEN));
+            //})();
             AjaxPOSTAsync(url, dataEN).then((datas) => {
                 createTable$(data, datas);
             }).catch((error) => {
@@ -332,7 +339,7 @@ function CountrySelectUpdate(lang, url) {
 
 document.addEventListener('DOMContentLoaded', function () {
     try {
-        let elems = document.querySelectorAll('.sidenav');
+        let elems = document.querySelectorAll(".sidenav");
         let instances = M.Sidenav.init(elems, null);
 
         $("#countrySelectRefresh").trigger("click");
@@ -360,12 +367,52 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        //if (urlControlSwitchLanguage !== null && typeof urlControlSwitchLanguage !== "undefined") {
-        //    while (mainDataBodyTable.firstChild) {
-        //        mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
-        //    }
-        //    CountrySelectUpdate(localStorage.getItem("countrySelect"), urlControlSwitchLanguage);
-        //}
+        const BtnSort = document.querySelectorAll(".BtnSort");
+
+        if (BtnSort !== null && typeof BtnSort !== "undefined") {
+            document.getElementById("mainDataHeadTable").addEventListener("click", (event) => {
+                const lang = document.getElementById("countrySelect");
+                const sort = event.target;
+
+                while (mainDataBodyTable.firstChild) {
+                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+                }
+
+                CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
+
+                history.pushState(lang.value, lang.value, urlControlRead);
+
+            });
+        }
+
+        
+        const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
+
+        if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
+            mainDataHeadFilterTable.addEventListener("keyup", (event) => {
+
+                const lang = document.getElementById("countrySelect");
+                const sort = event.target.name;
+                const findText = event.target.value;
+
+                const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(".inputSearch");
+                const findTextAll = {};
+
+                inputSearchAll.forEach((element) => {
+                    findTextAll[element.name] = element.value;
+                });
+
+
+                while (mainDataBodyTable.firstChild) {
+                    mainDataBodyTable.removeChild(mainDataBodyTable.firstChild);
+                }
+
+                CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort, JSON.stringify(findTextAll));
+
+                history.pushState(lang.value, lang.value, urlControlRead);
+
+            });
+        }
 
         const addTableRow = document.getElementById("addTableRow");
 
@@ -376,17 +423,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
         }
-
-        //const rootMainTable = document.getElementById("rootMainTable");
-
-        //if (rootMainTable !== null && typeof rootMainTable !== "undefined") {
-        //    rootMainTable.addEventListener("change", (event) => {
-
-        //        event.target.closest("tr").querySelector("button.saveLineButton").setAttribute("disabled", false);
-
-        //    });
-        //}
-
 
     } catch (e) {
         console.log(e);
