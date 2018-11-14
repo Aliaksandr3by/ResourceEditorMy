@@ -32,6 +32,11 @@ namespace ResourceEditor
                 defaults: new { controller = "Home", action = "Read", id = UrlParameter.Optional });
 
             routes.MapRoute(
+                name: "HomeLog",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Log", id = UrlParameter.Optional });
+
+            routes.MapRoute(
                 name: "HomeInsert",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Insert", id = UrlParameter.Optional });

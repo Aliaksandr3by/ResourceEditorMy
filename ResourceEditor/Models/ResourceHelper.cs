@@ -27,6 +27,68 @@ namespace ResourceEditor.Models
     /// </summary>
     public class ResourceHelper
     {
+        public static List<LangNameLog> GetLog()
+        {
+            //string qwe = @"[{'Id':'q1','Value':'qwe','Comment':'pl'},{'Id':'q1','Value':'qwe','Comment':'pl'}]";
+
+            string path = HostingEnvironment.MapPath($"~/App_LocalResources/Log.txt");
+
+            List<LangNameLog> result = new List<LangNameLog>();
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                string str = sr.ReadLine().Replace('"', '\'');
+
+                while (str != null)
+                {
+                    result.Add(JsonConvert.DeserializeObject<LangNameLog>(str));
+                    str = sr.ReadLine();
+                }
+            }
+
+            return result;
+        }
+        public static void Logging(LangName langName, string path, string status)
+        {
+
+            JsonSerializer serializer = new JsonSerializer();
+            string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
+            using (FileStream fs = new FileStream(fileName, FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+            {
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    LangNameLog langNameLog = new LangNameLog();
+                    langNameLog.Id = langName.Id;
+                    langNameLog.Value = langName.Value;
+                    langNameLog.Comment = langName.Comment;
+                    langNameLog.StatusLog = status;
+                    langNameLog.DateLog = DateTime.Now.ToLocalTime().ToString();
+                    langNameLog.PathLog = Path.GetFileName(path);
+
+                    serializer.Serialize(writer, langNameLog);
+
+                    sw.WriteLine(System.Environment.NewLine);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method need to parse collection object to JSON format
+        /// </summary>
+        /// <param name="langNames">lang Names</param>
+        /// <returns>Json formatted object</returns>
+        public static string ParceToJson(IEnumerable<LangName> langNames)
+        {
+            var stringBuilder = new StringBuilder();
+
+            var serializer = new JavaScriptSerializer();
+
+            stringBuilder.Append(string.Join(",", langNames.Select(x => serializer.Serialize(x))));
+
+            return $"[{stringBuilder}]";
+        }
+
         /// <summary>
         /// This method checks if the item already exists.
         /// </summary>
@@ -76,23 +138,6 @@ namespace ResourceEditor.Models
             var allFoundFiles = Directory.GetFiles(fullPath, file, SearchOption.AllDirectories);
 
             return allFoundFiles.FirstOrDefault();
-        }
-
-        public static void Logging(LangName langName, string path, string status)
-        {
-            
-            JsonSerializer serializer = new JsonSerializer();
-            string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
-            using (FileStream fs = new FileStream(fileName, FileMode.Append))
-            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-            {
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    sw.WriteLine($@"    {status}    {DateTime.Now}  {Path.GetFileName(path)}");
-                    serializer.Serialize(writer, langName);
-                    sw.WriteLine(System.Environment.NewLine);
-                }
-            }
         }
 
         /// <summary>
@@ -176,7 +221,7 @@ namespace ResourceEditor.Models
         /// <returns>
         /// The <see cref="bool"/> result operation.
         /// </returns>
-        public static bool Create(string pathSave, List<LangName> langNames)
+        public static bool Create(string pathSave, IEnumerable<LangName> langNames)
         {
             if (langNames == null)
             {
@@ -325,22 +370,6 @@ namespace ResourceEditor.Models
             }
 
             return originalElement;
-        }
-
-        /// <summary>
-        /// This method need to parse collection object to JSON format
-        /// </summary>
-        /// <param name="langNames">lang Names</param>
-        /// <returns>Json formatted object</returns>
-        public static string ParceToJson(List<LangName> langNames)
-        {
-            var stringBuilder = new StringBuilder();
-
-            var serializer = new JavaScriptSerializer();
-
-            stringBuilder.Append(string.Join(",", langNames.Select(x => serializer.Serialize(x))));
-
-            return $"[{stringBuilder}]";
         }
     }
 }

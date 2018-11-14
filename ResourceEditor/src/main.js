@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const BtnSort = document.querySelectorAll(".BtnSort");
-        if (BtnSort !== null && typeof BtnSort !== "undefined") {
+        if (BtnSort !== null && typeof BtnSort !== "undefined" && BtnSort.length > 0) {
             document.getElementById("mainDataHeadTable").addEventListener("click", (event) => {
                 const lang = document.getElementById("countrySelect");
                 const sort = event.target;
@@ -436,6 +436,30 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        const refreshLog = document.getElementById("refreshLog");
+        const rootLog = document.getElementById("rootLog");
+        if (refreshLog !== null && typeof refreshLog !== "undefined") {
+            refreshLog.addEventListener("click", (event) => {
+
+                const that = event.target;
+
+                AjaxPOSTAsync(urlControlLogFile, null).then((data) => {
+
+                    EmptyElement(rootLog);
+
+                    for (let items of data.Data) {          //WWWWWFFFFFFFFFF
+                        for (let item in items) {
+                            rootLog.textContent += `${item}: ${items[item]}     `;
+                        }
+                        rootLog.appendChild(document.createElement('br'));
+                    }
+
+                }).catch((error) => {
+                    console.error(error);
+                });
+
+            });
+        }
 
     } catch (e) {
         console.log(e);
@@ -482,13 +506,20 @@ function AjaxPOSTAsync(url, object) {
         xhr.open('POST', url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.responseType = 'json';
         xhr.onload = (e) => {
             const that = e.target;
             if (that.status >= 200 && that.status < 300 || that.status === 304) {
-                resolve(JSON.parse(xhr.responseText));
+                //resolve(JSON.parse(xhr.responseText));
+                resolve(xhr.response);
             }
         };
         xhr.onerror = () => reject(xhr.statusText);
-        xhr.send(JSON.stringify(object));
+        if (object) {
+            xhr.send(JSON.stringify(object));
+        }
+        else {
+            xhr.send();
+        }
     });
 }

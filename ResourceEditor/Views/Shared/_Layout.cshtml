@@ -14,6 +14,21 @@
 
     @RenderSection("scripts", required: false)
 
+    <script type="text/javascript">
+        const urlControlActionDelete = "@Url.Action("Delete", "Home")";
+        const urlControlActionUpdate = "@Url.Action("Update", "Home")";
+        const urlControlActionDataProtect = "@Url.Action("DataProtect", "Home")";
+        const urlControlSwitchLanguage = "@Url.Action("SwitchLanguage", "Home")";
+        const urlControlUploadFile = "@Url.Action("UploadFile", "Home")";
+        const urlControlGetFile = "@Url.Action("GetFile", "Home")";
+        const urlControlSelectCountry = "@Url.Action("SelectCountry", "Home")";
+        const urlControlRead = "@Url.Action("Read", "Home")";
+        const urlControlLogFile = "@Url.Action("LogFile", "Home")";
+
+    </script>
+
+    <meta http-equiv="pragma" content="no-cache">
+
 </head>
 <body>
     <div class="container">
@@ -23,7 +38,8 @@
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
                         <li>@Html.ActionLink("Index", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Main Table", "read", "Home")</li>
+                        <li>@Html.ActionLink("Main Table", "Read", "Home")</li>
+                        <li>@Html.ActionLink("Log Table", "Log", "Home")</li>
                     </ul>
                 </div>
             </nav>
@@ -31,6 +47,7 @@
             <ul class="sidenav" id="mobile-demo">
                 <li>@Html.ActionLink("Index", "Index", "Home")</li>
                 <li>@Html.ActionLink("Main Table", "read", "Home")</li>
+                <li>@Html.ActionLink("Log Table", "Log", "Home")</li>
             </ul>
         </header>
 
