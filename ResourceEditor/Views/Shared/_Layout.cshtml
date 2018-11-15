@@ -9,7 +9,9 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    @Styles.Render("~/Content/materialize")
+  
+    @Styles.Render("~/Content/bootstrap")
+
     @Styles.Render("~/Content/site")
 
     @RenderSection("scripts", required: false)
@@ -43,12 +45,6 @@
                     </ul>
                 </div>
             </nav>
-
-            <ul class="sidenav" id="mobile-demo">
-                <li>@Html.ActionLink("Index", "Index", "Home")</li>
-                <li>@Html.ActionLink("Main Table", "read", "Home")</li>
-                <li>@Html.ActionLink("Log Table", "Log", "Home")</li>
-            </ul>
         </header>
 
         <main>
@@ -65,7 +61,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryvalunob")
-    @Scripts.Render("~/bundles/materialize")
+
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+
     @Scripts.Render("~/bundles/main")
 
 </body>

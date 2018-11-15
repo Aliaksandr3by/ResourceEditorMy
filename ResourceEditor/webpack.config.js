@@ -1,17 +1,26 @@
-const path = require('path');
+"use strict";
+
+var path = require("path");
+var WebpackNotifierPlugin = require("webpack-notifier");
+var BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 module.exports = {
-    entry: ['./Scripts/es6/main.js'],
+    entry: "./src/main.js",
     output: {
-        path: path.resolve(__dirname, './Scripts/build'),
-        filename: 'bundle.js'
+        path: path.resolve(__dirname, "./src/"),
+        filename: "bundle.js"
     },
-    // IMPORTANT NOTE: If you are using Webpack 2 or above, replace "loaders" with "rules"
     module: {
-        loaders: [{
-            loader: 'babel-loader',
-            test: /\.js$/,
-            exclude: /node_modules/
-        }]
-    }
-}
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            }
+        ]
+    },
+    devtool: "inline-source-map",
+    plugins: [new WebpackNotifierPlugin(), new BrowserSyncPlugin()]
+};

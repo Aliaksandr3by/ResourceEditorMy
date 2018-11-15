@@ -1,5 +1,31 @@
 "use strict";
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+import { CreateTable } from './App';
+
+const root = document.getElementById('root');
+
+const mainDataBodyTable = document.getElementById('resourceTableTbody');
+
+if (mainDataBodyTable) {
+    AjaxPOSTAsync(urlControlSwitchLanguage, { language: "it" }).then((data) => {
+
+        AjaxPOSTAsync(urlControlSwitchLanguage, { language: "en" }).then((datas) => {
+
+            ReactDOM.render(<CreateTable data={data} titleText={datas}></CreateTable>, mainDataBodyTable);
+
+        }).catch((error) => {
+            console.error(error);
+        });
+
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
 const createInput$ = (className = "", readOnly = false, val = "", titleText = "...") => {
     return $("<input></input>", {
         type: "text",
@@ -35,7 +61,7 @@ const createRow$ = (data = { "Id": "", "Value": "", "Comment": "" }, titleText =
     }
 };
 
-function createTable$(datum = [{}], titles = [{}]) {
+function createTable$(datum, titles) {
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
             let _title = {
@@ -53,7 +79,7 @@ function createTable$(datum = [{}], titles = [{}]) {
     } else if (typeof datum === "object" && typeof titles === "object") {
         createRow$(datum, titles);
     } else {
-        console.error("unknown");
+        console.error("unknown error ");
     }
 };
 
@@ -123,7 +149,7 @@ $("#ResourceUploads").on("click", null, (e) => {
         processData: false, // Не обрабатываем файлы (Don"t process the files)
         contentType: false, // Так jQuery скажет серверу что это строковой запрос
         success: (respond, textStatus, jqXHR) => {
-            if (!("error" in respond) && "fileName" in respond) {
+            if (!(respond["error"]) && respond["fileName"]) {
                 that.siblings("div").remove();
                 that.closest("div").append(`<div>${respond.fileName} is ok </div>`);
                 GetCountrySet();
@@ -185,7 +211,7 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
             }
         },
         success: (data) => {
-            if ("status" in data) {
+            if (data["status"]) {
                 that.removeClass("is-invalid");
                 $(value).removeAttr("placeholder");
                 that.closest("th").find("div.dataError").remove();
@@ -230,10 +256,10 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                 that.attr("disabled", true);
                 that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
                 that.parents("tr").find("th").find("input").prop("readonly", true);
-            } else if ("error" in data) {
+            } else if (data["error"]) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
-                if ("status" in data) {
+                if (data["status"]) {
                     $.each(data.error, (i, value) => {
 
                         let errDiv = $("<div></div>", {
@@ -308,7 +334,7 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
         "filter": filter
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
-        if ("error" in data) {
+        if (data["error"]) {
             EmptyElement(mainDataBodyTable);
             let divError = document.createElement("div");
             divError.textContent = data.error;
@@ -335,9 +361,6 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
 
 document.addEventListener('DOMContentLoaded', function () {
     try {
-        let elems = document.querySelectorAll(".sidenav");
-        let instances = M.Sidenav.init(elems, null);
-
         $("#countrySelectRefresh").trigger("click");
 
         const mainDataBodyTable = document.getElementById("mainDataBodyTable");

@@ -6,7 +6,30 @@
 
 <h2>Index</h2>
 
-<div id="content">
-
+<div class="row">
+    <div class="col">
+        <div id="resourceTable">
+            <table id="mainTable" class="table table-striped">
+                <thead id="resourceTableThead">
+                    <tr>
+                        <th scope="col">Key</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="resourceTableTbody"></tbody>
+            </table>
+        </div>
+        <div class="col-12 text-center">
+            <button id="addTableRow" type="button" class="btn btn-warning btn-circle btn-xl">+</button>
+        </div>
+    </div>
 </div>
 
+<div class="row">
+    <div class="col-sm">
+        <div id="root"></div>
+    </div>
+</div>
