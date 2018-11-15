@@ -33,6 +33,11 @@ namespace ResourceEditor.Models
 
             string path = HostingEnvironment.MapPath($"~/App_LocalResources/Log.txt");
 
+            if (File.Exists(path))
+            {
+                throw new InvalidOperationException();
+            }
+
             List<LangNameLog> result = new List<LangNameLog>();
 
             using (StreamReader sr = new StreamReader(path))

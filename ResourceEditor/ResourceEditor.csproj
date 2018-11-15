@@ -513,6 +513,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Read.cshtml" />
     <Content Include="Views\Shared\GetUserIP.cshtml" />
+    <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="node_modules\jquery-validation-unobtrusive\package.json" />
