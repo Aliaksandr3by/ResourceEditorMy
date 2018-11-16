@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @RenderSection("scripts", required: false)
     <script type="text/javascript">
         const urlControlActionDelete = "@Url.Action("Delete", "Home")";
         const urlControlActionUpdate = "@Url.Action("Update", "Home")";
@@ -70,7 +69,9 @@
     @Scripts.Render("~/bundles/popper")
     @Scripts.Render("~/bundles/bootstrap")
 
-    @Scripts.Render("~/bundles/main")
+    @*@Scripts.Render("~/bundles/main")*@
+
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>

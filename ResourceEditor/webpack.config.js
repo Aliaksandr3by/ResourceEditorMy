@@ -5,7 +5,7 @@ var WebpackNotifierPlugin = require("webpack-notifier");
 var BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 module.exports = {
-    entry: "./src/main.js",
+    entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "./src/"),
         filename: "bundle.js"

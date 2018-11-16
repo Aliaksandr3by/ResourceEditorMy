@@ -3,23 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { HashRouter, Route, Switch, Link } from 'react-router-dom';
 
-import { CreateRow  } from './Component';
-
-
-export const CreateTable = ({data = [{}], titleText = [{}]}) => {
-    return (
-        data.map((currentValue, index)=>{
-            return (<CreateRow key={index.toString()} data = {currentValue} titleText = {titleText} ></CreateRow>);
-        })
-    );
-};
-CreateTable.prototype = {
-    data: PropTypes.array, 
-    titleText: PropTypes.array
-}
-
-
-
 
 export default class Summary extends Component {
     constructor(props) {

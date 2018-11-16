@@ -1,44 +1,5 @@
 "use strict";
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-
-import { CreateTable } from './App';
-
-const root = document.getElementById('root');
-
-const mainDataBodyTable = document.getElementById('resourceTableTbody');
-
-if (mainDataBodyTable) {
-    const dataLG = {
-        "language": that,
-        "sort": sort,
-        "filter": filter
-    };
-    const dataEN = {
-        "language": "en",
-        "sort": sort,
-        "filter": filter
-    };
-    AjaxPOSTAsync(urlControlSwitchLanguage, dataLG).then((data) => {
-
-        AjaxPOSTAsync(urlControlSwitchLanguage, dataEN).then((datas) => {
-
-            ReactDOM.render(<CreateTable data={data} titleText={datas}></CreateTable>, mainDataBodyTable);
-
-        }).catch((error) => {
-            console.error(error);
-        });
-
-    }).catch((error) => {
-        console.error(error);
-    });
-}
-
-
-
-
 const createInput$ = (className = "", readOnly = false, val = "", titleText = "...") => {
     return $("<input></input>", {
         type: "text",
@@ -50,15 +11,15 @@ const createInput$ = (className = "", readOnly = false, val = "", titleText = ".
     });
 };
 
-const createButton$ = (className = "", purpose = "") => {
+function createButton$(className = "", purpose = "") {
     return $(`<button></button>`, {
         type: "button",
         class: `${className}`,
         text: `${purpose}`
     });
-};
+}
 
-const createRow$ = (data = { "Id": "", "Value": "", "Comment": "" }, titleText = { "Id": "", "Value": "", "Comment": "" }) => {
+function createRow$(data = { "Id": "", "Value": "", "Comment": "" }, titleText = { "Id": "", "Value": "", "Comment": "" }) {
     if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
 
         let buttonName = data.Id !== "" ? "Save" : "Insert";
@@ -72,7 +33,7 @@ const createRow$ = (data = { "Id": "", "Value": "", "Comment": "" }, titleText =
         lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-flex w-100", buttonName));
         lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-flex w-100", "Delete"));
     }
-};
+}
 
 function createTable$(datum, titles) {
     if (Array.isArray(datum) && Array.isArray(titles)) {
@@ -94,9 +55,9 @@ function createTable$(datum, titles) {
     } else {
         console.error("unknown error ");
     }
-};
+}
 
-const countryResolver = (data = {}) => {
+const countryResolver = (data = [{}]) => {
     const countrySelecter = document.createElement('select');
     countrySelecter.className = `custom-select`;
     countrySelecter.id = `countrySelect`;
@@ -115,23 +76,6 @@ const countryResolver = (data = {}) => {
     }
     return countrySelecter;
 };
-
-function countryResolver1(data = {}) {
-
-    let sel = $(`<select></select>`, {
-        class: `browser-default`,
-        id: `countrySelect`,
-        name: `Id`
-    });
-
-    sel.append($("<option>").attr("disabled", "disabled").text("Select language"));
-
-    $(data).each((i, e) => {
-        sel.append($("<option>").attr("value", e.Id).text(`${i + 1}. ${e.Id} - ${e.Value}(${e.Comment})`));
-    });
-
-    return sel;
-}
 
 function GetCountrySet(lang = "en") {
     $.ajax({
