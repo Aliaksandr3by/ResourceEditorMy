@@ -1,4 +1,6 @@
-﻿@{
+﻿@Styles.Render("~/Content/bootstrap")
+
+@{
     ViewBag.Title = "Main Table";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -62,5 +64,11 @@
 </div>
 
 @section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryvalunob")
+
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
     <script src="~/src/main.js"></script>
 }

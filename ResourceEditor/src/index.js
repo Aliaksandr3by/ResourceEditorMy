@@ -2,12 +2,19 @@
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+import 'jquery';
+import 'popper.js';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+//import 'bootstrap/scss/bootstrap.scss';
+
 import CreateTable from './Components/CreateTable';
 
-const mainDataBodyTable = document.getElementById('mainDataBodyTable');
 
 function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
-    if (mainDataBodyTable) {
+    const rootMainTable = document.getElementById('rootMainTable');
+
+    if (rootMainTable) {
         const dataLG = {
             "language": lang,
             "sort": sort,
@@ -18,16 +25,12 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
             "sort": sort,
             "filter": filter
         };
-        AjaxPOSTAsync(url, dataLG).then((data) => {
-
-            AjaxPOSTAsync(url, dataEN).then((datas) => {
-
-                ReactDOM.render(<CreateTable data={data} titleText={datas} />, mainDataBodyTable);
-
+        AjaxPOSTAsync(url, dataLG).then((datum) => {
+            AjaxPOSTAsync(url, dataEN).then((titles) => {
+                ReactDOM.render(<CreateTable datum={datum} titles={titles} />, rootMainTable);
             }).catch((error) => {
                 console.error(error);
             });
-
         }).catch((error) => {
             console.error(error);
         });

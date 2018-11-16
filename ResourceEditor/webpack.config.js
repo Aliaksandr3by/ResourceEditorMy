@@ -1,8 +1,10 @@
 "use strict";
-
-var path = require("path");
-var WebpackNotifierPlugin = require("webpack-notifier");
-var BrowserSyncPlugin = require("browser-sync-webpack-plugin");
+const fs = require('fs');
+const path = require('path');
+const resolve = require('resolve');
+const webpack = require('webpack');
+const WebpackNotifierPlugin = require("webpack-notifier");
+const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 module.exports = {
     entry: "./src/index.js",
@@ -18,9 +20,21 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             }
         ]
     },
     devtool: "inline-source-map",
-    plugins: [new WebpackNotifierPlugin(), new BrowserSyncPlugin()]
+    plugins: [
+        new WebpackNotifierPlugin(),
+        new BrowserSyncPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+            warnings: false,
+            mangle: true
+        })
+    ]
 };
