@@ -3,19 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@ViewBag.Title - ResX Editor</title>
-
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  
-    @Styles.Render("~/Content/bootstrap")
-
-    @Styles.Render("~/Content/site")
-
     @RenderSection("scripts", required: false)
-
     <script type="text/javascript">
         const urlControlActionDelete = "@Url.Action("Delete", "Home")";
         const urlControlActionUpdate = "@Url.Action("Update", "Home")";
@@ -26,36 +14,53 @@
         const urlControlSelectCountry = "@Url.Action("SelectCountry", "Home")";
         const urlControlRead = "@Url.Action("Read", "Home")";
         const urlControlLogFile = "@Url.Action("LogFile", "Home")";
-
     </script>
-
     <meta http-equiv="pragma" content="no-cache">
-
+    <title>@ViewBag.Title - ResX Editor</title>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/site")
 </head>
 <body>
     <div class="container">
-        <header class="row center">
-            <nav>
-                <div class="nav-wrapper">
-                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-                    <ul class="right hide-on-med-and-down">
-                        <li>@Html.ActionLink("Index", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Main Table", "Read", "Home")</li>
-                        <li>@Html.ActionLink("Log Table", "Log", "Home")</li>
-                    </ul>
-                </div>
-            </nav>
+        <br />
+        <header class="row">
+            <div class="col-sm">
+                <nav class="navbar navbar-expand-md navbar-light bg-light">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+                            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                        <a class="navbar-brand" href="#">Hidden brand</a>
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item active">@Html.ActionLink("Index", "Index", "Home", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Main Table", "Read", "Home", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Log Table", "Log", "Home", null, new { @class = "nav-link" })</li>
+                        </ul>
+                        <form class="form-inline my-2 my-sm-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
         </header>
-
+        <br />
         <main>
             @RenderBody()
         </main>
-
-        <footer class="row center">
-            <div class="alert alert-secondary" role="alert">
-                @Html.Partial("GetUserIP")
+        <br />
+        <footer class="row">
+            <div class="">
+                <div class="alert alert-warning alert-dismissible fade show w-100" role="alert">
+                    @Html.Partial("GetUserIP")
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
         </footer>
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")

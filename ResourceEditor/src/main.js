@@ -11,9 +11,19 @@ const root = document.getElementById('root');
 const mainDataBodyTable = document.getElementById('resourceTableTbody');
 
 if (mainDataBodyTable) {
-    AjaxPOSTAsync(urlControlSwitchLanguage, { language: "it" }).then((data) => {
+    const dataLG = {
+        "language": that,
+        "sort": sort,
+        "filter": filter
+    };
+    const dataEN = {
+        "language": "en",
+        "sort": sort,
+        "filter": filter
+    };
+    AjaxPOSTAsync(urlControlSwitchLanguage, dataLG).then((data) => {
 
-        AjaxPOSTAsync(urlControlSwitchLanguage, { language: "en" }).then((datas) => {
+        AjaxPOSTAsync(urlControlSwitchLanguage, dataEN).then((datas) => {
 
             ReactDOM.render(<CreateTable data={data} titleText={datas}></CreateTable>, mainDataBodyTable);
 
@@ -25,6 +35,9 @@ if (mainDataBodyTable) {
         console.error(error);
     });
 }
+
+
+
 
 const createInput$ = (className = "", readOnly = false, val = "", titleText = "...") => {
     return $("<input></input>", {
@@ -52,12 +65,12 @@ const createRow$ = (data = { "Id": "", "Value": "", "Comment": "" }, titleText =
 
         let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-inline w-100", String(data.Id).length > 0, data.Id, titleText.Id));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-inline w-100", false, data.Value, titleText.Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-inline w-100", false, data.Comment, titleText.Comment));
+        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-flex w-100", String(data.Id).length > 0, data.Id, titleText.Id));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-flex w-100", false, data.Value, titleText.Value));
+        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-flex w-100", false, data.Comment, titleText.Comment));
 
-        lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-inline w-100", buttonName));
-        lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-inline w-100", "Delete"));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-flex w-100", buttonName));
+        lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-flex w-100", "Delete"));
     }
 };
 
@@ -83,7 +96,28 @@ function createTable$(datum, titles) {
     }
 };
 
-function countryResolver(data = {}) {
+const countryResolver = (data = {}) => {
+    const countrySelecter = document.createElement('select');
+    countrySelecter.className = `custom-select`;
+    countrySelecter.id = `countrySelect`;
+    countrySelecter.setAttribute("aria-label", "Example select with button addon");
+
+    let opt = document.createElement("option");
+    opt.text = "Select language";
+    opt.disabled = true;
+    countrySelecter.add(opt, null);
+    let i = 0;
+    for (let item of data) {
+        let opt = document.createElement("option");
+        opt.value = item.Id;
+        opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
+        countrySelecter.add(opt, null);
+    }
+    return countrySelecter;
+};
+
+function countryResolver1(data = {}) {
+
     let sel = $(`<select></select>`, {
         class: `browser-default`,
         id: `countrySelect`,
@@ -107,8 +141,8 @@ function GetCountrySet(lang = "en") {
         },
         success: (data, textStatus) => {
             if (data !== "") {
-                $("#CountrySelect").empty();
-                $("#CountrySelect").append(countryResolver(data));
+                $("#countrySelect").remove();
+                $("#CountrySelect").prepend($(countryResolver(data)));
                 $("#countrySelect").val(lang).trigger("change");
                 //$("#countrySelect").formSelect();
             } else {
@@ -134,6 +168,15 @@ $("#ResourceUploads").on("click", null, (e) => {
     let that = $(e.target);
     let data = new FormData(); //с encoding установленным в "multipart/form-data".
     let uploadFile = $("#FileResource").prop("files");
+    const fileUpload = document.querySelector(".fileUpload");
+
+    const resultUpload = (respond = "@", alert = "alert-success") => {
+        const resultUpload = document.createElement('div');
+        resultUpload.className = `alert ${alert}`;
+        resultUpload.setAttribute("role", "alert");
+        resultUpload.textContent = `${respond} is ok!`;
+        return resultUpload;
+    };
 
     $.each(uploadFile, (i, value) => {
         data.append(`uploads[${i}]`, value);
@@ -149,14 +192,14 @@ $("#ResourceUploads").on("click", null, (e) => {
         processData: false, // Не обрабатываем файлы (Don"t process the files)
         contentType: false, // Так jQuery скажет серверу что это строковой запрос
         success: (respond, textStatus, jqXHR) => {
-            if (!(respond["error"]) && respond["fileName"]) {
-                that.siblings("div").remove();
-                that.closest("div").append(`<div>${respond.fileName} is ok </div>`);
+            if (!respond["error"] && respond["fileName"]) {
+                EmptyElement(fileUpload);
+                fileUpload.appendChild(resultUpload(respond.fileName, "alert-success"));
                 GetCountrySet();
             }
             else {
-                that.siblings("div").remove();
-                that.closest("div").append(`<div>${respond.error}</div>`);
+                EmptyElement(fileUpload);
+                fileUpload.append(resultUpload(respond.error, "alert-danger"));
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {

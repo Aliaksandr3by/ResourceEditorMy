@@ -9,60 +9,59 @@
 }
 
 <div class="row">
-    <div class="col s12">
-        <div class="file-field input-field">
-            <div class="btn">
-                <span>File</span>
-                <input type="file" id="FileResource" multiple required accept=".resx">
+    <div class="col">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="ResourceUploads">Upload</span>
             </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text" placeholder="Upload one or more files">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="FileResource" multiple required accept=".resx" aria-describedby="inputGroupFileAddon01">
+                <label class="custom-file-label" for="FileResource">Choose file</label>
+            </div>
+        </div>
+        <div class="fileUpload"></div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        <div class="input-group" id="CountrySelect">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="countrySelectRefresh">Refresh</button>
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="ResourceSave">Download</button>
             </div>
         </div>
     </div>
-    <div class="col s12">
-        <div>
-            <button id="ResourceUploads" class="btn" type="button">Send</button>
-        </div>
-    </div>
 </div>
-<div class="row center">
-    <div class="col s6 centered" id="CountrySelect">
-
-    </div>
-    <div class="col s3 centered">
-        <button id="countrySelectRefresh" class="btn" type="button">Refresh</button>
-    </div>
-    <div class="col s3 centered ">
-        <button id="ResourceSave" type="button" class="btn">Download</button>
-    </div>
-</div>
-<div class="row center">
-    <div class="col s12">
+<br />
+<div class="row">
+    <div class="col">
         <div id="rootMainTable">
-            <table id="mainTable" class="highlight centered responsive-table">
-                <thead id="mainDataHeadTable">
+            <table class="table" id="mainTable">
+                <thead class="thead-dark" id="mainDataHeadTable">
                     <tr>
-                        <th scope="col"><button class="BtnSort btn-flat" value="Id" id="BtnSortId" type="button">Id</button></th>
-                        <th scope="col"><button class="BtnSort btn-flat" value="Value" id="BtnSortValue" type="button">Value</button></th>
-                        <th scope="col"><button class="BtnSort btn-flat" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
+                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
+                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Value" id="BtnSortValue" type="button">Value</button></th>
+                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
-                <thead id="mainDataHeadFilterTable">
+                <thead class="thead-light" id="mainDataHeadFilterTable">
                     <tr>
-                        <th scope="col"><input type="search" class="inputSearch" name="Id" placeholder="Filter by Id" /></th>
-                        <th scope="col"><input type="search" class="inputSearch" name="Value" placeholder="Filter by Value" /></th>
-                        <th scope="col"><input type="search" class="inputSearch" name="Comment" placeholder="Filter by Comment" /></th>
-                        <th scope="col" colspan="2"><button class="btn-flat" id="BtnClear" type="button">Clear</button></th>
+                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Id" placeholder="Filter by Id" /></th>
+                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Value" placeholder="Filter by Value" /></th>
+                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Comment" placeholder="Filter by Comment" /></th>
+                        <th scope="col" colspan="2"><button  class="BtnSort btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
                     </tr>
                 </thead>
                 <tbody id="mainDataBodyTable"></tbody>
             </table>
         </div>
         <div>
-            <button type="button" class="btn-floating btn-large waves-effect waves-light red" id="addTableRow"><i class="material-icons">add</i></button>
+            <button type="button" class="btn btn-warning btn-circle btn-xl align-self-center" id="addTableRow">+</button>
         </div>
     </div>
 </div>
