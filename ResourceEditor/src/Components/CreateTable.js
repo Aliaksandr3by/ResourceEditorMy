@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import CreateRow from './CreateRow';
 
-const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], titles = [{ "Id": "", "Value": "", "Comment": "" }]}) => {
+const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], titles = [{ "Id": "", "Value": "", "Comment": "" }] }) => {
     return (
         <table className="table" id="mainTable">
             <thead className="thead-dark" id="mainDataHeadTable">
@@ -12,8 +12,8 @@ const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], title
                     <th scope="col"><button className="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
                     <th scope="col"><button className="BtnSort btn btn-outline-info btn-block" value="Value" id="BtnSortValue" type="button">Value</button></th>
                     <th scope="col"><button className="BtnSort btn btn-outline-info btn-block" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
-                    <th scope="col"/>
-                    <th scope="col"/>
+                    <th scope="col" />
+                    <th scope="col" />
                 </tr>
             </thead>
             <thead className="thead-light" id="mainDataHeadFilterTable">
@@ -25,26 +25,27 @@ const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], title
                 </tr>
             </thead>
             <tbody id="mainDataBodyTable">
-                {datum.map((data, key) => {
-                    let _title = {
-                        "Id": "Missing item EN",
-                        "Value": "Missing item EN",
-                        "Comment": "Missing item EN"
-                    };
-                    titles.map((title) => {
-                        if (data.Id === title.Id) {
-                            _title = title;
-                        }
-                    });
+                {
+                    datum.map((data, key) => {
+                        let _title = {
+                            "Id": "Missing item EN",
+                            "Value": "Missing item EN",
+                            "Comment": "Missing item EN"
+                        };
+                        titles.map((title) => {
+                            if (data.Id === title.Id) {
+                                _title = title;
+                            }
+                        });
 
-                    return (
-                        <CreateRow key={key} data={data} titleText={_title} />
-                    );
-                })}
-                
+                        return (
+                            <CreateRow key={key} datum={data} titleText={_title} />
+                        );
+                    })
+                }
             </tbody>
         </table>
-        );
+    );
 };
 CreateTable.prototype = {
     datum: PropTypes.array,

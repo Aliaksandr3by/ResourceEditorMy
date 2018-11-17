@@ -34,7 +34,7 @@ namespace ResourceEditor.Managers
         ///     </see>
         ///     lang list.
         /// </returns>
-        public static IEnumerable<LangName> GetLanguages()
+        public static List<LangName> GetLanguages()
         {
             var result = new List<LangName>();
             var xDoc = new XmlDocument();
@@ -65,7 +65,6 @@ namespace ResourceEditor.Managers
                     result.Add(country);
                 }
             }
-
             return result.OrderBy(e => e.Id).ToList();
         }
 

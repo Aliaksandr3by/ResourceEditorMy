@@ -14,16 +14,22 @@ import CreateTable from './Components/CreateTable';
 document.addEventListener('DOMContentLoaded', function () {
 
     GetCountrySet(urlControlSelectCountry);
-    CountrySelectUpdate("it", urlControlSwitchLanguage, "");
+    //CountrySelectUpdate("it", urlControlSwitchLanguage);
+
+    document.getElementById('CountrySelect').addEventListener('change', (e) => {
+        const that = e.target.value;
+        CountrySelectUpdate(that, urlControlSwitchLanguage, "", "");
+
+    });
 
 });
+
 
 
 function GetCountrySet(url) {
     const CountrySelect = document.getElementById('CountrySelect');
     if (CountrySelect) {
         AjaxPOSTAsync(url).then((data) => {
-            EmptyElement(CountrySelect);
             ReactDOM.render(<CreateSelect datum={data} />, CountrySelect);
         }).catch((error) => {
             console.error(error);
@@ -47,7 +53,6 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
         };
         AjaxPOSTAsync(url, dataLG).then((datum) => {
             AjaxPOSTAsync(url, dataEN).then((titles) => {
-                //EmptyElement(rootMainTable);
                 ReactDOM.render(<CreateTable datum={datum} titles={titles} />, rootMainTable);
             }).catch((error) => {
                 console.error(error);
@@ -86,10 +91,4 @@ function AjaxPOSTAsync(url, object = null) {
             xhr.send();
         }
     });
-}
-
-function EmptyElement(element) {
-    while (element.firstChild) {
-        element.removeChild(element.firstChild);
-    }
 }

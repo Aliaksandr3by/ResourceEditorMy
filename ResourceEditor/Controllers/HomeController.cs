@@ -98,220 +98,234 @@ namespace ResourceEditor.Controllers
             return this.Json(result);
         }
 
-    /// <summary>
-    /// The upload file.
-    /// </summary>
-    /// <param name="uploads">
-    /// The uploads.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
-    {
-        if (uploads == null)
+        /// <summary>
+        /// The upload file.
+        /// </summary>
+        /// <param name="uploads">
+        /// The uploads.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
-            return this.Json(new { error = "File was not found!" });
-        }
-
-        var httpPostedFileBases = uploads as HttpPostedFileBase[] ?? uploads.ToArray();
-
-        foreach (var upload in httpPostedFileBases)
-        {
-            if (upload != null)
+            if (uploads == null)
             {
-                upload.SaveAs(this.Server.MapPath("~/App_LocalResources/" + upload.FileName));
-                Managers.XmlManager.SetLang(upload.FileName);
+                return this.Json(new { error = "File was not found!" });
             }
-            else
+
+            var httpPostedFileBases = uploads as HttpPostedFileBase[] ?? uploads.ToArray();
+
+            foreach (var upload in httpPostedFileBases)
             {
-                return this.Json(new { result = "File was not saved!", error = "upload is NUll" });//обрыв если хоть один файл не загрузился
-            }
-        }
-
-        return this.Json(new { result = "File saved!", fileName = string.Join(", ", httpPostedFileBases.Select(x => x.FileName)) });
-    }
-
-    /// <summary>
-    /// The get file.
-    /// </summary>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="FileResult"/>.
-    /// </returns>
-    public FileResult GetFile(string language)
-    {
-        var pathSave = ResourceHelper.GetPath(language);
-        if (System.IO.File.Exists(pathSave))
-        {
-            var fileType = "application/xml";
-            var fileName = System.IO.Path.GetFileName(pathSave);
-            return this.File(pathSave, fileType, fileName);
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// The data protect.
-    /// </summary>
-    /// <param name="itemExists">
-    /// The item exists.
-    /// </param>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public JsonResult DataProtect(LangName itemExists, string language)
-    {
-        var pathSave = ResourceHelper.GetPath(language);
-
-        var result = ResourceHelper.DataProtect(pathSave, itemExists);
-
-        if (result != null)
-        {
-            return this.Json(result);
-        }
-        else
-        {
-            return this.Json(new { status = $"{itemExists.Id} was not found!" });
-        }
-    }
-
-    /// <summary>
-    /// The delete.
-    /// </summary>
-    /// <param name="rowDelete">
-    /// The row delete.
-    /// </param>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public JsonResult Delete(LangName rowDelete, string language)
-    {
-        var pathSave = ResourceHelper.GetPath(language);
-
-        return this.Json(ResourceHelper.Delete(pathSave, rowDelete));
-    }
-
-    /// <summary>
-    /// The update.
-    /// </summary>
-    /// <param name="rowUpdate">
-    /// The row update.
-    /// </param>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public JsonResult Update(LangName rowUpdate, string language)
-    {
-        if (this.ModelState.IsValid)
-        {
-            var pathSave = ResourceHelper.GetPath(language);
-
-            if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
-            {
-                ResourceHelper.Update(pathSave, rowUpdate);
-                return this.Json(new { status = "Update" });
-            }
-            else
-            {
-
-                if (language == "en")
+                if (upload != null)
                 {
-                    ResourceHelper.InsertInAllFile(pathSave, rowUpdate);
-                    return this.Json(new { status = "Insert all resource file" });
+                    upload.SaveAs(this.Server.MapPath("~/App_LocalResources/" + upload.FileName));
+                    Managers.XmlManager.SetLang(upload.FileName);
                 }
                 else
                 {
-                    ResourceHelper.Insert(pathSave, rowUpdate);
-                    return this.Json(new { status = "Insert" });
+                    return this.Json(new { result = "File was not saved!", error = "upload is NUll" });//обрыв если хоть один файл не загрузился
                 }
+            }
 
+            return this.Json(new { result = "File saved!", fileName = string.Join(", ", httpPostedFileBases.Select(x => x.FileName)) });
+        }
 
+        /// <summary>
+        /// The get file.
+        /// </summary>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FileResult"/>.
+        /// </returns>
+        [HttpGet]
+        public FileResult GetFile(string language)
+        {
+            var fileName = ResourceHelper.GetPath(language);
+            if (System.IO.File.Exists(fileName))
+            {
+                var contentType = "application/xml";
+                var fileDownloadName = System.IO.Path.GetFileName(fileName);
+                return this.File(fileName, contentType, fileDownloadName);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// The data protect.
+        /// </summary>
+        /// <param name="itemExists">
+        /// The item exists.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult DataProtect(LangName itemExists, string language)
+        {
+            var pathSave = ResourceHelper.GetPath(language);
+
+            var result = ResourceHelper.DataProtect(pathSave, itemExists);
+
+            if (result != null)
+            {
+                return this.Json(result);
+            }
+            else
+            {
+                return this.Json(new { status = $"{itemExists.Id} was not found!" });
             }
         }
 
-        var errors = new List<string>();
-
-        foreach (var modelStateVal in this.ViewData.ModelState.Values)
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="rowDelete">
+        /// The row delete.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult Delete(LangName rowDelete, string language)
         {
-            errors.AddRange(modelStateVal.Errors.Select(error => error.ErrorMessage));
+            var pathSave = ResourceHelper.GetPath(language);
+
+            return this.Json(ResourceHelper.Delete(pathSave, rowDelete));
         }
 
-        return this.Json(new { status = "validation-error", error = errors });
+        /// <summary>
+        /// The update.
+        /// </summary>
+        /// <param name="rowUpdate">
+        /// The row update.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult Update(LangName rowUpdate, string language)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var pathSave = ResourceHelper.GetPath(language);
+
+                if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
+                {
+                    ResourceHelper.Update(pathSave, rowUpdate);
+                    return this.Json(new { status = "Update" });
+                }
+                else
+                {
+                    if (language == "en")
+                    {
+                        ResourceHelper.InsertInAllFile(pathSave, rowUpdate);
+                        return this.Json(new { status = "Insert all resource file" });
+                    }
+                    else
+                    {
+                        ResourceHelper.Insert(pathSave, rowUpdate);
+                        return this.Json(new { status = "Insert" });
+                    }
+                }
+            }
+
+            var errors = new List<string>();
+
+            foreach (var modelStateVal in this.ViewData.ModelState.Values)
+            {
+                errors.AddRange(modelStateVal.Errors.Select(error => error.ErrorMessage));
+            }
+
+            var result = this.Json(new { status = "validation-error", error = errors });
+
+            return result;
+        }
+
+        /// <summary>
+        /// The insert.
+        /// </summary>
+        /// <param name="rowInsert">
+        /// The rowInsert.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult Insert(LangName rowInsert, string language)
+        {
+            var pathSave = ResourceHelper.GetPath(language);
+
+            var result = rowInsert != null ? this.Json(ResourceHelper.Insert(pathSave, rowInsert)) : null;
+
+            return result;
+        }
+
+        /// <summary>
+        /// The switch.
+        /// </summary>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult SwitchLanguage(string language, string sort, string filter)
+        {
+            var pathSave = ResourceHelper.GetPath(language);
+
+            var result = (pathSave == null)
+                ? this.Json(new { error = "File was not found" })
+                : this.Json(ResourceHelper.Read(pathSave, sort, filter));
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// The select country.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
+        public JsonResult SelectCountry()
+        {
+            var selectCountry = ResourceEditor.Managers.XmlManager.GetLanguages();
+
+            var result = this.Json(selectCountry);
+
+            return result;
+        }
     }
-
-    /// <summary>
-    /// The insert.
-    /// </summary>
-    /// <param name="rowInsert">
-    /// The rowInsert.
-    /// </param>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public JsonResult Insert(LangName rowInsert, string language)
-    {
-        var pathSave = ResourceHelper.GetPath(language);
-
-        return rowInsert != null ? this.Json(ResourceHelper.Insert(pathSave, rowInsert)) : null;
-    }
-
-    /// <summary>
-    /// The switch.
-    /// </summary>
-    /// <param name="language">
-    /// The language.
-    /// </param>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    [AllowCrossSiteJson]
-    [ContentType]
-    public JsonResult SwitchLanguage(string language, string sort, string filter)
-    {
-        var pathSave = ResourceHelper.GetPath(language);
-
-        var result = (pathSave == null)
-            ? this.Json(new { error = "File was not found" })
-            : this.Json(ResourceHelper.Read(pathSave, sort, filter));
-
-        return result;
-    }
-
-
-    /// <summary>
-    /// The select country.
-    /// </summary>
-    /// <returns>
-    /// The <see cref="ActionResult"/>.
-    /// </returns>
-    [HttpPost]
-    public JsonResult SelectCountry()
-    {
-        var selectCountry = ResourceEditor.Managers.XmlManager.GetLanguages();
-
-        return this.Json(selectCountry);
-    }
-}
 }
