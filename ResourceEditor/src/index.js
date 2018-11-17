@@ -2,14 +2,34 @@
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
+//import 'bootstrap/dist/css/bootstrap.css';
+//import 'bootstrap/scss/bootstrap.scss';
 import 'jquery';
 import 'popper.js';
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-//import 'bootstrap/scss/bootstrap.scss';
 
+import CreateSelect from './Components/CreateSelect';
 import CreateTable from './Components/CreateTable';
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    GetCountrySet(urlControlSelectCountry);
+    CountrySelectUpdate("it", urlControlSwitchLanguage, "");
+
+});
+
+
+function GetCountrySet(url) {
+    const CountrySelect = document.getElementById('CountrySelect');
+    if (CountrySelect) {
+        AjaxPOSTAsync(url).then((data) => {
+            EmptyElement(CountrySelect);
+            ReactDOM.render(<CreateSelect datum={data} />, CountrySelect);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+}
 
 function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
     const rootMainTable = document.getElementById('rootMainTable');
@@ -27,6 +47,7 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
         };
         AjaxPOSTAsync(url, dataLG).then((datum) => {
             AjaxPOSTAsync(url, dataEN).then((titles) => {
+                //EmptyElement(rootMainTable);
                 ReactDOM.render(<CreateTable datum={datum} titles={titles} />, rootMainTable);
             }).catch((error) => {
                 console.error(error);
@@ -37,17 +58,13 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
     }
 }
 
-CountrySelectUpdate("it", urlControlSwitchLanguage, "");
-
-
-
 /**
  * Ajax function
  * @param {string} url адрес контроллера
  * @param {object} object содержит идентификатор language языка
  * @returns {Promise} object
  */
-function AjaxPOSTAsync(url, object) {
+function AjaxPOSTAsync(url, object = null) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', url, true);
@@ -69,4 +86,10 @@ function AjaxPOSTAsync(url, object) {
             xhr.send();
         }
     });
+}
+
+function EmptyElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
 }

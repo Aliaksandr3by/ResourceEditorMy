@@ -45,10 +45,6 @@ const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], title
             </tbody>
         </table>
         );
-
-
-
-    
 };
 CreateTable.prototype = {
     datum: PropTypes.array,

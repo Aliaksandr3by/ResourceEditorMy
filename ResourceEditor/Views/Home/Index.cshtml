@@ -1,4 +1,5 @@
-﻿
+﻿@Styles.Render("~/Content/bootstrap")
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,15 +23,8 @@
 </div>
 <br />
 <div class="row">
-    <div class="col">
-        <div class="input-group" id="CountrySelect">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="countrySelectRefresh">Refresh</button>
-            </div>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="ResourceSave">Download</button>
-            </div>
-        </div>
+    <div class="col" id="CountrySelect">
+
     </div>
 </div>
 <br />

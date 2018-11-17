@@ -478,8 +478,8 @@
     <Content Include="node_modules\jquery\src\wrap.js" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <Content Include="src\Components\App.js" />
     <Content Include="src\bundle.js" />
+    <Content Include="src\Components\CreateSelect.js" />
     <Content Include="src\Components\CreateRow.js" />
     <Content Include="src\Components\CreateButton.js" />
     <Content Include="src\Components\CreateInput.js" />
