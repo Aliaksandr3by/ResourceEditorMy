@@ -15,7 +15,8 @@ function createButton$(className = "", purpose = "") {
     return $(`<button></button>`, {
         type: "button",
         class: `${className}`,
-        text: `${purpose}`
+        text: `${purpose}`,
+        "data-action": purpose
     });
 }
 
@@ -374,17 +375,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const BtnSort = document.querySelectorAll(".BtnSort");
         if (BtnSort !== null && typeof BtnSort !== "undefined" && BtnSort.length > 0) {
-            document.getElementById("mainDataHeadTable").addEventListener("click", (event) => {
-                const lang = document.getElementById("countrySelect");
-                const sort = event.target;
+            const mainDataHeadTable = document.getElementById("mainDataHeadTable");
+            if (mainDataHeadTable) {
+                mainDataHeadTable.addEventListener("click", (event) => {
+                    const sort = event.target;
+                    if (sort.tagName === 'BUTTON') {
 
-                EmptyElement(mainDataBodyTable);
+                        const lang = document.getElementById("countrySelect");
 
-                CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
+                        EmptyElement(mainDataBodyTable);
 
-                history.pushState(lang.value, lang.value, urlControlRead);
+                        CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
 
-            });
+                        history.pushState(lang.value, lang.value, urlControlRead);
+                    }
+                });
+            }
         }
 
 
