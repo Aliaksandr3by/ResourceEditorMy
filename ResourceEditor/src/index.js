@@ -13,12 +13,13 @@ import CreateTable from './Components/CreateTable';
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    GetCountrySet(urlControlSelectCountry);
+    getCountryList(urlControlSelectCountry);
     //CountrySelectUpdate("it", urlControlSwitchLanguage);
 
     document.getElementById('CountrySelect').addEventListener('change', (e) => {
         const that = e.target.value;
-        CountrySelectUpdate(that, urlControlSwitchLanguage, "", "");
+        localStorage.setItem("countrySelect", String(that));
+        getDataResourceWithTitle(that, urlControlSwitchLanguage, "", "");
 
     });
 
@@ -26,18 +27,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-function GetCountrySet(url) {
+function getCountryList(url) {
     const CountrySelect = document.getElementById('CountrySelect');
     if (CountrySelect) {
         AjaxPOSTAsync(url).then((data) => {
-            ReactDOM.render(<CreateSelect datum={data} />, CountrySelect);
+            ReactDOM.render(<CreateSelect langList={data} />, CountrySelect);
         }).catch((error) => {
             console.error(error);
         });
     }
 }
 
-function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
+function getDataResourceWithTitle(lang, url, sort = "Id", filter = "") {
     const rootMainTable = document.getElementById('rootMainTable');
 
     if (rootMainTable) {
@@ -52,11 +53,15 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
             "filter": filter
         };
         AjaxPOSTAsync(url, dataLG).then((datum) => {
-            AjaxPOSTAsync(url, dataEN).then((titles) => {
-                ReactDOM.render(<CreateTable datum={datum} titles={titles} />, rootMainTable);
-            }).catch((error) => {
-                console.error(error);
-            });
+            if (!datum["error"]) {
+                AjaxPOSTAsync(url, dataEN).then((titles) => {
+                    ReactDOM.render(<CreateTable dataResource={datum} titleResource={titles} />, rootMainTable);
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                console.error(datum["error"]);
+            }
         }).catch((error) => {
             console.error(error);
         });

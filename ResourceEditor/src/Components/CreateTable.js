@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import CreateRow from './CreateRow';
 
-const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], titles = [{ "Id": "", "Value": "", "Comment": "" }] }) => {
+const CreateTable = ({ dataResource = [{ "Id": "", "Value": "", "Comment": "" }], titleResource = [{ "Id": "", "Value": "", "Comment": "" }] }) => {
     return (
         <table className="table" id="mainTable">
             <thead className="thead-dark" id="mainDataHeadTable">
@@ -26,13 +26,13 @@ const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], title
             </thead>
             <tbody id="mainDataBodyTable">
                 {
-                    datum.map((data, key) => {
+                    dataResource.map((data, key) => {
                         let _title = {
                             "Id": "Missing item EN",
                             "Value": "Missing item EN",
                             "Comment": "Missing item EN"
                         };
-                        titles.map((title) => {
+                        titleResource.map((title) => {
                             if (data.Id === title.Id) {
                                 _title = title;
                             }
@@ -48,8 +48,8 @@ const CreateTable = ({ datum = [{ "Id": "", "Value": "", "Comment": "" }], title
     );
 };
 CreateTable.prototype = {
-    datum: PropTypes.array,
-    titles: PropTypes.array
+    dataResource: PropTypes.array,
+    titleResource: PropTypes.array
 };
 
 export default CreateTable;

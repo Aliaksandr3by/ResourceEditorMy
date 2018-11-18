@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { isArray } from 'util';
 
-const CreateSelect = (datum = {}) => {
-    const datumTmp = datum.datum;
+const CreateSelect = (langList = {}) => {
+    const datumTmp = langList.langList;
     return (
         <div className="input-group">
             <select className="custom-select" id="countrySelect" aria-label="Example select with button addon">
@@ -27,7 +27,7 @@ const CreateSelect = (datum = {}) => {
     );
 };
 CountrySelect.prototype = {
-    data: PropTypes.object
+    langList: PropTypes.object
 };
 
 export default CreateSelect;
