@@ -375,10 +375,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const BtnSort = document.querySelectorAll(".BtnSort");
         if (BtnSort !== null && typeof BtnSort !== "undefined" && BtnSort.length > 0) {
+
             const mainDataHeadTable = document.getElementById("mainDataHeadTable");
+
             if (mainDataHeadTable) {
+
                 mainDataHeadTable.addEventListener("click", (event) => {
+
                     const sort = event.target;
+
                     if (sort.tagName === 'BUTTON') {
 
                         const lang = document.getElementById("countrySelect");
@@ -387,7 +392,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
 
-                        history.pushState(lang.value, lang.value, urlControlRead);
                     }
                 });
             }
@@ -398,22 +402,23 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
             mainDataHeadFilterTable.addEventListener("keyup", (event) => {
 
-                const lang = document.getElementById("countrySelect");
-                const sort = event.target.name;
-                const findText = event.target.value;
+                if (event.target.tagName === 'INPUT') {
+                    const lang = document.getElementById("countrySelect");
+                    const sort = event.target.name;
+                    const findText = event.target.value;
 
-                const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(".inputSearch");
-                const findTextAll = {};
+                    const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(".inputSearch");
+                    const findTextAll = {};
 
-                inputSearchAll.forEach((element) => {
-                    findTextAll[element.name] = element.value;
-                });
+                    inputSearchAll.forEach((element) => {
+                        findTextAll[element.name] = element.value;
+                    });
 
-                EmptyElement(mainDataBodyTable);
+                    EmptyElement(mainDataBodyTable);
 
-                CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort, JSON.stringify(findTextAll));
+                    CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort, JSON.stringify(findTextAll));
 
-                history.pushState(lang.value, lang.value, urlControlRead);
+                }
 
             });
         }
@@ -421,15 +426,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const BtnClear = document.getElementById("BtnClear");
         if (BtnClear !== null && typeof BtnClear !== "undefined") {
+
             BtnClear.addEventListener("click", (event) => {
 
                 const inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
                 const lang = document.getElementById("countrySelect");
+                
+                EmptyElement(document.getElementById("mainDataBodyTable"));
 
-                EmptyElement(mainDataBodyTable);
                 inputSearchAll.forEach((element) => {
                     element.value = "";
                 });
+
                 CountrySelectUpdate(lang.value, urlControlSwitchLanguage);
 
             });

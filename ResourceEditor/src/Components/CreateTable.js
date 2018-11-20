@@ -7,6 +7,7 @@ import CreateRow from './CreateRow';
 const CreateTable = ({ dataResource = [{ "Id": "", "Value": "", "Comment": "" }], titleResource = [{ "Id": "", "Value": "", "Comment": "" }] }) => {
     return (
         <table className="table" id="mainTable">
+            <caption>ResX data</caption>
             <thead className="thead-dark" id="mainDataHeadTable">
                 <tr>
                     <th scope="col"><button className="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
@@ -21,7 +22,7 @@ const CreateTable = ({ dataResource = [{ "Id": "", "Value": "", "Comment": "" }]
                     <th scope="col"><input type="search" className="inputSearch form-control d-flex" name="Id" placeholder="Filter by Id" /></th>
                     <th scope="col"><input type="search" className="inputSearch form-control d-flex" name="Value" placeholder="Filter by Value" /></th>
                     <th scope="col"><input type="search" className="inputSearch form-control d-flex" name="Comment" placeholder="Filter by Comment" /></th>
-                    <th scope="col" colSpan={2}><button className="BtnSort btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
+                    <th scope="col" colSpan={2}><button className="btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
                 </tr>
             </thead>
             <tbody id="mainDataBodyTable">

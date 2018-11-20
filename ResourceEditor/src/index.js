@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 
 //import 'bootstrap/dist/css/bootstrap.css';
 //import 'bootstrap/scss/bootstrap.scss';
-import 'jquery';
-import 'popper.js';
+//import 'jquery';
+//import 'popper.js';
+
+import 'bootstrap.native';
 import 'bootstrap';
 
 import CreateSelect from './Components/CreateSelect';

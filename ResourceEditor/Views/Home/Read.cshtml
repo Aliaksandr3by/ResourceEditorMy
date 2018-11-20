@@ -37,23 +37,29 @@
     <div class="col">
         <div id="rootMainTable">
             <table class="table" id="mainTable">
-                <thead class="thead-dark" id="mainDataHeadTable">
-                    <tr>
+                <caption>
+                    <p>
+                        ResX data
+                    </p>
+                </caption>
+                <thead >
+                    <tr class="thead-dark" id="mainDataHeadTable">
                         <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
                         <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Value" id="BtnSortValue" type="button">Value</button></th>
                         <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
-                </thead>
-                <thead class="thead-light" id="mainDataHeadFilterTable">
-                    <tr>
+                    <tr class="thead-light" id="mainDataHeadFilterTable">
                         <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Id" placeholder="Filter by Id" /></th>
                         <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Value" placeholder="Filter by Value" /></th>
                         <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Comment" placeholder="Filter by Comment" /></th>
-                        <th scope="col" colspan="2"><button class="BtnSort btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
+                        <th scope="col" colspan="2"><button class="btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
                     </tr>
                 </thead>
+                <tfoot>
+     
+                </tfoot>
                 <tbody id="mainDataBodyTable"></tbody>
             </table>
         </div>
