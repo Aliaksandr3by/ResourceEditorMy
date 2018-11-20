@@ -1,7 +1,10 @@
-﻿@Styles.Render("~/Content/bootstrap")
+﻿@section scriptsHead {
+    @*@Styles.Render("~/Content/bootstrap")*@
+    <link rel="stylesheet" href="~/node_modules/bootstrap/dist/css/bootstrap.min.css">
+}
 
 @{
-    ViewBag.Title = "Main Table";
+    ViewBag.Title = "Native";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -38,11 +41,9 @@
         <div id="rootMainTable">
             <table class="table" id="mainTable">
                 <caption>
-                    <p>
-                        ResX data
-                    </p>
+                    <p>ResX data</p>
                 </caption>
-                <thead >
+                <thead>
                     <tr class="thead-dark" id="mainDataHeadTable">
                         <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
                         <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Value" id="BtnSortValue" type="button">Value</button></th>
@@ -58,7 +59,7 @@
                     </tr>
                 </thead>
                 <tfoot>
-     
+
                 </tfoot>
                 <tbody id="mainDataBodyTable"></tbody>
             </table>
@@ -69,12 +70,26 @@
     </div>
 </div>
 
-@section scripts {
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryvalunob")
 
-    @Scripts.Render("~/bundles/popper")
-    @Scripts.Render("~/bundles/bootstrap")
+@section scriptsFooter {
+
+    @*
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryvalunob")
+
+        @Scripts.Render("~/bundles/popper")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/main")
+    *@
+
+    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/node_modules/popper.js/dist/popper.js"></script>
+
+    <script src="~/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
     <script src="~/src/main.js"></script>
 }

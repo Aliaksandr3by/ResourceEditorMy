@@ -1,7 +1,10 @@
-﻿@Styles.Render("~/Content/bootstrap")
+﻿@section scriptsHead {
+    @*@Styles.Render("~/Content/bootstrap")*@
+    <link rel="stylesheet" href="~/node_modules/bootstrap/dist/css/bootstrap.min.css">
+}
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "React";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -39,7 +42,6 @@
     </div>
 </div>
 
-
-@section scripts {
+@section scriptsFooter {
     <script src="~/src/bundle.js"></script>
 }

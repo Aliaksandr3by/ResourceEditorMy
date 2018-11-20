@@ -2,12 +2,15 @@
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-//import 'bootstrap/dist/css/bootstrap.css';
-//import 'bootstrap/scss/bootstrap.scss';
+//import jQuery, * as $ from 'jquery/dist/jquery';
+//import 'popper.js/dist/popper';
+//import 'bootstrap/scss/bootstrap';
+//import 'bootstrap/dist/js/bootstrap';
+
+//import 'bootstrap.native';
+
 //import 'jquery';
 //import 'popper.js';
-
-import 'bootstrap.native';
 import 'bootstrap';
 
 import CreateSelect from './Components/CreateSelect';

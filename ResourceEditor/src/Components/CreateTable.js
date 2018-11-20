@@ -7,7 +7,7 @@ import CreateRow from './CreateRow';
 const CreateTable = ({ dataResource = [{ "Id": "", "Value": "", "Comment": "" }], titleResource = [{ "Id": "", "Value": "", "Comment": "" }] }) => {
     return (
         <table className="table" id="mainTable">
-            <caption>ResX data</caption>
+            <caption>ResX data view</caption>
             <thead className="thead-dark" id="mainDataHeadTable">
                 <tr>
                     <th scope="col"><button className="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
