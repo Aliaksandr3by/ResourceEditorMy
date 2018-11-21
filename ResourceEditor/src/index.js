@@ -1,4 +1,6 @@
-﻿import React from 'react';
+﻿//import * as Promise from 'bluebird';
+import "@babel/polyfill";
+import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -11,6 +13,7 @@ import PropTypes from 'prop-types';
 
 //import 'jquery';
 //import 'popper.js';
+
 import 'bootstrap';
 
 import CreateSelect from './Components/CreateSelect';
