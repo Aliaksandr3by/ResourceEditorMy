@@ -56,6 +56,7 @@ namespace ResourceEditor.Controllers
         /// </returns>
         public ActionResult Index()
         {
+            ViewData["BrowserType"] = HttpContext.Request.Browser.Type;
             return this.View();
         }
 
@@ -73,6 +74,8 @@ namespace ResourceEditor.Controllers
         /// </returns>
         public ActionResult Read(List<LangName> list, string language)
         {
+            ViewData["BrowserType"] = HttpContext.Request.Browser.Type;
+
             var pathSave = ResourceHelper.GetPath(language);
 
             var langName = ResourceHelper.Read(pathSave);
@@ -86,6 +89,8 @@ namespace ResourceEditor.Controllers
         /// <returns></returns>
         public ActionResult Log(string language)
         {
+            ViewData["BrowserType"] = HttpContext.Request.Browser.Type;
+
             return this.View("Log");
         }
 
@@ -321,6 +326,8 @@ namespace ResourceEditor.Controllers
         [ContentType]
         public JsonResult SelectCountry()
         {
+            var tmp = HttpContext.Request.Browser;
+
             var selectCountry = ResourceEditor.Managers.XmlManager.GetLanguages();
 
             var result = this.Json(selectCountry);

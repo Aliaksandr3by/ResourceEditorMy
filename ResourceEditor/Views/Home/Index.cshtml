@@ -1,6 +1,7 @@
 ﻿@section scriptsHead {
     @*@Styles.Render("~/Content/bootstrap")*@
     <link rel="stylesheet" href="~/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link href="~/Content/Site.css" rel="stylesheet" />
 }
 
 @{
@@ -8,7 +9,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+    <h1>@ViewData["BrowserType"]</h1>
 
 <div class="row">
     <div class="col">

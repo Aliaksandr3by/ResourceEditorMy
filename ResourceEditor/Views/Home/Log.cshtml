@@ -1,9 +1,15 @@
-﻿@{
+﻿@section scriptsHead {
+    @*@Styles.Render("~/Content/bootstrap")*@
+    <link rel="stylesheet" href="~/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link href="~/Content/Site.css" rel="stylesheet" />
+}
+
+@{
     ViewBag.Title = "Log";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Log</h2>
+    <h1>@ViewData["BrowserType"]</h1>
 
 <button id="refreshLog" class="btn-floating" type="button">Refresh</button>
 <hr />
@@ -11,3 +17,27 @@
 
 </div>
 <hr />
+
+
+@section scriptsFooter {
+
+    @*
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryvalunob")
+
+        @Scripts.Render("~/bundles/popper")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/main")
+    *@
+
+    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/node_modules/popper.js/dist/popper.js"></script>
+
+    <script src="~/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+    <script src="~/src/main.js"></script>
+}
