@@ -29,8 +29,8 @@ namespace ResourceEditor.Entities
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        [Required(ErrorMessage = "Please Value")]
-        [RegularExpression(@"\w*", ErrorMessage = @"Please enter a valid value - \w*")]
+        //[Required(ErrorMessage = "Please Value")]
+        //[RegularExpression(@"\w*", ErrorMessage = @"Please enter a valid value - \w*")]
         [Display(Name = "Value")]
         public string Value { get; set; }
 

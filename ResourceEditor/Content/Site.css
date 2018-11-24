@@ -2,8 +2,14 @@
     min-width: 500px;
 }
 
+textarea{
+    min-height:40px;
+    max-height:150px;
+}
+
 .error {
     color: red;
+    background-color:lightcyan;
 }
 
 .btn-circle {
@@ -26,5 +32,13 @@
     }
 
 .fistColTable {
-    background-color:aqua;
+    min-width:50px;
+}
+
+.inputDataValue {
+
+}
+
+.inputDataComment{
+ 
 }

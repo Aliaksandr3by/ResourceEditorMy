@@ -28,11 +28,7 @@ const CreateTable = ({ dataResource = [{ "Id": "", "Value": "", "Comment": "" }]
             <tbody id="mainDataBodyTable">
                 {
                     dataResource.map((data, key) => {
-                        let _title = {
-                            "Id": "Missing item EN",
-                            "Value": "Missing item EN",
-                            "Comment": "Missing item EN"
-                        };
+                        let _title = {};
                         titleResource.map((title) => {
                             if (data.Id === title.Id) {
                                 _title = title;

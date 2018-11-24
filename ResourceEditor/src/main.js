@@ -1,6 +1,6 @@
 "use strict";
 
-const createInput$ = (className = "", readOnly = false, val = "", titleText = "...") => {
+function createInput$(className = "", readOnly = false, val = "", titleText = "missing data") {
     return $("<input></input>", {
         type: "text",
         class: `${className}`,
@@ -9,7 +9,17 @@ const createInput$ = (className = "", readOnly = false, val = "", titleText = ".
         title: titleText,
         value: val
     });
-};
+}
+function createTextarea$(className = "", readOnly = false, val = "", titleText = "missing data") {
+    return $("<textarea></textarea>", {
+        class: `${className}`,
+        name: `${className}`,
+        readonly: readOnly,
+        title: titleText,
+        rows: 1 ,
+        text: val
+    });
+}
 
 function createButton$(className = "", purpose = "") {
     return $(`<button></button>`, {
@@ -20,30 +30,27 @@ function createButton$(className = "", purpose = "") {
     });
 }
 
-function createRow$(data = { "Id": "", "Value": "", "Comment": "" }, titleText = { "Id": "", "Value": "", "Comment": "" }) {
-    if (!$.isEmptyObject(data)) { //Проверяет, является ли заданный объект пустым. Функция имеет один вариант использования:
+function createRow$(data = {}, titleText = {}) {
 
-        let buttonName = data.Id !== "" ? "Save" : "Insert";
+    let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-        let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
+    lastTr.append("<th scope='row'></th>").children("th").last()
+        .append(createInput$(`inputDataId form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
+    lastTr.append("<td></td>").children("td").last()
+        .append(createTextarea$(`inputDataValue form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, false, data.Value, titleText.Value));
+    lastTr.append("<td></td>").children("td").last()
+        .append(createTextarea$(`inputDataComment form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, false, data.Comment, titleText.Comment));
 
-        lastTr.append("<th scope='row'></th>").children("th").last().append(createInput$("inputDataId form-control d-flex w-100", String(data.Id).length > 0, data.Id, titleText.Id));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataValue form-control d-flex w-100", false, data.Value, titleText.Value));
-        lastTr.append("<td></td>").children("td").last().append(createInput$("inputDataComment form-control d-flex w-100", false, data.Comment, titleText.Comment));
-
-        lastTr.append("<td></td>").children("td").last().append(createButton$("saveLineButton btn btn-success d-flex w-100", buttonName));
-        lastTr.append("<td></td>").children("td").last().append(createButton$("deleteLineButton btn btn-danger d-flex w-100", "Delete"));
-    }
+    lastTr.append("<td></td>").children("td").last()
+        .append(createButton$("saveLineButton btn btn-success d-flex w-100", data.Id === "" ? "Insert" : "Save"));
+    lastTr.append("<td></td>").children("td").last()
+        .append(createButton$("deleteLineButton btn btn-danger d-flex w-100", "Delete"));
 }
 
 function createTable$(datum, titles) {
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
-            let _title = {
-                "Id": "Missing item EN",
-                "Value": "Missing item EN",
-                "Comment": "Missing item EN"
-            };
+            let _title = {};
             for (let title of titles) {
                 if (data.Id === title.Id) {
                     _title = title;
@@ -223,8 +230,7 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
 
 $("#rootMainTable").on("click", ".saveLineButton", null, e => {
     let that = $(e.target);
-    let tmpData = that.closest("tr").find("input");
-    let [id, value, comment] = tmpData;
+    let [id, value, comment] = that.closest("tr").find("input, textarea");
 
     $.ajax({
         type: "POST",

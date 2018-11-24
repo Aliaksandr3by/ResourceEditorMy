@@ -520,6 +520,7 @@
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
     <Content Include="src\bundle.js" />
+    <Content Include="src\Components\CreateTextArea.js" />
     <Content Include="src\Components\CreateSelect.js" />
     <Content Include="src\Components\CreateRow.js" />
     <Content Include="src\Components\CreateButton.js" />

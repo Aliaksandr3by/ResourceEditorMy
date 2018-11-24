@@ -100,7 +100,7 @@ namespace ResourceEditor.Controllers
         public JsonResult LogFile()
         {
             var result = this.Json(ResourceHelper.GetLog());
-            return this.Json(result);
+            return result;
         }
 
         /// <summary>
@@ -135,7 +135,9 @@ namespace ResourceEditor.Controllers
                 }
             }
 
-            return this.Json(new { result = "File saved!", fileName = string.Join(", ", httpPostedFileBases.Select(x => x.FileName)) });
+            var result = this.Json(new { result = "File saved!", fileName = string.Join(", ", httpPostedFileBases.Select(x => x.FileName)) });
+
+            return result;
         }
 
         /// <summary>
@@ -151,6 +153,7 @@ namespace ResourceEditor.Controllers
         public FileResult GetFile(string language)
         {
             var fileName = ResourceHelper.GetPath(language);
+
             if (System.IO.File.Exists(fileName))
             {
                 var contentType = "application/xml";
@@ -210,8 +213,8 @@ namespace ResourceEditor.Controllers
         public JsonResult Delete(LangName rowDelete, string language)
         {
             var pathSave = ResourceHelper.GetPath(language);
-
-            return this.Json(ResourceHelper.Delete(pathSave, rowDelete));
+            var result = this.Json(ResourceHelper.Delete(pathSave, rowDelete));
+            return result;
         }
 
         /// <summary>

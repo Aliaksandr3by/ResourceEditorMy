@@ -206,9 +206,14 @@ namespace ResourceEditor.Models
         /// <returns>New node item</returns>
         public static ResXDataNode CreateNodeElement(LangName langName)
         {
-            if (!string.IsNullOrWhiteSpace(langName.Id) && !string.IsNullOrWhiteSpace(langName.Value))
+            if (!string.IsNullOrWhiteSpace(langName.Id))
             {
-                return new ResXDataNode(langName.Id, langName.Value) { Comment = langName.Comment };
+                return new ResXDataNode(
+                    langName.Id == null ? "" : langName.Id, 
+                    langName.Value == null ? "" : langName.Value)
+                {
+                    Comment = langName.Comment == null ? "" : langName.Comment
+                };
             }
 
             return null;
