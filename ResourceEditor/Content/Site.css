@@ -2,14 +2,19 @@
     min-width: 500px;
 }
 
-textarea{
-    min-height:40px;
-    max-height:150px;
+::selection {
+    color: azure; /* Цвет текста */
+    background-color: red; /* Цвет фона */
+}
+
+textarea {
+    min-height: 40px;
+    max-height: 150px;
 }
 
 .error {
     color: red;
-    background-color:lightcyan;
+    background-color: lightcyan;
 }
 
 .btn-circle {
@@ -32,13 +37,21 @@ textarea{
     }
 
 .fistColTable {
-    min-width:50px;
+    
+}
+
+.inputSearch{
+    text-align: center;
+}
+
+.inputDataId {
+    text-align: center;
+    min-width: 70px;
 }
 
 .inputDataValue {
 
 }
 
-.inputDataComment{
- 
+.inputDataComment {
 }

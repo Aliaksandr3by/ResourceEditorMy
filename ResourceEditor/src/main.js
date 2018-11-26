@@ -16,7 +16,8 @@ function createTextarea$(className = "", readOnly = false, val = "", titleText =
         name: `${className}`,
         readonly: readOnly,
         title: titleText,
-        rows: 1 ,
+        wrap:"soft",
+        rows: 1,
         text: val
     });
 }
@@ -35,7 +36,7 @@ function createRow$(data = {}, titleText = {}) {
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
     lastTr.append("<th scope='row'></th>").children("th").last()
-        .append(createInput$(`inputDataId form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
+        .append(createInput$(`inputDataId form-control ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
     lastTr.append("<td></td>").children("td").last()
         .append(createTextarea$(`inputDataValue form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, false, data.Value, titleText.Value));
     lastTr.append("<td></td>").children("td").last()
