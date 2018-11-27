@@ -1,5 +1,17 @@
 "use strict";
 
+//Polyfill closest for IE11:
+if (!Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector;
+if (!Element.prototype.closest) Element.prototype.closest = function (selector) {
+    let el = this;
+    while (el) {
+        if (el.matches(selector)) {
+            return el;
+        }
+        el = el.parentElement;
+    }
+};
+
 function createInput$(className = "", readOnly = false, val = "", titleText = "missing data") {
     return $("<input></input>", {
         type: "text",
@@ -33,10 +45,10 @@ function createRow$(data = {}, titleText = {}) {
 
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-    lastTr.append(`<th class='inputDataId ${titleText.Id ? "" : "error"}' title='${titleText.Id}' contentEditable='${!!!data.Id}'>${data.Id}</th>`);
+    //lastTr.append(`<th class='inputDataId ${titleText.Id ? "" : "error"}' title='${titleText.Id}' contentEditable='${!!!data.Id}'>${data.Id}</th>`);
 
-    //lastTr.append("<th scope='row'></th>").children("th").last()
-    //    .append(createInput$(`inputDataId form-control ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
+    lastTr.append("<th></th>").children("th").last()
+        .append(createInput$(`inputDataId ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
     lastTr.append("<td></td>").children("td").last()
         .append(createTextarea$(`inputDataValue`, false, data.Value, titleText.Value));
     lastTr.append("<td></td>").children("td").last()
@@ -48,7 +60,16 @@ function createRow$(data = {}, titleText = {}) {
         .append(createButton$("deleteLineButton", "Delete"));
 }
 
-function createTable$(datum, titles) {
+function createTable$(datum_tmp, titles_tmp) {
+
+    let datum = datum_tmp;
+    let titles = titles_tmp;
+
+    if (typeof datum === 'string' && typeof titles === 'string') {
+        datum = JSON.parse(datum_tmp);
+        titles = JSON.parse(titles_tmp);
+    } 
+
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
             let _title = {};
@@ -119,49 +140,29 @@ $("#countrySelectRefresh").on("click", null, null, e => {
 
 $("#ResourceUploads").on("click", null, (e) => {
     let that = $(e.target);
-    let data = new FormData(); //с encoding установленным в "multipart/form-data".
     let uploadFile = $("#FileResource").prop("files");
     const fileUpload = document.querySelector(".fileUpload");
 
-    const resultUpload = (respond = "@", alert = "alert-success") => {
+    const resultUpload = (respond = "", alert = "") => {
         const resultUpload = document.createElement('div');
-        resultUpload.className = `alert ${alert}`;
-        resultUpload.setAttribute("role", "alert");
-        resultUpload.textContent = `${respond} is ok!`;
+        resultUpload.className = `${alert}`;
+        resultUpload.textContent = `${respond}`;
         return resultUpload;
     };
 
-    $.each(uploadFile, (i, value) => {
-        data.append(`uploads[${i}]`, value);
-    });
-
-    $.ajax({
-        url: urlControlUploadFile,
-        type: "POST",
-        data: data,
-        //cache: false,
-        //dataType: "json",
-        //async: true,
-        processData: false, // Не обрабатываем файлы (Don"t process the files)
-        contentType: false, // Так jQuery скажет серверу что это строковой запрос
-        success: (respond, textStatus, jqXHR) => {
-            if (!respond["error"] && respond["fileName"]) {
-                EmptyElement(fileUpload);
-                fileUpload.appendChild(resultUpload(respond.fileName, "alert-success"));
-                GetCountrySet();
-            }
-            else {
-                EmptyElement(fileUpload);
-                fileUpload.append(resultUpload(respond.error, "alert-danger"));
-            }
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.log(xhr);
-            console.log(ajaxOptions);
-            console.log(thrownError);
+    AjaxPOSTAsyncFileSend(urlControlUploadFile, "FileResource").then((respond) => {
+        if (!respond["error"] && respond["fileName"]) {
+            EmptyElement(fileUpload);
+            fileUpload.appendChild(resultUpload(respond.fileName, "success"));
+            GetCountrySet();
         }
+        else {
+            EmptyElement(fileUpload);
+            fileUpload.appendChild(resultUpload(respond.error, "error"));
+        }
+    }).catch((error) => {
+        console.error(error);
     });
-
 });
 
 $("#ResourceSave").on("click", null, null, e => {
@@ -193,7 +194,7 @@ $("#ResourceSave").on("click", null, null, e => {
  */
 $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
     const that = $(e.target);
-    const tmpData = that.closest("tr").find("input");
+    const tmpData = that.closest("tr").find("input, textarea");
     const [id, value, comment] = tmpData;
     $.ajax({
         type: "POST",
@@ -231,9 +232,9 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
 
 $("#rootMainTable").on("click", ".saveLineButton", null, e => {
     const that = $(e.target);
-    const [id, value, comment] = that.closest("tr").find("th, textarea");
+    const [id, value, comment] = that.closest("tr").find("input, textarea");
     const tmp = {
-        Id: id.textContent,
+        Id: id.value,
         Value: value.value,
         Comment: comment.value
     };
@@ -284,9 +285,9 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
 $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     if (confirm("Delete?")) {
         const that = $(e.target);
-        const [id, value, comment] = that.closest("tr").find("th, textarea");
+        const [id, value, comment] = that.closest("tr").find("input, textarea");
         const tmp = {
-            Id: id.textContent,
+            Id: id.value,
             Value: value.value,
             Comment: comment.value
         };
@@ -476,6 +477,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     EmptyElement(rootLog);
 
+                    if (typeof data === "string") {
+                        data = JSON.parse(data);
+                    }
+
                     for (let items of data) {          //WWWWWFFFFFFFFFF
                         for (let item in items) {
                             rootLog.textContent += `${item}: ${items[item]};`;
@@ -550,5 +555,31 @@ function AjaxPOSTAsync(url, object) {
         else {
             xhr.send();
         }
+    });
+}
+
+
+function AjaxPOSTAsyncFileSend(url, objectFiles) {
+    return new Promise((resolve, reject) => {
+
+        const data = new FormData(); //с encoding установленным в "multipart/form-data".
+        const files = window.document.getElementById(objectFiles).files;
+
+        for (let i = 0; i < files.length; i++) {
+            data.append(`uploads[${i}]`, files[i], files[i].name);
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onload = (e) => {
+            const that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                resolve(xhr.response);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(data);
     });
 }

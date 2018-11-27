@@ -195,7 +195,26 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="jsconfig.json" />
+    <Content Include="node_modules\npm-require\demo.js" />
+    <Content Include="node_modules\npm-require\index.html" />
+    <Content Include="node_modules\npm-require\src\npm-require.js" />
+    <Content Include="node_modules\npm-require\test\bar.js" />
+    <Content Include="node_modules\npm-require\test\foo.js" />
+    <Content Include="node_modules\npm-require\test\foobar.js" />
+    <Content Include="node_modules\popper.js\dist\esm\popper-utils.js" />
+    <Content Include="node_modules\popper.js\dist\esm\popper-utils.min.js" />
+    <Content Include="node_modules\popper.js\dist\esm\popper.js" />
+    <Content Include="node_modules\popper.js\dist\esm\popper.min.js" />
+    <Content Include="node_modules\popper.js\dist\popper-utils.js" />
+    <Content Include="node_modules\popper.js\dist\popper-utils.min.js" />
+    <Content Include="node_modules\popper.js\dist\popper.js" />
+    <Content Include="node_modules\popper.js\dist\popper.min.js" />
+    <Content Include="node_modules\popper.js\dist\umd\popper-utils.js" />
+    <Content Include="node_modules\popper.js\dist\umd\popper-utils.min.js" />
+    <Content Include="node_modules\popper.js\dist\umd\popper.js" />
+    <Content Include="node_modules\popper.js\dist\umd\popper.min.js" />
+    <Content Include="public\bundle.js" />
+    <Content Include="tsconfig.json" />
     <Content Include="node_modules\bluebird\js\browser\bluebird.core.js" />
     <Content Include="node_modules\bluebird\js\browser\bluebird.core.min.js" />
     <Content Include="node_modules\bluebird\js\browser\bluebird.js" />
@@ -520,15 +539,13 @@
     <Content Include="node_modules\jquery\src\wrap.js" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <Content Include="src\bundle.js" />
-    <Content Include="src\Components\CreateTextArea.js" />
-    <Content Include="src\Components\CreateSelect.js" />
-    <Content Include="src\Components\CreateRow.js" />
-    <Content Include="src\Components\CreateButton.js" />
-    <Content Include="src\Components\CreateInput.js" />
-    <Content Include="src\Components\CreateTable.js" />
-    <Content Include="src\index.js" />
-    <Content Include="src\ArrayFrom.js" />
+    <Content Include="src_react\Components\CreateTextArea.js" />
+    <Content Include="src_react\Components\CreateSelect.js" />
+    <Content Include="src_react\Components\CreateRow.js" />
+    <Content Include="src_react\Components\CreateButton.js" />
+    <Content Include="src_react\Components\CreateInput.js" />
+    <Content Include="src_react\Components\CreateTable.js" />
+    <Content Include="src_react\index.js" />
     <Content Include="src\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -673,6 +690,25 @@
     <Content Include="node_modules\bluebird\LICENSE" />
     <Content Include="node_modules\bluebird\package.json" />
     <Content Include="node_modules\bluebird\README.md" />
+    <Content Include="node_modules\popper.js\dist\esm\popper-utils.js.map" />
+    <Content Include="node_modules\popper.js\dist\esm\popper-utils.min.js.map" />
+    <Content Include="node_modules\popper.js\dist\esm\popper.js.map" />
+    <Content Include="node_modules\popper.js\dist\esm\popper.min.js.map" />
+    <Content Include="node_modules\popper.js\dist\esm\poppper.js.flow" />
+    <Content Include="node_modules\popper.js\dist\popper-utils.js.map" />
+    <Content Include="node_modules\popper.js\dist\popper-utils.min.js.map" />
+    <Content Include="node_modules\popper.js\dist\popper.js.map" />
+    <Content Include="node_modules\popper.js\dist\popper.min.js.map" />
+    <Content Include="node_modules\popper.js\dist\umd\popper-utils.js.map" />
+    <Content Include="node_modules\popper.js\dist\umd\popper-utils.min.js.map" />
+    <Content Include="node_modules\popper.js\dist\umd\popper.js.map" />
+    <Content Include="node_modules\popper.js\dist\umd\popper.min.js.map" />
+    <Content Include="node_modules\popper.js\index.js.flow" />
+    <Content Include="node_modules\popper.js\package.json" />
+    <Content Include="node_modules\popper.js\README.md" />
+    <Content Include="node_modules\npm-require\LICENSE" />
+    <Content Include="node_modules\npm-require\package.json" />
+    <Content Include="node_modules\npm-require\README.md" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -687,6 +723,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_LocalResources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="node_modules\popper.js\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

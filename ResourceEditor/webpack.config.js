@@ -5,9 +5,9 @@ var WebpackNotifierPlugin = require("webpack-notifier");
 var BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 module.exports = {
-    entry: ["@babel/polyfill", path.resolve(__dirname, './src/index.js')],
+    entry: ["@babel/polyfill", path.resolve(__dirname, './src_react/index.js')],
     output: {
-        path: path.resolve(__dirname, "./src"),
+        path: path.resolve(__dirname, "./public"),
         filename: "bundle.js"
     },
     module: {

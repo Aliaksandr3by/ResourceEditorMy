@@ -12,13 +12,14 @@
 
 <div class="row">
     <div class="col">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="ResourceUploads">Upload</span>
+        <div>
+            <div class="customFileUploads">
+                <label class="customFileUploads" for="FileResource">Choose file</label>
+                <input class="customFileUploads" id="FileResource" type="file" multiple required accept=".resx" aria-describedby="inputGroupFileAddon01">
+                <button class="customFileUploads" type="button" id="ResourceUploads">Upload</button>
             </div>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="FileResource" multiple required accept=".resx" aria-describedby="inputGroupFileAddon01">
-                <label class="custom-file-label" for="FileResource">Choose file</label>
+            <div id="img-container">
+                <ul id="img-list"></ul>
             </div>
         </div>
         <div class="fileUpload"></div>
@@ -75,9 +76,10 @@
 @section scriptsFooter {
 
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/node_modules/popper.js/dist/popper.js"></script>
     <script src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-
-    <script src="~/src/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+    <script src="~/out/main.js"></script>
 
 }

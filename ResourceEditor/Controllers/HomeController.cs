@@ -113,6 +113,8 @@ namespace ResourceEditor.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [AllowCrossSiteJson]
+        [ContentType]
         public ActionResult UploadFile(IEnumerable<HttpPostedFileBase> uploads)
         {
             if (uploads == null)

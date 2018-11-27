@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <h1>@ViewData["BrowserType"]</h1>
+<h1>@ViewData["BrowserType"]</h1>
 
 <div class="row">
     <div class="col">
@@ -42,7 +42,7 @@
 </div>
 
 @section scriptsFooter {
-
-    <script src="~/src/bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+    <script src="~/public/bundle.js"></script>
 
 }

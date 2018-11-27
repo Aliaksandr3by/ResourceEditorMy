@@ -1,0 +1,27 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "allowJs": true,
+    //"checkJs": true,
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "strict": true,
+    "noEmit": false,
+    "outDir": "out",
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "esnext",
+      "esnext.array",
+      "esnext.asynciterable",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [ "src" ],
+  "exclude": [ "node_modules", "build", "public", "obj" ]
+}

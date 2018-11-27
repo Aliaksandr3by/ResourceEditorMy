@@ -61,7 +61,8 @@ namespace ResourceEditor.Models
 
             if (!File.Exists(fileName))
             {
-                System.IO.File.Create(fileName);
+                var file = System.IO.File.Create(fileName);
+                file.Close();
             }
 
             JsonSerializer serializer = new JsonSerializer();
@@ -70,13 +71,15 @@ namespace ResourceEditor.Models
             {
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
-                    LangNameLogFull langNameLog = new LangNameLogFull();
-                    langNameLog.LangNameSampleEN = langName;
-                    langNameLog.LangNameOld = langName;
-                    langNameLog.LangNameNew = langName;
-                    langNameLog.StatusLog = status;
-                    langNameLog.DateLog = DateTime.Now.ToLocalTime().ToString();
-                    langNameLog.PathLog = Path.GetFileName(path);
+                    LangNameLogFull langNameLog = new LangNameLogFull
+                    {
+                        LangNameSampleEN = langName,
+                        LangNameOld = langName,
+                        LangNameNew = langName,
+                        StatusLog = status,
+                        DateLog = DateTime.Now.ToLocalTime().ToString(),
+                        PathLog = Path.GetFileName(path)
+                    };
 
                     serializer.Serialize(writer, langNameLog);
 
@@ -215,11 +218,9 @@ namespace ResourceEditor.Models
         {
             if (!string.IsNullOrWhiteSpace(langName.Id))
             {
-                return new ResXDataNode(
-                    langName.Id == null ? "" : langName.Id, 
-                    langName.Value == null ? "" : langName.Value)
+                return new ResXDataNode(langName.Id ?? "", langName.Value ?? "")
                 {
-                    Comment = langName.Comment == null ? "" : langName.Comment
+                    Comment = langName.Comment ?? ""
                 };
             }
 
@@ -293,7 +294,7 @@ namespace ResourceEditor.Models
 
         public static IEnumerable<LangName> InsertInAllFile(string pathSave, LangName newItem)
         {
-            
+
             var allFoundFiles = Directory.GetFiles(HostingEnvironment.MapPath("~/App_LocalResources/"), "Resource.*.resx", SearchOption.AllDirectories);
 
             foreach (var item in allFoundFiles)

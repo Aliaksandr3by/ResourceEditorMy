@@ -62,6 +62,11 @@ tbody tr:hover {
     background-color: #fce8e8;
 }
 
+.success {
+    color: green;
+    background-color: #e8f1fc;
+}
+
 
 textarea {
     width: 100%;
@@ -70,7 +75,7 @@ textarea {
     max-width: 250px;
     border: none;
     padding: 0px;
-    background-color: inherit;
+    background-color: transparent;
     font-family: inherit;
 }
 
@@ -84,18 +89,22 @@ input {
         background-color: transparent;
     }
 
-/*  button  */
-
-button {
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    background-color: white;
-    color: black;
-    border: 2px solid #e7e7e7;
-    border-radius: 12px;
-}
+    input.inputDataId {
+        text-align: center;
+        border: none;
+        background-color: transparent;
+    }
+    /*  button  */
+    button {
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        background-color: white;
+        color: black;
+        border: 2px solid #e7e7e7;
+        border-radius: 12px;
+    }
 
     button:hover {
         text-decoration: none;
@@ -167,4 +176,11 @@ button {
 
 .buttonAdd {
     text-align:center;
+}
+
+
+.customFileUploads{
+    width: auto;
+    display: inline;
+    vertical-align:middle;
 }
