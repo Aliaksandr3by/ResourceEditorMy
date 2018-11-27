@@ -13,10 +13,8 @@ function createInput$(className = "", readOnly = false, val = "", titleText = "m
 function createTextarea$(className = "", readOnly = false, val = "", titleText = "missing data") {
     return $("<textarea></textarea>", {
         class: `${className}`,
-        name: `${className}`,
         readonly: readOnly,
         title: titleText,
-        wrap:"soft",
         rows: 1,
         text: val
     });
@@ -35,17 +33,19 @@ function createRow$(data = {}, titleText = {}) {
 
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
 
-    lastTr.append("<th scope='row'></th>").children("th").last()
-        .append(createInput$(`inputDataId form-control ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
+    lastTr.append(`<th class='inputDataId ${titleText.Id ? "" : "error"}' title='${titleText.Id}' contentEditable='${!!!data.Id}'>${data.Id}</th>`);
+
+    //lastTr.append("<th scope='row'></th>").children("th").last()
+    //    .append(createInput$(`inputDataId form-control ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
     lastTr.append("<td></td>").children("td").last()
-        .append(createTextarea$(`inputDataValue form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, false, data.Value, titleText.Value));
+        .append(createTextarea$(`inputDataValue`, false, data.Value, titleText.Value));
     lastTr.append("<td></td>").children("td").last()
-        .append(createTextarea$(`inputDataComment form-control d-flex w-100 ${titleText.Id ? "" : "error"}`, false, data.Comment, titleText.Comment));
+        .append(createTextarea$(`inputDataComment`, false, data.Comment, titleText.Comment));
 
     lastTr.append("<td></td>").children("td").last()
-        .append(createButton$("saveLineButton btn btn-success d-flex w-100", data.Id === "" ? "Insert" : "Save"));
+        .append(createButton$("saveLineButton", data.Id === "" ? "Insert" : "Save"));
     lastTr.append("<td></td>").children("td").last()
-        .append(createButton$("deleteLineButton btn btn-danger d-flex w-100", "Delete"));
+        .append(createButton$("deleteLineButton", "Delete"));
 }
 
 function createTable$(datum, titles) {
@@ -230,19 +230,19 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
 });
 
 $("#rootMainTable").on("click", ".saveLineButton", null, e => {
-    let that = $(e.target);
-    let [id, value, comment] = that.closest("tr").find("input, textarea");
-
+    const that = $(e.target);
+    const [id, value, comment] = that.closest("tr").find("th, textarea");
+    const tmp = {
+        Id: id.textContent,
+        Value: value.value,
+        Comment: comment.value
+    };
     $.ajax({
         type: "POST",
         url: urlControlActionUpdate,
         data: {
             language: $("#countrySelect").val(),
-            rowUpdate: {
-                Id: $(id).val(),
-                Value: $(value).val(),
-                Comment: $(comment).val()
-            }
+            rowUpdate: tmp
         },
         success: (data) => {
             if (data.hasOwnProperty('status') && !data.hasOwnProperty('error')) {
@@ -283,22 +283,20 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
 
 $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     if (confirm("Delete?")) {
-        let that = $(e.target); //$(this);
-        let tmpData = that.closest("tr").find("input");
-        let id = $(tmpData[0]);
-        let value = $(tmpData[1]);
-        let comment = $(tmpData[2]);
-
+        const that = $(e.target);
+        const [id, value, comment] = that.closest("tr").find("th, textarea");
+        const tmp = {
+            Id: id.textContent,
+            Value: value.value,
+            Comment: comment.value
+        };
+        const language = window.document.getElementById("countrySelect").value;
         $.ajax({
             type: "POST",
             url: urlControlActionDelete,
             data: {
-                language: $("#countrySelect").val(),
-                rowDelete: {
-                    Id: id.val(),
-                    Value: value.val(),
-                    Comment: comment.val()
-                }
+                language: language,
+                rowDelete: tmp
             },
             success: (data, textStatus) => {
                 console.log(textStatus);
@@ -478,9 +476,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     EmptyElement(rootLog);
 
-                    for (let items of data.Data) {          //WWWWWFFFFFFFFFF
+                    for (let items of data) {          //WWWWWFFFFFFFFFF
                         for (let item in items) {
-                            rootLog.textContent += `${item}: ${items[item]}     `;
+                            rootLog.textContent += `${item}: ${items[item]};`;
                         }
                         rootLog.appendChild(document.createElement('br'));
                     }

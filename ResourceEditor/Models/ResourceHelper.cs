@@ -27,46 +27,53 @@ namespace ResourceEditor.Models
     /// </summary>
     public class ResourceHelper
     {
-        public static List<LangNameLog> GetLog()
+        public static List<LangNameLogFull> GetLog()
         {
             //string qwe = @"[{'Id':'q1','Value':'qwe','Comment':'pl'},{'Id':'q1','Value':'qwe','Comment':'pl'}]";
 
             string path = HostingEnvironment.MapPath($"~/App_LocalResources/Log.txt");
 
+            List<LangNameLogFull> result = null;
+
             if (File.Exists(path))
             {
-                throw new InvalidOperationException();
-            }
+                result = new List<LangNameLogFull>();
 
-            List<LangNameLog> result = new List<LangNameLog>();
-
-            using (StreamReader sr = new StreamReader(path))
-            {
-                string str = sr.ReadLine().Replace('"', '\'');
-
-                while (str != null)
+                using (StreamReader sr = new StreamReader(path))
                 {
-                    result.Add(JsonConvert.DeserializeObject<LangNameLog>(str));
-                    str = sr.ReadLine();
+                    string str = sr.ReadLine().Replace('"', '\'');
+
+                    while (str != null)
+                    {
+                        result.Add(JsonConvert.DeserializeObject<LangNameLogFull>(str));
+                        str = sr.ReadLine();
+                    }
                 }
+
+                return result;
             }
 
             return result;
         }
         public static void Logging(LangName langName, string path, string status)
         {
+            string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
+
+            if (!File.Exists(fileName))
+            {
+                System.IO.File.Create(fileName);
+            }
 
             JsonSerializer serializer = new JsonSerializer();
-            string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
             using (FileStream fs = new FileStream(fileName, FileMode.Append))
             using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
             {
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
-                    LangNameLog langNameLog = new LangNameLog();
-                    langNameLog.Id = langName.Id;
-                    langNameLog.Value = langName.Value;
-                    langNameLog.Comment = langName.Comment;
+                    LangNameLogFull langNameLog = new LangNameLogFull();
+                    langNameLog.LangNameSampleEN = langName;
+                    langNameLog.LangNameOld = langName;
+                    langNameLog.LangNameNew = langName;
                     langNameLog.StatusLog = status;
                     langNameLog.DateLog = DateTime.Now.ToLocalTime().ToString();
                     langNameLog.PathLog = Path.GetFileName(path);

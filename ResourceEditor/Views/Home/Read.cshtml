@@ -1,7 +1,6 @@
 ﻿@section scriptsHead {
-    @*@Styles.Render("~/Content/bootstrap")*@
-    <link rel="stylesheet" href="~/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/NavMenu.css" rel="stylesheet" />
 }
 
 @{
@@ -42,32 +41,32 @@
 <div class="row">
     <div class="col">
         <div id="rootMainTable">
-            <table class="table" id="mainTable">
+            <table id="mainTable">
                 <colgroup class=""></colgroup>
                 <caption>
                     <p>ResX data</p>
                 </caption>
                 <thead>
-                    <tr class="thead-dark" id="mainDataHeadTable">
-                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Id" id="BtnSortId" type="button">Id</button></th>
-                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Value" id="BtnSortValue" type="button">Value</button></th>
-                        <th scope="col"><button class="BtnSort btn btn-outline-info btn-block" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
+                    <tr id="mainDataHeadTable">
+                        <th scope="col"><button class="BtnSort" value="Id" id="BtnSortId" type="button">Id</button></th>
+                        <th scope="col"><button class="BtnSort" value="Value" id="BtnSortValue" type="button">Value</button></th>
+                        <th scope="col"><button class="BtnSort" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
-                    <tr class="thead-light fistColTable" id="mainDataHeadFilterTable">
-                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Id" placeholder="Filter by Id" /></th>
-                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Value" placeholder="Filter by Value"/></th>
-                        <th scope="col"><input type="search" class="inputSearch form-control d-flex" name="Comment" placeholder="Filter by Comment"/></th>
-                        <th scope="col" colspan="2"><button class="btn btn-outline-danger btn-block" id="BtnClear" type="button">Clear</button></th>
+                    <tr id="mainDataHeadFilterTable">
+                        <th scope="col"><input type="search" class="inputSearch" name="Id" placeholder="Filter by Id" /></th>
+                        <th scope="col"><input type="search" class="inputSearch" name="Value" placeholder="Filter by Value" /></th>
+                        <th scope="col"><input type="search" class="inputSearch" name="Comment" placeholder="Filter by Comment" /></th>
+                        <th scope="col" colspan="2"><button class="BtnClear" id="BtnClear" type="button">Clear</button></th>
                     </tr>
                 </thead>
                 <tfoot></tfoot>
                 <tbody id="mainDataBodyTable"></tbody>
             </table>
         </div>
-        <div>
-            <button type="button" class="btn btn-warning btn-circle btn-xl align-self-center" id="addTableRow">+</button>
+        <div class="buttonAdd">
+            <button type="button" class="btn-circle btn-xl" id="addTableRow">+</button>
         </div>
     </div>
 </div>
@@ -78,10 +77,6 @@
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
     <script src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-
-    <script src="~/node_modules/popper.js/dist/popper.js"></script>
-
-    <script src="~/node_modules/bootstrap/dist/js/bootstrap.js"></script>
 
     <script src="~/src/main.js"></script>
 
