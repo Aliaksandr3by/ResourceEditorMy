@@ -93,7 +93,7 @@ function createTable$(datum_tmp, titles_tmp) {
 var countryResolver = function (data) {
     if (data === void 0) { data = [{}]; }
     var countrySelecter = document.createElement('select');
-    countrySelecter.className = "custom-select";
+    countrySelecter.className = "fileContainer-0 custom-select";
     countrySelecter.id = "countrySelect";
     var opt = document.createElement("option");
     opt.text = "Select language";

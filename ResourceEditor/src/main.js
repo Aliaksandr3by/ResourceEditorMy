@@ -89,7 +89,7 @@ function createTable$(datum_tmp, titles_tmp) {
 
 const countryResolver = (data = [{}]) => {
     const countrySelecter = document.createElement('select');
-    countrySelecter.className = `custom-select`;
+    countrySelecter.className = `fileContainer-0 custom-select`;
     countrySelecter.id = `countrySelect`;
 
     let opt = document.createElement("option");
