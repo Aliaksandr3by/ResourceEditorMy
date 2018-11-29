@@ -1,15 +1,17 @@
 ﻿html {
     font-family: sans-serif;
+    font-size: 16px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     align-content: center;
     align-items: center;
     /*height: 100%;*/
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     background: #eeeeee;
     min-width: 500px;
+
 }
 
 body {
@@ -19,12 +21,13 @@ body {
     /*recommend 1920 / 1080 max based on usage stats, use 100% to that point*/
     width: 100%;
     max-width: 900px;
-    /*height: 100%;*/
-    /*max-height: 900px;*/
+    height: 100%;
+    min-height: 900px;
     background: #fafafa;
     -webkit-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
+    
 }
 
 ::selection {
@@ -77,10 +80,12 @@ textarea {
     padding: 0px;
     background-color: transparent;
     font-family: inherit;
+    font-size: 1.1rem;
 }
 
 input {
     width: 100%;
+    font-size: 1.1rem;
 }
 
     input.inputSearch {
@@ -94,24 +99,29 @@ input {
         border: none;
         background-color: transparent;
     }
-    /*  button  */
-    button {
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        background-color: white;
-        color: black;
-        border: 2px solid #e7e7e7;
-        border-radius: 12px;
-    }
+
+
+button {
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-color: white;
+    color: black;
+    border: 2px solid #e7e7e7;
+    border-radius: 12px;
+}
 
     button:hover {
         text-decoration: none;
         color: white;
         background-color: black;
         border: 2px solid azure;
-        cursor: pointer
+        cursor: pointer;
+    }
+    button:disabled {
+        display: none;
+
     }
 
     button.btn-circle {
@@ -122,19 +132,21 @@ input {
         text-align: center;
         line-height: 1.42857;
     }
-    button.btn-circle:hover {
-        color:red;
-    }
+
+        button.btn-circle:hover {
+            color: red;
+        }
 
         button.btn-circle.btn-xl {
             width: 70px;
             height: 70px;
             padding: 10px 16px;
             border-radius: 35px;
-            font-size: 24px;
+            font-size: 1.7rem;
             line-height: 1.33;
             background-color: #ffcb00;
         }
+
             button.btn-circle.btn-xl:hover {
                 width: 150px;
                 height: 70px;
@@ -175,12 +187,36 @@ input {
 
 
 .buttonAdd {
-    text-align:center;
+    text-align: center;
 }
 
 
-.customFileUploads{
+.inline {
     width: auto;
     display: inline;
-    vertical-align:middle;
+    vertical-align: middle;
+}
+
+select.custom-select {
+    width: auto;
+    display: inline;
+    vertical-align: middle;
+    align-items: center;
+    height: 2.9rem;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.0rem;
+    text-decoration: none;
+    background-color: white;
+    border: inherit;
+    padding: 13px 25px;
+}
+
+option.custom-select-option {
+    vertical-align: middle;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    color: darkmagenta;
+    font-size: 1.2rem;
 }

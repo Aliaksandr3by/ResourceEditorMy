@@ -91,7 +91,6 @@ const countryResolver = (data = [{}]) => {
     const countrySelecter = document.createElement('select');
     countrySelecter.className = `custom-select`;
     countrySelecter.id = `countrySelect`;
-    countrySelecter.setAttribute("aria-label", "Example select with button addon");
 
     let opt = document.createElement("option");
     opt.text = "Select language";
@@ -100,6 +99,7 @@ const countryResolver = (data = [{}]) => {
     let i = 0;
     for (let item of data) {
         let opt = document.createElement("option");
+        opt.className = `custom-select-option`;
         opt.value = item.Id;
         opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
         countrySelecter.add(opt, null);
@@ -219,7 +219,7 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
                 $(value).attr("placeholder", data.Value);
                 that.closest("th").find("div.dataSuccess").remove();
                 that.closest("th").append(`<div class="dataError">${data.Id} was found!</div >`);
-                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", "disabled");
+                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
@@ -494,6 +494,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
         }
+
+
+        window.addEventListener("hashchange", (e) => {
+            console.log(e.oldURL);
+            console.log(e.newURL);
+        }, false);
 
     } catch (e) {
         console.log(e);
