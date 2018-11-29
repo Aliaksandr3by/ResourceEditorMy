@@ -7,8 +7,8 @@
     align-content: center;
     align-items: center;
     /*height: 100%;*/
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     background: #eeeeee;
     min-width: 500px;
 }
@@ -23,9 +23,9 @@ body {
     height: 100%;
     min-height: 900px;
     background: #fafafa;
-    -webkit-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 96px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0 0 96px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 0 96px 0 rgba(0,0,0,0.75);
+    box-shadow: 0 0 96px 0 rgba(0,0,0,0.75);
 }
 
 ::selection {
@@ -75,7 +75,7 @@ textarea {
     max-height: 250px;
     max-width: 250px;
     border: none;
-    padding: 0px;
+    padding: 0;
     background-color: transparent;
     font-family: inherit;
     font-size: 1.1rem;
@@ -86,7 +86,7 @@ input {
     font-size: 1.1rem;
 }
 
-    input.inputSearch {
+    .inputSearch {
         text-align: center;
         border: none;
         background-color: transparent;
@@ -94,7 +94,7 @@ input {
         height: 3rem;
     }
 
-    input.inputDataId {
+    .inputDataId {
         text-align: center;
         border: none;
         background-color: transparent;
@@ -127,7 +127,7 @@ button {
     button.btn-circle {
         width: 30px;
         height: 30px;
-        padding: 6px 0px;
+        padding: 6px 0;
         border-radius: 15px;
         text-align: center;
         line-height: 1.42857;
@@ -177,11 +177,11 @@ button {
             border: inherit;
         }
 
-    button.BtnSort {
+    .BtnSort {
         width: 100%;
     }
 
-    button.BtnClear {
+    .BtnClear {
         width: 100%;
     }
 
@@ -210,9 +210,7 @@ button {
 }
 
 
-select.custom-select {
-    width: auto;
-    display: inline;
+.custom-select {
     vertical-align: middle;
     align-items: center;
     height: 2.9rem;
@@ -223,9 +221,11 @@ select.custom-select {
     background-color: white;
     border: inherit;
     padding: 13px 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-option.custom-select-option {
+.custom-select-option {
     vertical-align: middle;
     align-items: center;
     align-content: center;

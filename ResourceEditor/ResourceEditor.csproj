@@ -207,7 +207,10 @@
     <Content Include="node_modules\popper.js\dist\umd\popper-utils.min.js" />
     <Content Include="node_modules\popper.js\dist\umd\popper.js" />
     <Content Include="node_modules\popper.js\dist\umd\popper.min.js" />
+    <Content Include="out\main.js" />
+    <Content Include="out\Utils.js" />
     <Content Include="public\bundle.js" />
+    <Content Include="src\Utils.js" />
     <Content Include="tsconfig.json" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.css" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -655,6 +658,8 @@
     <Content Include="node_modules\popper.js\index.js.flow" />
     <Content Include="node_modules\popper.js\package.json" />
     <Content Include="node_modules\popper.js\README.md" />
+    <Content Include="out\main.js.map" />
+    <Content Include="out\Utils.js.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\UpdateData.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
