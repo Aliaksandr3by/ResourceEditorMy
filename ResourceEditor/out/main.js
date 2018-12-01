@@ -11,45 +11,44 @@ if (!Element.prototype.closest)
             el = el.parentElement;
         }
     };
-function createInput$(className = "", readOnly = false, val = "", titleText = "missing data") {
-    return $("<input></input>", {
-        type: "text",
-        class: `${className}`,
-        name: `${className}`,
-        readonly: readOnly,
-        title: titleText,
-        value: val
-    });
-}
-function createTextarea$(className = "", readOnly = false, val = "", titleText = "missing data") {
-    return $("<textarea></textarea>", {
-        class: `${className}`,
-        readonly: readOnly,
-        title: titleText,
-        rows: 1,
-        text: val
-    });
-}
-function createButton$(className = "", purpose = "") {
-    return $(`<button></button>`, {
-        type: "button",
-        class: `${className}`,
-        text: `${purpose}`,
-        "data-action": purpose
-    });
-}
 function createRow$(data = {}, titleText = {}) {
+    const inputDataValue = window.document.createElement('textarea');
+    inputDataValue.className = 'inputDataValue';
+    inputDataValue.readOnly = false;
+    inputDataValue.value = data.Value;
+    inputDataValue.title = titleText.Value;
+    const inputDataComment = window.document.createElement('textarea');
+    inputDataComment.className = 'inputDataComment';
+    inputDataComment.readOnly = false;
+    inputDataComment.value = data.Comment;
+    inputDataComment.title = titleText.Comment;
+    const createTextarea = (className = "", purpose = "non", readOnly = false, value = "...", title = "...") => {
+        const textarea = window.document.createElement('textarea');
+        textarea.className = className;
+        textarea.readOnly = readOnly;
+        textarea.value = value;
+        textarea.title = title;
+        return textarea;
+    };
+    const createButton = (className = "", purpose = "") => {
+        const button = window.document.createElement('button');
+        button.className = className;
+        button.textContent = purpose;
+        button.type = 'button';
+        button.setAttribute("data-action", purpose);
+        return button;
+    };
+    const createInput = window.document.createElement('input');
+    createInput.className = `inputDataId ${titleText.Id ? "" : "error"}`;
+    createInput.readOnly = String(data.Id).length > 0;
+    createInput.value = data.Id;
+    createInput.title = titleText.Id;
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th></th>").children("th").last()
-        .append(createInput$(`inputDataId ${titleText.Id ? "" : "error"}`, String(data.Id).length > 0, data.Id, titleText.Id));
-    lastTr.append("<td></td>").children("td").last()
-        .append(createTextarea$(`inputDataValue`, false, data.Value, titleText.Value));
-    lastTr.append("<td></td>").children("td").last()
-        .append(createTextarea$(`inputDataComment`, false, data.Comment, titleText.Comment));
-    lastTr.append("<td></td>").children("td").last()
-        .append(createButton$("saveLineButton", data.Id === "" ? "Insert" : "Save"));
-    lastTr.append("<td></td>").children("td").last()
-        .append(createButton$("deleteLineButton", "Delete"));
+    lastTr.append("<th></th>").children("th").last().append(createInput);
+    lastTr.append("<td></td>").children("td").last().append(inputDataValue);
+    lastTr.append("<td></td>").children("td").last().append(inputDataComment);
+    lastTr.append("<td></td>").children("td").last().append(createButton("saveLineButton", data.Id === "" ? "Insert" : "Save"));
+    lastTr.append("<td></td>").children("td").last().append(createButton("deleteLineButton", "Delete"));
 }
 function createTable$(datum_tmp, titles_tmp) {
     let datum = datum_tmp;

@@ -86,19 +86,20 @@ input {
     font-size: 1.1rem;
 }
 
-    .inputSearch {
-        text-align: center;
-        border: none;
-        background-color: transparent;
-        font-size: 0.8rem;
-        height: 3rem;
-    }
+.inputSearch {
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 0.8rem;
+    height: 3rem;
+}
 
-    .inputDataId {
-        text-align: center;
-        border: none;
-        background-color: transparent;
-    }
+.inputDataId {
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    height: 2.5rem;
+}
 
 
 button {
@@ -112,78 +113,71 @@ button {
     border-radius: 12px;
 }
 
-    button:hover {
+input[type=file] {
+    cursor: pointer;
+    vertical-align:middle;
+}
+
+button:hover {
+    text-decoration: none;
+    color: white;
+    background-color: black;
+    border: 2px solid azure;
+    cursor: pointer;
+}
+
+button:disabled {
+    display: none;
+}
+
+button.btn-circle {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 1.7rem;
+    line-height: 1.42857;
+}
+
+    button.btn-circle:hover {
+        color: red;
+        width: 100%;
+        height: 70px;
+    }
+
+button.deleteLineButton {
+    width: 100%;
+    border: 2px solid #f44336;
+}
+
+    button.deleteLineButton:hover {
+        text-decoration: none;
+        color: white;
+        background-color: #852222;
+        border: inherit;
+        padding: 13px 25px;
+    }
+
+button.saveLineButton {
+    width: 100%;
+    border: 2px solid #008CBA;
+}
+
+    button.saveLineButton:hover {
         text-decoration: none;
         color: white;
         background-color: black;
-        border: 2px solid azure;
-        cursor: pointer;
+        border: inherit;
     }
 
-    button:disabled {
-        display: none;
-    }
+.BtnSort {
+    width: 100%;
+}
 
-    button.btn-circle {
-        width: 30px;
-        height: 30px;
-        padding: 6px 0;
-        border-radius: 15px;
-        text-align: center;
-        line-height: 1.42857;
-    }
-
-        button.btn-circle:hover {
-            color: red;
-        }
-
-        button.btn-circle.btn-xl {
-            width: 70px;
-            height: 70px;
-            padding: 10px 16px;
-            border-radius: 35px;
-            font-size: 1.7rem;
-            line-height: 1.33;
-            background-color: #ffcb00;
-        }
-
-            button.btn-circle.btn-xl:hover {
-                width: 150px;
-                height: 70px;
-            }
-
-    button.deleteLineButton {
-        width: 100%;
-        border: 2px solid #f44336;
-    }
-
-        button.deleteLineButton:hover {
-            text-decoration: none;
-            color: white;
-            background-color: #852222;
-            border: inherit;
-            padding: 13px 25px;
-        }
-
-    button.saveLineButton {
-        width: 100%;
-        border: 2px solid #008CBA;
-    }
-
-        button.saveLineButton:hover {
-            text-decoration: none;
-            color: white;
-            background-color: black;
-            border: inherit;
-        }
-
-    .BtnSort {
-        width: 100%;
-    }
-
-    .BtnClear {
-        width: 100%;
-    }
+.BtnClear {
+    width: 100%;
+}
 
 
 .buttonAdd {
@@ -192,6 +186,7 @@ button {
 
 .fileContainer {
     display: flex;
+    align-items: center;
 }
 
 .fileContainer-0 {
@@ -200,7 +195,7 @@ button {
 }
 
 .fileContainer-1 {
-    flex: 6;
+    flex: 2;
     order: 1;
 }
 
@@ -209,13 +204,9 @@ button {
     order: 2;
 }
 
-
 .custom-select {
-    vertical-align: middle;
-    align-items: center;
     height: 2.9rem;
     border-radius: 15px;
-    text-align: center;
     font-size: 1.0rem;
     text-decoration: none;
     background-color: white;

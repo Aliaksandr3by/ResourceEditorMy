@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col">
         <div class="fileContainer">
-            <input class="fileContainer-1" id="FileResource" type="file" multiple accept=".resx" />
+            <input class="fileContainer-1 custom-select" id="FileResource" type="file" multiple accept=".resx" />
             <button class="fileContainer-2" type="button" id="ResourceUploads">Upload</button>
         </div>
         <div class="fileUpload"></div>
@@ -57,7 +57,7 @@
             </table>
         </div>
         <div class="buttonAdd">
-            <button type="button" class="btn-circle btn-xl" id="addTableRow">+</button>
+            <button type="button" class="btn-circle" id="addTableRow">+</button>
         </div>
     </div>
 </div>
@@ -65,10 +65,5 @@
 
 @section scriptsFooter {
     <script type="module" src="~/node_modules/jquery/dist/jquery.js"></script>
-    <script type="module" src="~/node_modules/popper.js/dist/popper.js"></script>
-    @*<script src="~/node_modules/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>*@
     <script src="~/out/main.js" type="module"></script>
-
 }
