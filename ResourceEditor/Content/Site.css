@@ -28,6 +28,10 @@ body {
     box-shadow: 0 0 96px 0 rgba(0,0,0,0.75);
 }
 
+details {
+    display: inline;
+}
+
 .hide{
     display:none;
 }

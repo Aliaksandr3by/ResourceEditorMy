@@ -1,3 +1,15 @@
+@media screen and (max-width: 500px) {
+    li {
+        float: none;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    li {
+        float: left;
+    }
+}
+
 .navigate {
     transform: translate3d(1rem, 1rem, 1rem);
     box-shadow: -1rem -0.2rem 0.4em olive, 1rem 0.2rem red;
@@ -11,9 +23,7 @@ ul {
     background-color: #333;
 }
 
-li {
-    float: left;
-}
+
 
     li a:nth-child(even) {
         background-color: #e2e2e2;
@@ -42,7 +52,7 @@ li.dropdown {
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 

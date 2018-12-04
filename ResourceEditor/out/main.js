@@ -419,15 +419,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         window.document.querySelector('.dropdown-content').addEventListener("click", (e) => {
             const that = e.target;
-            if (that.getAttribute('data-action') === 'fileUpload') {
-                const colFileContainer = window.document.getElementById('colFileContainer');
-                colFileContainer.classList.toggle('hide');
+            const DataAction = that.getAttribute('data-action');
+            if (DataAction) {
+                switch (DataAction) {
+                    case 'fileUpload':
+                        const colFileContainer = window.document.getElementById('colFileContainer');
+                        if (colFileContainer) {
+                            colFileContainer.classList.toggle('hide');
+                            that.classList.toggle('change');
+                        }
+                        break;
+                    case 'languageChange':
+                        const colLanguageChange = window.document.getElementById('colLanguageChange');
+                        if (colLanguageChange) {
+                            colLanguageChange.classList.toggle('hide');
+                            that.classList.toggle('change');
+                        }
+                        break;
+                }
             }
-            if (that.getAttribute('data-action') === 'languageChange') {
-                const colLanguageChange = window.document.getElementById('colLanguageChange');
-                colLanguageChange.classList.toggle('hide');
-            }
-            that.classList.toggle('change');
         }, false);
         window.addEventListener("hashchange", (e) => {
             console.log(e.oldURL);
