@@ -28,6 +28,29 @@ body {
     box-shadow: 0 0 96px 0 rgba(0,0,0,0.75);
 }
 
+.hide{
+    display:none;
+}
+.change{
+    background-color: orangered !important;
+}
+
+a:not([href]) {
+    cursor: pointer;
+}
+
+a {
+    color: black;
+}
+
+    a:active {
+        color: yellow;
+    }
+
+    a:visited {
+        color: gray;
+    }
+
 ::selection {
     color: azure; /* Цвет текста */
     background-color: red; /* Цвет фона */
@@ -115,7 +138,7 @@ button {
 
 input[type=file] {
     cursor: pointer;
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
 button:hover {

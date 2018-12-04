@@ -1,3 +1,8 @@
+.navigate {
+    transform: translate3d(1rem, 1rem, 1rem);
+    box-shadow: -1rem -0.2rem 0.4em olive, 1rem 0.2rem red;
+}
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -9,6 +14,10 @@ ul {
 li {
     float: left;
 }
+
+    li a:nth-child(even) {
+        background-color: #e2e2e2;
+    }
 
 li a,
 .dropbtn {

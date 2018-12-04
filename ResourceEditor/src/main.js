@@ -493,6 +493,19 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        window.document.querySelector('.dropdown-content').addEventListener("click", (e) => {
+            const that = e.target;
+            if (that.getAttribute('data-action') === 'fileUpload') {
+                const colFileContainer = window.document.getElementById('colFileContainer');
+                colFileContainer.classList.toggle('hide');
+            }
+            if (that.getAttribute('data-action') === 'languageChange') {
+                const colLanguageChange = window.document.getElementById('colLanguageChange');
+                colLanguageChange.classList.toggle('hide');
+            }
+            that.classList.toggle('change');
+
+        }, false);
 
         window.addEventListener("hashchange", (e) => {
             console.log(e.oldURL);

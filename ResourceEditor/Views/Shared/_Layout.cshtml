@@ -29,17 +29,17 @@
         <header class="row">
             <div class="col-sm">
 
-                <nav>
+                <nav class="navigate">
                     <ul>
                         <li class="nav-item">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Main", "Read", "Home", null, new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
                         <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropbtn">Dropdown</a>
+                            <a href="javascript:void(0)" class="dropbtn">Options</a>
                             <div class="dropdown-content">
-                                <a href="#">Link 1</a>
-                                <a href="#">Link 2</a>
-                                <a href="#">Link 3</a>
+                                <a data-action="fileUpload" id="colFileContainerTogle">ResX file upload</a>
+                                <a data-action="languageChange">Language change</a>
+                                <a data-action="">Link 3</a>
                             </div>
                         </li>
                         <li>@Html.Partial("GetUserIP")</li>

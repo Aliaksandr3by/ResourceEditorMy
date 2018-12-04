@@ -11,7 +11,7 @@
 <h1>@ViewData["BrowserType"]</h1>
 
 <div class="row">
-    <div class="col">
+    <div id="colFileContainer">
         <div class="fileContainer">
             <input class="fileContainer-1 custom-select" id="FileResource" type="file" multiple accept=".resx" />
             <button class="fileContainer-2" type="button" id="ResourceUploads">Upload</button>
@@ -21,7 +21,7 @@
 </div>
 <br />
 <div class="row">
-    <div class="col">
+    <div id="colLanguageChange">
         <div class="fileContainer" id="CountrySelect">
             <button class="fileContainer-2" type="button" id="countrySelectRefresh">Refresh</button>
             <button class="fileContainer-2" type="button" id="ResourceSave">Download</button>
