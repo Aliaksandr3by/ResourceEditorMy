@@ -1,0 +1,19 @@
+﻿@using ResourceEditor.Entities;
+@model List<ResourceEditor.Entities.LangName>
+
+<nav id="navigate" class="navigate">
+    <ul class="nav">
+        <li class="nav-item">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item">@Html.ActionLink("Main", "Read", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item dropdown">
+            <a class="dropbtn">Options</a>
+            <div class="dropdown-content">
+                <a data-action="fileUpload" id="colFileContainerTogle">ResX file upload</a>
+                <a data-action="languageChange">Language change</a>
+                <a data-action="">Link 3</a>
+            </div>
+        </li>
+        <li class="nav-item item-01"><a data-action="getIP">@Html.Partial("GetUserIP")</a></li>
+    </ul>
+</nav>

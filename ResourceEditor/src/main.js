@@ -14,48 +14,43 @@ if (!Element.prototype.closest) Element.prototype.closest = function (selector) 
 
 function createRow$(data = {}, titleText = {}) {
 
-    const inputDataValue = window.document.createElement('textarea');
-    inputDataValue.className = 'inputDataValue';
-    inputDataValue.readOnly = false;
-    inputDataValue.value = data.Value;
-    inputDataValue.title = titleText.Value;
+    const inputDataKey = (className = "", value = "...", title = "...", purpose = "non") => {
+        const createInput = window.document.createElement('input');
+        createInput.className = className;
+        createInput.value = value.Id;
+        createInput.title = title.Id;
+        createInput.readOnly = Boolean(String(value.Id).length > 0);
+        createInput.setAttribute("data-purpose", purpose);
+        return createInput;
+    };
 
-    const inputDataComment = window.document.createElement('textarea');
-    inputDataComment.className = 'inputDataComment';
-    inputDataComment.readOnly = false;
-    inputDataComment.value = data.Comment;
-    inputDataComment.title = titleText.Comment;
-
-    const createTextarea = (className = "", purpose = "non", readOnly = false, value = "...", title = "...") => {
-        const textarea = window.document.createElement('textarea');
-        textarea.className = className;
-        textarea.readOnly = readOnly;
-        textarea.value = value;
-        textarea.title = title;
-        return textarea;
+    const dataTextArea = (className = "", value = "...", title = "...", purpose = "non", readOnly = false) => {
+        const input = window.document.createElement('textarea');
+        input.className = className;
+        input.readOnly = readOnly;
+        input.value = value.Comment;
+        input.title = title.Comment;
+        input.setAttribute("data-purpose", purpose);
+        return input;
     };
 
     const createButton = (className = "", purpose = "") => {
-        const button = window.document.createElement('button');
-        button.className = className;
-        button.textContent = purpose;
-        button.type = 'button';
-        button.setAttribute("data-action", purpose);
-        return button;
+        const createButton = window.document.createElement('button');
+        createButton.className = className;
+        createButton.textContent = purpose;
+        createButton.type = 'button';
+        createButton.setAttribute("data-action", purpose);
+        return createButton;
     };
 
-    const createInput = window.document.createElement('input');
-    createInput.className = `inputDataId ${titleText.Id ? "" : "error"}`;
-    createInput.readOnly = String(data.Id).length > 0;
-    createInput.value = data.Id;
-    createInput.title = titleText.Id;
+    const rowTable = window.document.createElement("tr");
 
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th></th>").children("th").last().append(createInput);
-    lastTr.append("<td></td>").children("td").last().append(inputDataValue);
-    lastTr.append("<td></td>").children("td").last().append(inputDataComment);
-    lastTr.append("<td></td>").children("td").last().append(createButton("saveLineButton", data.Id === "" ? "Insert" : "Save"));
-    lastTr.append("<td></td>").children("td").last().append(createButton("deleteLineButton", "Delete"));
+    lastTr.append("<th aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "key"));
+    lastTr.append("<td aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data, titleText));
+    lastTr.append("<td aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data, titleText));
+    lastTr.append("<td data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
+    lastTr.append("<td data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
 }
 
 function createTable$(datum_tmp, titles_tmp) {
@@ -87,7 +82,7 @@ function createTable$(datum_tmp, titles_tmp) {
 
 const countryResolver = (data = [{}]) => {
     const countrySelecter = document.createElement('select');
-    countrySelecter.className = `fileContainer-0 custom-select`;
+    countrySelecter.className = `flex-container-element element-01`;
     countrySelecter.id = `countrySelect`;
 
     let opt = document.createElement("option");
@@ -97,7 +92,7 @@ const countryResolver = (data = [{}]) => {
     let i = 0;
     for (let item of data) {
         let opt = document.createElement("option");
-        opt.className = `custom-select-option`;
+        opt.className = ``;
         opt.value = item.Id;
         opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
         countrySelecter.add(opt, null);

@@ -24,37 +24,15 @@
 
 </head>
 <body>
-    <div class="container">
-        <br />
-        <header class="row">
-            <div>
-                <nav id="navigate" class="navigate">
-                    <ul class="nav">
-                        <li class="nav-item">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Main", "Read", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item dropdown">
-                            <a class="dropbtn">Options</a>
-                            <div class="dropdown-content">
-                                <a data-action="fileUpload" id="colFileContainerTogle">ResX file upload</a>
-                                <a data-action="languageChange">Language change</a>
-                                <a data-action="">Link 3</a>
-                            </div>
-                        </li>
-                        <li class="nav-item item-01"><a data-action="getIP">@Html.Partial("GetUserIP")</a></li>
-                    </ul>
-                </nav>
-            </div>
+    <div class="container-grid">
+        <header class="container-grid-item grid-item-header" role="navigation">
+            @Html.Partial("NavigateBar")
         </header>
-        <br />
-        <main>
+        <main class="container-grid-item grid-item-main" role="main">
             @RenderBody()
         </main>
-        <br />
-        <footer class="row">
-            <div>
-
-            </div>
+        <footer class="container-grid-item grid-item-footer" role="status">
+            @DateTime.Now
         </footer>
     </div>
 

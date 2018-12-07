@@ -10,55 +10,49 @@
 
 <h1>@ViewData["BrowserType"]</h1>
 
-<div class="row">
-    <div id="colFileContainer">
-        <div class="fileContainer">
-            <input class="fileContainer-1 custom-select" id="FileResource" type="file" multiple accept=".resx" />
-            <button class="fileContainer-2" type="button" id="ResourceUploads">Upload</button>
-        </div>
-        <div class="fileUpload"></div>
+<div id="colFileContainer">
+    <div class="flex-container">
+        <input class="flex-container-element element-01" id="FileResource" type="file" multiple accept=".resx" />
+        <button class="flex-container-element element-02" type="button" id="ResourceUploads">Upload</button>
+    </div>
+    <div class="fileUpload"></div>
+</div>
+
+<div id="colLanguageChange">
+    <div class="flex-container" id="CountrySelect">
+        <button class="flex-container-element element-02" type="button" id="countrySelectRefresh">Refresh</button>
+        <button class="flex-container-element element-03" type="button" id="ResourceSave">Download</button>
     </div>
 </div>
-<br />
-<div class="row">
-    <div id="colLanguageChange">
-        <div class="fileContainer" id="CountrySelect">
-            <button class="fileContainer-2" type="button" id="countrySelectRefresh">Refresh</button>
-            <button class="fileContainer-2" type="button" id="ResourceSave">Download</button>
-        </div>
+
+<div class="col">
+    <div id="rootMainTable">
+        <table id="mainTable">
+            <colgroup class=""></colgroup>
+            <caption>
+                <p>ResX data</p>
+            </caption>
+            <thead>
+                <tr id="mainDataHeadTable">
+                    <th scope="col"><button class="btn BtnSort" value="Id" id="BtnSortId" type="button">Id</button></th>
+                    <th scope="col"><button class="btn BtnSort" value="Value" id="BtnSortValue" type="button">Value</button></th>
+                    <th scope="col"><button class="btn BtnSort" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                <tr id="mainDataHeadFilterTable">
+                    <th scope="col"><input type="search" class="btn inputSearch" name="Id" placeholder="Filter by Id" /></th>
+                    <th scope="col"><input type="search" class="btn inputSearch" name="Value" placeholder="Filter by Value" /></th>
+                    <th scope="col"><input type="search" class="btn inputSearch" name="Comment" placeholder="Filter by Comment" /></th>
+                    <th scope="col" colspan="2"><button  class="btn BtnClear" id="BtnClear" type="button">Clear</button></th>
+                </tr>
+            </thead>
+            <tfoot></tfoot>
+            <tbody id="mainDataBodyTable"></tbody>
+        </table>
     </div>
-</div>
-<br />
-<div class="row">
-    <div class="col">
-        <div id="rootMainTable">
-            <table id="mainTable">
-                <colgroup class=""></colgroup>
-                <caption>
-                    <p>ResX data</p>
-                </caption>
-                <thead>
-                    <tr id="mainDataHeadTable">
-                        <th scope="col"><button class="BtnSort" value="Id" id="BtnSortId" type="button">Id</button></th>
-                        <th scope="col"><button class="BtnSort" value="Value" id="BtnSortValue" type="button">Value</button></th>
-                        <th scope="col"><button class="BtnSort" value="Comment" id="BtnSortComment" type="button">Comment</button></th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                    <tr id="mainDataHeadFilterTable">
-                        <th scope="col"><input type="search" class="inputSearch" name="Id" placeholder="Filter by Id" /></th>
-                        <th scope="col"><input type="search" class="inputSearch" name="Value" placeholder="Filter by Value" /></th>
-                        <th scope="col"><input type="search" class="inputSearch" name="Comment" placeholder="Filter by Comment" /></th>
-                        <th scope="col" colspan="2"><button class="BtnClear" id="BtnClear" type="button">Clear</button></th>
-                    </tr>
-                </thead>
-                <tfoot></tfoot>
-                <tbody id="mainDataBodyTable"></tbody>
-            </table>
-        </div>
-        <div class="buttonAdd">
-            <button type="button" class="btn-circle" id="addTableRow">+</button>
-        </div>
+    <div class="buttonAdd">
+        <button type="button" class="btn btn-circle" id="addTableRow">+</button>
     </div>
 </div>
 
