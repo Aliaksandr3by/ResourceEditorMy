@@ -17,7 +17,7 @@ body {
 
 .container-grid {
     display: grid;
-    grid-template-columns: minmax(270px, 900px);
+    grid-template-columns: minmax(320px, 900px);
     grid-template-rows: minmax(100px, auto) auto 100px;
     grid-template-areas: "header" "main" "footer";
     /*<grid-row-gap> <grid-column-gap>;*/
@@ -114,35 +114,92 @@ a:visited {
     }
     table tr {
         border: 3px solid rgb(16, 160, 48);
-        margin: 20px 10px;
+        margin: 7px 0px;
         display: flex;
-        flex-direction: row; 
-        flex-wrap: wrap;
-        flex-grow: 20px;
-        justify-content: start;
+        /*<‘flex-direction’> || <‘flex-wrap’> */
+        flex-flow: row wrap;
+        justify-content: space-around;
         align-items: stretch;
         align-content: stretch;
     }
-    table td {
-        border: 1px solid rgb(230, 41, 41);
+    table th[scope] {
+        color: #ffffff;
+        background-color: rgb(54, 70, 75);
+    }
+    table td[aria-label]{
+        background-color: rgb(60, 77, 107);
+    }
+    table .tabl-row {
+        margin: 3px 1px;
+        /*flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]*/
+        flex: 1 0 auto;
     }
     table th:before {
         content: attr(aria-label);
+        display: block;
     }
     table td:before {
         content: attr(aria-label);
     }
 }
 
+@media screen and (max-width: 540px) {
+    .el-01 {
+        background: rgb(186, 198, 202);
+        flex: 1 0 100px;
+
+    }
+    .el-02 {
+        background-color: rgb(186, 198, 202);
+        flex: 1 0 200px;
+    }
+    .el-03 {
+        background-color: rgb(186, 198, 202);
+        flex: 1 0 200px;
+
+    }
+    .el-04 {
+        align-self: center;
+        flex: 1 2 auto;
+    }
+    .el-05 {
+        align-self: flex-end;
+        flex: 1 2 auto;
+    }
+}
+
+
+.flex-container {
+    margin: 15px 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.flex-container-element {
+    flex: 1 0 auto;
+}
+
+.element-01 {
+    flex: 1 0 auto;
+    order: 0;
+}
+
+.element-02 {
+    flex: 1 0 auto;
+    order: 1;
+}
+
+.element-03 {
+    flex: 1 0 auto;
+    order: 2;
+}
+
 textarea {
     width: 100%;
-    /* min-height: 55px; */
-    /* min-width: 100px; */
-    /* max-width: 400px; */
-    /* max-height: 600px; */
     border: none;
-    padding: 0;
-    margin: 0;
     background-color: transparent;
     font-family: inherit;
     font-size: 1.1rem;
@@ -165,10 +222,10 @@ input.inputSearch {
 }
 
 input.inputDataId {
-    text-align: center;
+    /* text-align: center; */
     border: none;
     background-color: transparent;
-    height: 2.5rem;
+    /* height: 2.5rem; */
 }
 
 .btn {
@@ -247,25 +304,4 @@ input.inputDataId {
 
 .buttonAdd {
     text-align: center;
-}
-
-.flex-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.flex-container-element {
-    flex-grow: 1;
-}
-
-.element-01 {
-    order: 0;
-}
-
-.element-02 {
-    order: 1;
-}
-
-.element-03 {
-    order: 2;
 }

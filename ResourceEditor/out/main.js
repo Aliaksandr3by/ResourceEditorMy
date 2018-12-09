@@ -1,16 +1,4 @@
 import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend } from "./Utils.js";
-if (!Element.prototype.matches)
-    Element.prototype.matches = Element.prototype.msMatchesSelector;
-if (!Element.prototype.closest)
-    Element.prototype.closest = function (selector) {
-        let el = this;
-        while (el) {
-            if (el.matches(selector)) {
-                return el;
-            }
-            el = el.parentElement;
-        }
-    };
 function createRow$(data = {}, titleText = {}) {
     const inputDataKey = (className = "", value = "...", title = "...", purpose = "non") => {
         const createInput = window.document.createElement('input');
@@ -25,8 +13,8 @@ function createRow$(data = {}, titleText = {}) {
         const input = window.document.createElement('textarea');
         input.className = className;
         input.readOnly = readOnly;
-        input.value = value.Comment;
-        input.title = title.Comment;
+        input.value = value;
+        input.title = title;
         input.setAttribute("data-purpose", purpose);
         return input;
     };
@@ -40,11 +28,11 @@ function createRow$(data = {}, titleText = {}) {
     };
     const rowTable = window.document.createElement("tr");
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "key"));
-    lastTr.append("<td aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data, titleText));
-    lastTr.append("<td aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data, titleText));
-    lastTr.append("<td data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
-    lastTr.append("<td data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
+    lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "key"));
+    lastTr.append("<td class='tabl-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value));
+    lastTr.append("<td class='tabl-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment));
+    lastTr.append("<td class='tabl-row el-04' data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
+    lastTr.append("<td class='tabl-row el-05' data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
 }
 function createTable$(datum_tmp, titles_tmp) {
     let datum = datum_tmp;
@@ -71,7 +59,7 @@ function createTable$(datum_tmp, titles_tmp) {
         console.error("unknown error ");
     }
 }
-const countryResolver = (data = [{}]) => {
+const countryResolver = (data) => {
     const countrySelecter = document.createElement('select');
     countrySelecter.className = `flex-container-element element-01`;
     countrySelecter.id = `countrySelect`;
@@ -85,38 +73,32 @@ const countryResolver = (data = [{}]) => {
         opt.className = ``;
         opt.value = item.Id;
         opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
+        opt.selected = item.Id === window.localStorage.getItem("countrySelect");
         countrySelecter.add(opt, null);
     }
     return countrySelecter;
 };
-function GetCountrySet(lang = "en") {
-    $.ajax({
-        type: "POST",
-        url: urlControlSelectCountry,
-        data: {},
-        success: (data, textStatus) => {
-            if (data !== "") {
-                $("#countrySelect").remove();
-                $("#CountrySelect").prepend($(countryResolver(data)));
-                $("#countrySelect").val(lang).trigger("change");
+function GetCountrySet(langSet) {
+    AjaxPOSTAsync(urlControlSelectCountry, null).then((data) => {
+        if (data !== "") {
+            const CountrySelect = window.document.getElementById("CountrySelect");
+            let countrySelect = window.document.getElementById("countrySelect");
+            if (countrySelect) {
+                CountrySelect.replaceChild(countryResolver(data), countrySelect);
             }
             else {
-                console.log("error");
+                countrySelect = CountrySelect.insertBefore(countryResolver(data), CountrySelect[0]);
             }
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.log(xhr);
-            console.log(ajaxOptions);
-            console.log(thrownError);
+            let lang = langSet || countrySelect.value || window.localStorage.getItem("countrySelect");
+            CountrySelectUpdateSet(lang);
         }
+        else {
+            console.log("error");
+        }
+    }).catch((error) => {
+        console.error(error);
     });
 }
-$("#countrySelectRefresh").on("click", null, null, e => {
-    let that = $(e.target);
-    let lsLang = localStorage.getItem("countrySelect") || "en";
-    GetCountrySet(lsLang);
-    CountrySelectUpdate(lsLang, urlControlSwitchLanguage);
-});
 $("#ResourceUploads").on("click", null, (e) => {
     let that = $(e.target);
     let uploadFile = $("#FileResource").prop("files");
@@ -285,18 +267,22 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
         });
     }
 });
-function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
+function CountrySelectUpdate(lang, url, sort, filter, take, page) {
     const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
     const dataLG = {
         "language": that,
         "sort": sort,
-        "filter": filter
+        "filter": filter,
+        "take": take,
+        "page": page
     };
     const dataEN = {
         "language": "en",
         "sort": sort,
-        "filter": filter
+        "filter": filter,
+        "take": take,
+        "page": page
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
         if (data["error"]) {
@@ -320,52 +306,60 @@ function CountrySelectUpdate(lang, url, sort = "Id", filter = "") {
         console.error(error);
     });
 }
+function CountrySelectUpdateSet(lang) {
+    let sort = window.document.getElementById("select-sort-table").value;
+    let filter = JSON.stringify(findTextAll(".inputSearch"));
+    let take = window.document.getElementById("take").value;
+    let page = window.document.getElementById("page").value;
+    CountrySelectUpdate(lang, urlControlSwitchLanguage, sort, filter, take, page);
+}
 document.addEventListener('DOMContentLoaded', function () {
     try {
-        $("#countrySelectRefresh").trigger("click");
         const mainDataBodyTable = document.getElementById("mainDataBodyTable");
+        GetCountrySet();
+        window.document.getElementById("countrySelectRefresh").addEventListener('click', (event) => {
+            GetCountrySet();
+        });
+        window.document.getElementById("page").addEventListener('change', (event) => {
+            GetCountrySet();
+        });
+        window.document.getElementById("take").addEventListener('change', (event) => {
+            GetCountrySet();
+        });
         window.addEventListener('popstate', (event) => {
             console.log(event.state);
             localStorage.setItem("countrySelect", String(event.state));
             $("#countrySelect").val(event.state).trigger("change");
-            CountrySelectUpdate(event.state, urlControlSwitchLanguage);
+            CountrySelectUpdateSet(event.state);
         });
         const CountrySelect = document.getElementById("CountrySelect");
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
             CountrySelect.addEventListener("change", (event) => {
-                EmptyElement(mainDataBodyTable);
-                CountrySelectUpdate(event.target.value, urlControlSwitchLanguage);
-                history.pushState(event.target.value, event.target.value, urlControlRead);
+                if (event.target.nodeName === "SELECT") {
+                    EmptyElement(mainDataBodyTable);
+                    let lang = event.target.value || window.localStorage.getItem("countrySelect");
+                    CountrySelectUpdateSet(lang);
+                    history.pushState(event.target.value, event.target.value, urlControlRead);
+                }
             });
         }
-        const BtnSort = document.querySelectorAll(".BtnSort");
-        if (BtnSort !== null && typeof BtnSort !== "undefined" && BtnSort.length > 0) {
-            const mainDataHeadTable = document.getElementById("mainDataHeadTable");
-            if (mainDataHeadTable) {
-                mainDataHeadTable.addEventListener("click", (event) => {
-                    const sort = event.target;
-                    if (sort.tagName === 'BUTTON') {
-                        const lang = document.getElementById("countrySelect");
-                        EmptyElement(mainDataBodyTable);
-                        CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort.value);
-                    }
-                });
-            }
+        const SelectSort = window.document.getElementById("select-sort-table");
+        if (SelectSort !== null && typeof SelectSort !== "undefined") {
+            SelectSort.addEventListener("change", (event) => {
+                if (SelectSort.tagName === 'SELECT') {
+                    const lang = document.getElementById("countrySelect").value;
+                    EmptyElement(mainDataBodyTable);
+                    CountrySelectUpdateSet(lang);
+                }
+            });
         }
         const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
         if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
             mainDataHeadFilterTable.addEventListener("keyup", (event) => {
                 if (event.target.tagName === 'INPUT') {
-                    const lang = document.getElementById("countrySelect");
-                    const sort = event.target.name;
-                    const findText = event.target.value;
-                    const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(".inputSearch");
-                    const findTextAll = {};
-                    inputSearchAll.forEach((element) => {
-                        findTextAll[element.name] = element.value;
-                    });
+                    const lang = document.getElementById("countrySelect").value;
                     EmptyElement(mainDataBodyTable);
-                    CountrySelectUpdate(lang.value, urlControlSwitchLanguage, sort, JSON.stringify(findTextAll));
+                    CountrySelectUpdateSet(lang);
                 }
             });
         }
@@ -373,12 +367,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (BtnClear !== null && typeof BtnClear !== "undefined") {
             BtnClear.addEventListener("click", (event) => {
                 const inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
-                const lang = document.getElementById("countrySelect");
+                const lang = document.getElementById("countrySelect").value;
                 EmptyElement(document.getElementById("mainDataBodyTable"));
                 inputSearchAll.forEach((element) => {
                     element.value = "";
                 });
-                CountrySelectUpdate(lang.value, urlControlSwitchLanguage);
+                CountrySelectUpdateSet(lang);
             });
         }
         const addTableRow = document.getElementById("addTableRow");
@@ -432,6 +426,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             that.classList.toggle('change');
                         }
                         break;
+                    case 'colSortFilter':
+                        const colSortFilter = window.document.getElementById('colSortFilter');
+                        if (colSortFilter) {
+                            colSortFilter.classList.toggle('hide');
+                            that.classList.toggle('change');
+                        }
+                        break;
                 }
             }
         }, false);
@@ -448,5 +449,13 @@ function EmptyElement(element) {
     while (element.firstChild) {
         element.removeChild(element.firstChild);
     }
+}
+function findTextAll(el) {
+    const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(el);
+    const findTextAll = {};
+    inputSearchAll.forEach((element) => {
+        findTextAll[element.name] = element.value;
+    });
+    return findTextAll;
 }
 //# sourceMappingURL=main.js.map

@@ -78,7 +78,7 @@ namespace ResourceEditor.Controllers
 
             var pathSave = ResourceHelper.GetPath(language);
 
-            var langName = ResourceHelper.Read(pathSave);
+            var langName = ResourceHelper.ReadSortTake(pathSave);
 
             return this.View("Read", langName);
         }
@@ -308,13 +308,13 @@ namespace ResourceEditor.Controllers
         [HttpPost]
         [AllowCrossSiteJson]
         [ContentType]
-        public JsonResult SwitchLanguage(string language, string sort, string filter)
+        public JsonResult SwitchLanguage(string language, string sort, string filter, int take, int page)
         {
             var pathSave = ResourceHelper.GetPath(language);
 
             var result = (pathSave == null)
                 ? this.Json(new { error = "File was not found" })
-                : this.Json(ResourceHelper.Read(pathSave, sort, filter));
+                : this.Json(ResourceHelper.ReadSortTake(pathSave, sort, filter, take, page));
 
             return result;
         }

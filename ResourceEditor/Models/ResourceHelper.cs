@@ -14,11 +14,13 @@ namespace ResourceEditor.Models
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Resources;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Web.Hosting;
     using System.Web.Script.Serialization;
 
@@ -160,13 +162,13 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="pathLoad">Full path by explore file</param>
         /// <returns>Edited data</returns>
-        public static List<LangName> Read(string pathLoad, string sort = "", string filter = "")
+        private static List<LangName> Read(string pathLoad)
         {
             if (!File.Exists(pathLoad))
             {
                 return null;
             }
-            var _filter = JsonConvert.DeserializeObject<LangName>(filter);
+            
             var outLangNames = new List<LangName>();
 
             using (var rr = new ResXResourceReader(pathLoad))
@@ -183,30 +185,54 @@ namespace ResourceEditor.Models
                         Value = node.GetValue(assemblies).ToString(),
                         Comment = !string.IsNullOrEmpty(node.Comment) ? node.Comment : string.Empty
                     };
-                    if (_filter != null)
+                    outLangNames.Add(tmp);
+                }
+            }
+            return outLangNames;
+        }
+
+        public static List<LangName> ReadSortTake(string pathLoad, string sort = "", string filter = "", int takeGet = 5, int pageGet = 1)
+        {
+            int take = takeGet;
+            int page = pageGet;
+
+
+
+            var _filter = JsonConvert.DeserializeObject<LangName>(filter);
+
+            var collection = Read(pathLoad);
+            var outLangNames = new List<LangName>();
+
+            if (_filter != null)
+            {
+                foreach (var item in collection)
+                {
+                    if (item.Id.Contains(_filter.Id) && item.Value.Contains(_filter.Value) && item.Comment.Contains(_filter.Comment))
                     {
-                        if (tmp.Id.Contains(_filter.Id) && tmp.Value.Contains(_filter.Value) && tmp.Comment.Contains(_filter.Comment))
-                        {
-                            outLangNames.Add(tmp);
-                        }
-                    }
-                    else
-                    {
-                        outLangNames.Add(tmp);
+                        outLangNames.Add(item);
                     }
                 }
             }
+
+            List<LangName> result = null;
+
             switch (sort)
             {
                 case "Id":
-                    return outLangNames.OrderBy(e => e.Id).ToList();
+                    result = outLangNames.OrderBy(e => e.Id).Skip((page - 1) * take).Take(take).ToList();
+                    break;
                 case "Value":
-                    return outLangNames.OrderBy(e => e.Value).ToList();
+                    result = outLangNames.OrderBy(e => e.Value).Skip((page - 1) * take).Take(take).ToList();
+                    break;
                 case "Comment":
-                    return outLangNames.OrderBy(e => e.Comment).ToList();
+                    result = outLangNames.OrderBy(e => e.Comment).Skip((page - 1) * take).Take(take).ToList();
+                    break;
                 default:
-                    return outLangNames.OrderBy(e => e.Id).ToList();
+                    result = outLangNames.ToList();
+                    break;
             }
+
+            return result;
         }
 
         /// <summary>
