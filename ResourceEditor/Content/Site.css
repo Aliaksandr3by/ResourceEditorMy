@@ -113,8 +113,8 @@ a:visited {
         display: none;
     }
     table tr {
-        border: 3px solid rgb(16, 160, 48);
-        margin: 7px 0px;
+        color: #fff;
+        background-color: #546e7a;
         display: flex;
         /*<‘flex-direction’> || <‘flex-wrap’> */
         flex-flow: row wrap;
@@ -123,15 +123,17 @@ a:visited {
         align-content: stretch;
     }
     table th[scope] {
-        color: #ffffff;
-        background-color: rgb(54, 70, 75);
+        color: #fff;
+        background-color: #607985;
     }
-    table td[aria-label]{
-        background-color: rgb(60, 77, 107);
+    table td[aria-label] {
+        color: #fff;
+        background-color: #546e7a;
     }
     table .tabl-row {
-        margin: 3px 1px;
-        /*flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]*/
+        margin: .5rem 0 1rem 0;
+        transition: box-shadow .25s, -webkit-box-shadow .25s;
+        border-radius: 3px;
         flex: 1 0 auto;
     }
     table th:before {
@@ -147,7 +149,6 @@ a:visited {
     .el-01 {
         background: rgb(186, 198, 202);
         flex: 1 0 100px;
-
     }
     .el-02 {
         background-color: rgb(186, 198, 202);
@@ -156,7 +157,6 @@ a:visited {
     .el-03 {
         background-color: rgb(186, 198, 202);
         flex: 1 0 200px;
-
     }
     .el-04 {
         align-self: center;
@@ -167,7 +167,6 @@ a:visited {
         flex: 1 2 auto;
     }
 }
-
 
 .flex-container {
     margin: 15px 10px;
