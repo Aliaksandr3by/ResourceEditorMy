@@ -31,7 +31,9 @@ function createRow$(data = {}, titleText = {}) {
         return createButton;
     };
 
+    const tableBody = window.document.getElementById("mainTable");
     const rowTable = window.document.createElement("tr");
+    tableBody.appendChild(rowTable);
 
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
     lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "key"));
@@ -109,9 +111,7 @@ function GetCountrySet(langSet) {
     });
 }
 
-$("#ResourceUploads").on("click", null, (e) => {
-    let that = $(e.target);
-    let uploadFile = $("#FileResource").prop("files");
+$("#ResourceUploads").on("click", null, () => {
     const fileUpload = document.querySelector(".fileUpload");
 
     const resultUpload = (respond = "", alert = "") => {
@@ -122,7 +122,7 @@ $("#ResourceUploads").on("click", null, (e) => {
     };
 
     AjaxPOSTAsyncFileSend(urlControlUploadFile, "FileResource").then((respond) => {
-        if (!respond["error"] && respond["fileName"]) {
+        if (!respond.error && respond.fileName) {
             EmptyElement(fileUpload);
             fileUpload.appendChild(resultUpload(respond.fileName, "success"));
             GetCountrySet();
@@ -136,8 +136,7 @@ $("#ResourceUploads").on("click", null, (e) => {
     });
 });
 
-$("#ResourceSave").on("click", null, null, e => {
-    let that = $(e.target);
+$("#ResourceSave").on("click", null, null, () => {
     const lng = $("#countrySelect").val();
     $.ajax({
         type: "GET",
@@ -147,7 +146,7 @@ $("#ResourceSave").on("click", null, null, e => {
         },
         success: (data) => {
             if (data !== "") {
-                location.href = `${urlControlGetFile}?${encodeURIComponent('language')}=${encodeURIComponent(lng)}`;
+                window.location.href = `${urlControlGetFile}?${encodeURIComponent('language')}=${encodeURIComponent(lng)}`;
             } else {
                 console.log("Please select language");
             }
@@ -179,7 +178,7 @@ $("#rootMainTable").on("change", ".inputDataId", null, function (e) {
             }
         },
         success: (data) => {
-            if (data["status"]) {
+            if (data.status) {
                 that.removeClass("is-invalid");
                 $(value).removeAttr("placeholder");
                 that.closest("th").find("div.dataError").remove();
@@ -223,10 +222,10 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                 that.attr("disabled", true);
                 that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
                 that.parents("tr").find("th").find("input").prop("readonly", true);
-            } else if (data["error"]) {
+            } else if (data.error) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
-                if (data["status"]) {
+                if (data.status) {
                     $.each(data.error, (i, value) => {
 
                         let errDiv = $("<div></div>", {
@@ -238,7 +237,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                         that.closest("tr").find("th").append(errDiv);
                     });
                 } else {
-                    alert(data.status);
+                    window.alert(data.status);
                 }
 
             } else {
@@ -254,7 +253,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
 });
 
 $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
-    if (confirm("Delete?")) {
+    if (window.confirm("Delete?")) {
         const that = $(e.target);
         const [id, value, comment] = that.closest("tr").find("input, textarea");
         const tmp = {
@@ -303,7 +302,7 @@ function CountrySelectUpdate(lang, url, sort, filter, take, page) {
         "page": page
     };
     AjaxPOSTAsync(url, dataLG).then((data) => {
-        if (data["error"]) {
+        if (data.error) {
             EmptyElement(mainDataBodyTable);
             let divError = document.createElement("div");
             divError.textContent = data.error;
@@ -339,14 +338,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         GetCountrySet();
 
-        window.document.getElementById("countrySelectRefresh").addEventListener('click', (event) => {
+        window.document.getElementById("countrySelectRefresh").addEventListener('click', () => {
             GetCountrySet();
         });
 
-        window.document.getElementById("page").addEventListener('change', (event) => {
+        window.document.getElementById("page").addEventListener('change', () => {
             GetCountrySet();
         });
-        window.document.getElementById("take").addEventListener('change', (event) => {
+        window.document.getElementById("take").addEventListener('change', () => {
             GetCountrySet();
         });
 
@@ -355,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log(event.state);
 
-            localStorage.setItem("countrySelect", String(event.state));
+            window.localStorage.setItem("countrySelect", String(event.state));
 
             $("#countrySelect").val(event.state).trigger("change");
 
@@ -371,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let lang = event.target.value || window.localStorage.getItem("countrySelect");
                     CountrySelectUpdateSet(lang);
 
-                    history.pushState(event.target.value, event.target.value, urlControlRead);
+                    window.history.pushState(event.target.value, event.target.value, urlControlRead);
                 }
             });
         }
@@ -379,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const SelectSort = window.document.getElementById("select-sort-table");
         if (SelectSort !== null && typeof SelectSort !== "undefined") {
 
-            SelectSort.addEventListener("change", (event) => {
+            SelectSort.addEventListener("change", () => {
 
                 if (SelectSort.tagName === 'SELECT') {
 
@@ -411,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const BtnClear = document.getElementById("BtnClear");
         if (BtnClear !== null && typeof BtnClear !== "undefined") {
 
-            BtnClear.addEventListener("click", (event) => {
+            BtnClear.addEventListener("click", () => {
 
                 const inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
                 const lang = document.getElementById("countrySelect").value;
@@ -430,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const addTableRow = document.getElementById("addTableRow");
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
-            addTableRow.addEventListener("click", (event) => {
+            addTableRow.addEventListener("click", () => {
 
                 createTable$({ "Id": "", "Value": "", "Comment": "" }, { "Id": "", "Value": "", "Comment": "" });
 
@@ -448,9 +447,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const refreshLog = document.getElementById("refreshLog");
         const rootLog = document.getElementById("rootLog");
         if (refreshLog !== null && typeof refreshLog !== "undefined") {
-            refreshLog.addEventListener("click", (event) => {
-
-                const that = event.target;
+            refreshLog.addEventListener("click", () => {
 
                 AjaxPOSTAsync(urlControlLogFile, null).then((data) => {
 
@@ -461,10 +458,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     for (let items of data) {          //WWWWWFFFFFFFFFF
-                        for (let item in items) {
-                            rootLog.textContent += `${item}: ${items[item]};`;
+                        if (data.hasOwnProperty(items)) {
+                            for (let item in items) {
+                                if (items.hasOwnProperty(item)) {
+                                    rootLog.textContent += `${item}: ${items[item]};`;
+                                }
+                            }
+                            rootLog.appendChild(document.createElement('br'));
                         }
-                        rootLog.appendChild(document.createElement('br'));
                     }
 
                 }).catch((error) => {
@@ -474,33 +475,37 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        window.document.querySelector('.dropdown-content').addEventListener("click", (e) => {
+        window.document.querySelector('.dropdown').addEventListener("click", (e) => {
             const that = e.target;
             const DataAction = that.getAttribute('data-action');
             if (DataAction) {
-                switch (DataAction) {
-                    case 'fileUpload':
-                        const colFileContainer = window.document.getElementById('colFileContainer');
-                        if (colFileContainer) {
-                            colFileContainer.classList.toggle('hide');
-                            that.classList.toggle('change');
-                        }
-                        break;
-                    case 'languageChange':
-                        const colLanguageChange = window.document.getElementById('colLanguageChange');
-                        if (colLanguageChange) {
-                            colLanguageChange.classList.toggle('hide');
-                            that.classList.toggle('change');
-                        }
-                        break;
-                    case 'colSortFilter':
-                        const colSortFilter = window.document.getElementById('colSortFilter');
-                        if (colSortFilter) {
-                            colSortFilter.classList.toggle('hide');
-                            that.classList.toggle('change');
-                        }
-                        break;
+                if (DataAction === 'fileUpload' || DataAction === 'hide-all') {
+                    const colFileContainer = window.document.getElementById('colFileContainer');
+                    if (colFileContainer) {
+                        colFileContainer.classList.toggle('hide');
+                        that.classList.toggle('change');
+                    }
                 }
+                if (DataAction === 'languageChange' || DataAction === 'hide-all') {
+                    const colLanguageChange = window.document.getElementById('colLanguageChange');
+                    if (colLanguageChange) {
+                        colLanguageChange.classList.toggle('hide');
+                        that.classList.toggle('change');
+                    }
+                }
+                if (DataAction === 'colSortFilter' || DataAction === 'hide-all') {
+                    const colSortFilter = window.document.getElementById('colSortFilter');
+                    if (colSortFilter) {
+                        colSortFilter.classList.toggle('hide');
+                        that.classList.toggle('change');
+                    }
+                }
+                if (DataAction === 'hide-all') {
+                    Array.from(document.querySelectorAll('a[data-action]')).forEach((element) => {
+                        element.classList.toggle('change');
+                    });
+                }
+
             }
         }, false);
 
@@ -521,7 +526,7 @@ function EmptyElement(element) {
 }
 
 function findTextAll(el) {
-    const inputSearchAll = mainDataHeadFilterTable.querySelectorAll(el);
+    const inputSearchAll = window.document.querySelectorAll(el);
     const findTextAll = {};
     inputSearchAll.forEach((element) => {
         findTextAll[element.name] = element.value;

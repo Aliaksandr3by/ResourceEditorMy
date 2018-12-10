@@ -1,5 +1,5 @@
 export function AjaxPOST(url, object, success, error) {
-    const xhr = new XMLHttpRequest();
+    const xhr = new window.XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -21,7 +21,7 @@ export function AjaxPOST(url, object, success, error) {
 }
 export function AjaxPOSTAsync(url, object) {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
+        const xhr = new window.XMLHttpRequest();
         xhr.open('POST', url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -43,12 +43,12 @@ export function AjaxPOSTAsync(url, object) {
 }
 export function AjaxPOSTAsyncFileSend(url, objectFiles) {
     return new Promise((resolve, reject) => {
-        const data = new FormData();
+        const data = new window.FormData();
         const files = window.document.getElementById(objectFiles).files;
         for (let i = 0; i < files.length; i++) {
             data.append(`uploads[${i}]`, files[i], files[i].name);
         }
-        const xhr = new XMLHttpRequest();
+        const xhr = new window.XMLHttpRequest();
         xhr.open('POST', url, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.responseType = 'json';

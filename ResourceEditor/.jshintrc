@@ -1,0 +1,17 @@
+{
+    "esversion": 6,
+    "undef": true,
+    "varstmt": true,
+    "forin": true,
+    "unused": true,
+    "funcscope": true,
+    "lastsemic": true,
+    "moz": true,
+    "jquery": true,
+    "module": true,
+    "globals": {
+        "window": true,
+        "console": true,
+        "document": true
+    }
+}

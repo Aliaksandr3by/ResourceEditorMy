@@ -3,17 +3,17 @@
 
 <nav id="navigate" class="navigate">
     <ul class="nav">
-        <li class="nav-item">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>
-        <li class="nav-item">@Html.ActionLink("Main", "Read", "Home", null, new { @class = "nav-link" })</li>
-        <li class="nav-item">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
-        <li class="nav-item dropdown">
-            <a class="dropbtn">Options</a>
+        <li class="nav-item item-00">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item item-01">@Html.ActionLink("Main", "Read", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item item-02">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
+        <li class="nav-item item-03 dropdown">
+            <a data-action="hide-all" class="dropbtn">Options</a>
             <div class="dropdown-content">
                 <a data-action="fileUpload" id="colFileContainerTogle">ResX file upload</a>
                 <a data-action="languageChange">Language change</a>
                 <a data-action="colSortFilter">Filter-Sort panel</a>
             </div>
         </li>
-        <li class="nav-item item-01"><a data-action="getIP">@Html.Partial("GetUserIP")</a></li>
+        <li class="nav-item item-04"><a data-get-ip="getIP">@Html.Partial("GetUserIP")</a></li>
     </ul>
 </nav>

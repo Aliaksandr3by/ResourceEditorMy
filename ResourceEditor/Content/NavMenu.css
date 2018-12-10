@@ -15,6 +15,7 @@
 }
 
 .navigate {
+    /* position: fixed; */
     transform: translate3d(1rem, 1rem, 1rem);
     box-shadow: -1rem -0.2rem 0.4em olive, 1rem 0.2rem red;
     margin: 0;
@@ -30,11 +31,15 @@
 }
 
 .nav-item {
-    padding: 0 10px;
-    /*margin: 10px 5px;*/
+    padding: 10 10px;
+    margin: 10px 0px;
 }
 
-.item-01 {
+.item-03 {
+    align-self: center;
+}
+
+.item-04 {
     align-self: flex-end;
 }
 
@@ -48,7 +53,6 @@
 
 .nav-item a,
 .dropbtn {
-    display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -61,12 +65,14 @@
 }
 
 .nav-item.dropdown {
-    display: inline-block;
+    position: relative;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
+    left: 0px;
+    top: 32px;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
