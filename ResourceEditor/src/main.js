@@ -237,7 +237,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                         that.closest("tr").find("th").append(errDiv);
                     });
                 } else {
-                    window.alert(data.status);
+                    alert(data.status);
                 }
 
             } else {

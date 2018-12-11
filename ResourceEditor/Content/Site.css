@@ -116,7 +116,6 @@ a:visited {
         color: #fff;
         background-color: #546e7a;
         display: flex;
-        /*<‘flex-direction’> || <‘flex-wrap’> */
         flex-flow: row wrap;
         justify-content: space-around;
         align-items: stretch;

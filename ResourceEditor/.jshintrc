@@ -1,5 +1,6 @@
 {
     "esversion": 6,
+    "browser": true,
     "undef": true,
     "varstmt": true,
     "forin": true,
@@ -9,9 +10,11 @@
     "moz": true,
     "jquery": true,
     "module": true,
+    "devel": true,
     "globals": {
         "window": true,
+        "document": true,
         "console": true,
-        "document": true
+        "alert": true
     }
 }

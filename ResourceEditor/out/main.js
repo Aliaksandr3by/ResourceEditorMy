@@ -221,7 +221,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                     });
                 }
                 else {
-                    window.alert(data.status);
+                    alert(data.status);
                 }
             }
             else {
