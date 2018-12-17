@@ -148,7 +148,6 @@ $("#ResourceSave").on("click", null, null, () => {
 });
 window.document.getElementById("rootMainTable").addEventListener("change", (e) => {
     if (e.target.getAttribute("data-purpose") === "Id") {
-        const that$ = $(e.target);
         const that = e.target;
         const countrySelect = document.getElementById("countrySelect").value;
         const those = that.closest("tr");
@@ -164,10 +163,15 @@ window.document.getElementById("rootMainTable").addEventListener("change", (e) =
             }
         };
         AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
-            const divResult = (object, options) => {
+            const createElementWithAttr = (object, options) => {
                 let element = window.document.createElement(object);
                 for (const key in options) {
-                    element[key] = options[key];
+                    if (key === "textContent") {
+                        element.textContent = options[key];
+                    }
+                    else {
+                        element.setAttribute(key, options[key]);
+                    }
                 }
                 return element;
             };
@@ -176,18 +180,30 @@ window.document.getElementById("rootMainTable").addEventListener("change", (e) =
                 that.classList.add("success");
                 value.removeAttribute("placeholder");
                 comment.removeAttribute("placeholder");
-                that$.closest("th").find("div.dataError").remove();
-                id.parentElement.appendChild(divResult("div", { "class": "dataSuccess", "data-result": "Success", "textContent": data.status }));
-                that$.closest("tr").children("td").children("button.saveLineButton").removeAttr("disabled");
+                those.querySelectorAll("div.dataError").forEach((el) => {
+                    el.remove();
+                });
+                id.parentElement.appendChild(createElementWithAttr("div", {
+                    "class": "success dataSuccess",
+                    "data-result": "Success",
+                    "textContent": data.status
+                }));
+                those.querySelector("button.saveLineButton").disabled = false;
             }
             else {
                 that.classList.remove("success");
                 that.classList.add("error");
                 value.setAttribute("placeholder", data.Value);
                 comment.setAttribute("placeholder", data.Comment);
-                that$.closest("th").find("div.dataSuccess").remove();
-                that$.closest("th").append(`<div class="dataError">${data.Id} was found!</div >`);
-                that$.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
+                those.querySelectorAll("div.dataSuccess").forEach((el) => {
+                    el.remove();
+                });
+                id.parentElement.appendChild(createElementWithAttr("div", {
+                    "class": "error dataError",
+                    "data-result": "Error",
+                    "textContent": `${data.Id} was found!`
+                }));
+                those.querySelector("button.saveLineButton").disabled = true;
             }
         }).catch((error) => {
             console.error(error);
