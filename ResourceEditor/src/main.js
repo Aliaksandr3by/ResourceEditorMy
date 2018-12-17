@@ -261,32 +261,32 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
             rowUpdate: tmp
         },
         success: (data) => {
+
             if (data.hasOwnProperty('status') && !data.hasOwnProperty('error')) {
                 that.removeClass("btn-danger");
                 $(id).removeClass("is-invalid");
                 that.attr("disabled", true);
                 that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
                 that.parents("tr").find("th").find("input").prop("readonly", true);
-            } else if (data.error) {
+            }
+
+            if (data.hasOwnProperty('status') && data.hasOwnProperty('error')) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
-                if (data.status) {
-                    $.each(data.error, (i, value) => {
+                $.each(data.error, (i, value) => {
 
-                        let errDiv = $("<div></div>", {
-                            class: `dataError invalid-feedback`,
-                            id: `id${i}dataError`,
-                            text: value
-                        });
-
-                        that.closest("tr").find("th").append(errDiv);
+                    let errDiv = $("<div></div>", {
+                        class: `dataError invalid-feedback`,
+                        id: `id${i}dataError`,
+                        text: value
                     });
-                } else {
-                    alert(data.status);
-                }
 
-            } else {
-                console.error("null");
+                    that.closest("tr").find("th").append(errDiv);
+                });
+            }
+
+            if (!data.hasOwnProperty('status') &&data.hasOwnProperty('error')) {
+                alert(data.error);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {

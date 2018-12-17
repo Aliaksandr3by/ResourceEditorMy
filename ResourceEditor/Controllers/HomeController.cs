@@ -200,7 +200,7 @@ namespace ResourceEditor.Controllers
             }
             catch (System.Exception ex)
             {
-                return this.Json(new { status = $"{ex.Message}" });
+                return this.Json(new { error = $"{ex.Message}" });
             }
         }
 
@@ -270,20 +270,23 @@ namespace ResourceEditor.Controllers
                 }
                 catch (System.UnauthorizedAccessException ex)
                 {
-                    return this.Json(new { status = ex.Message });
+                    return this.Json(new { error = ex.Message });
                 }
             }
-
-            var errors = new List<string>();
-
-            foreach (var modelStateVal in this.ViewData.ModelState.Values)
+            else
             {
-                errors.AddRange(modelStateVal.Errors.Select(error => error.ErrorMessage));
+                var errors = new List<string>();
+
+                foreach (var modelStateVal in this.ViewData.ModelState.Values)
+                {
+                    errors.AddRange(modelStateVal.Errors.Select(error => error.ErrorMessage));
+                }
+
+                var result = this.Json(new { status = "validation-error", error = errors });
+
+                return result;
             }
 
-            var result = this.Json(new { status = "validation-error", error = errors });
-
-            return result;
         }
 
         /// <summary>

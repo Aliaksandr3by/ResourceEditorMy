@@ -233,7 +233,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                 that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
                 that.parents("tr").find("th").find("input").prop("readonly", true);
             }
-            else if (data.error) {
+            if (data.hasOwnProperty('status') && data.hasOwnProperty('error')) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
                 if (data.status) {
@@ -247,11 +247,11 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                     });
                 }
                 else {
-                    alert(data.status);
+                    alert(data.error);
                 }
             }
-            else {
-                console.error("null");
+            if (data.hasOwnProperty('error')) {
+                alert(data.error);
             }
         },
         error: (xhr, ajaxOptions, thrownError) => {
