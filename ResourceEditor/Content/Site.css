@@ -83,23 +83,20 @@ a:visited {
         width: 100%;
         background-color: transparent;
     }
-
     th {
         /* vertical-align: middle; */
+        max-width: 200px;
+        min-width: 100px;
     }
-
     tr {
         border: 1px solid azure;
     }
-
     td {
         border: 1px solid azure;
     }
-
     tbody tr:nth-child(even) {
         background-color: #f2f2f2;
     }
-
     tbody tr:hover {
         background-color: #f0f2f2;
     }
@@ -109,19 +106,15 @@ a:visited {
     table {
         width: 100%;
     }
-
     table thead {
         display: none;
     }
-
     table tfoot {
         display: none;
     }
-
     tbody tr:nth-child(even) {
         background-color: #f7ffff;
     }
-
     table tr {
         color: #fff;
         background-color: #ffffff;
@@ -129,60 +122,55 @@ a:visited {
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         grid-gap: 6px 6px;
     }
-
     table tr:hover {
         transform: translate3d(0.1rem, 0.1rem, 0.1rem);
         box-shadow: -0.3rem -0.2rem 0.4em olive, 0.3rem 0.2rem red;
     }
-
     table th[scope] {
         color: rgb(255, 0, 0);
         background-color: #f2f5f7;
+        max-width: 200px;
+        min-width: 100px;
     }
-
     table td[aria-label] {
         color: rgb(107, 4, 4);
         background-color: #ececec;
     }
-
     table .tabl-row {
         margin: 0.3rem 0 0.1rem 0;
         border-radius: 3px;
     }
-
     table th:before {
         content: attr(aria-label);
         display: block;
     }
-
     table td:before {
         content: attr(aria-label);
     }
 }
 
 @media screen and (max-width: 560px) {
+    table th[scope] {
+        max-width: 100%;
+        min-height: 3.5rem;
+    }
     table tr {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         grid-gap: 3px 3px;
     }
-
     .tabl-row.el-01 {
         grid-column: 1/ -1;
     }
-
     .tabl-row.el-02 {
         grid-column: 1/-1;
     }
-
     .tabl-row.el-03 {
         grid-column: 1/ -1;
     }
-
     .tabl-row.el-04 {
         grid-column: 2/ 3;
     }
-
     .tabl-row.el-05 {
         grid-column: 4/ 5;
     }
