@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<div id="colSortFilter" > 
+<div id="colSortFilter">
     <div class="flex-container">
         <select class="flex-container-element element-01" name="sort" id="select-sort-table">
             <option value="Id" selected>Sort by Id</option>
@@ -70,6 +70,12 @@
 
 
 @section scriptsFooter {
-    <script type="module" src="~/node_modules/jquery/dist/jquery.js"></script>
-    <script src="~/src/main.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.3/bluebird.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/library.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/shim.min.js"></script>
+    <script src="~/node_modules/jquery/dist/jquery.js"></script>
+    <!-- <script src="~/src/main.js"></script> -->
+    <script src="~/out/main.js"></script>
+
 }

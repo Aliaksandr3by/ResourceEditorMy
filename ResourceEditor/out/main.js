@@ -1,7 +1,29 @@
-import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend } from "./Utils.js";
-function createRow$(data = {}, titleText = {}) {
-    const inputDataKey = (className = "", value = "...", title = "...", purpose = "non") => {
-        const createInput = window.document.createElement('input');
+"use strict";
+if (!Element.prototype.matches)
+    Element.prototype.matches = Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function (s) {
+        var el = this;
+        if (!document.documentElement.contains(el))
+            return null;
+        do {
+            if (el.matches(s))
+                return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
+function createRow$(data, titleText) {
+    if (data === void 0) { data = {}; }
+    if (titleText === void 0) { titleText = {}; }
+    var inputDataKey = function (className, value, title, purpose) {
+        if (className === void 0) { className = ""; }
+        if (value === void 0) { value = "..."; }
+        if (title === void 0) { title = "..."; }
+        if (purpose === void 0) { purpose = "non"; }
+        var createInput = window.document.createElement('input');
         createInput.className = className;
         createInput.value = value.Id;
         createInput.title = title.Id;
@@ -9,8 +31,13 @@ function createRow$(data = {}, titleText = {}) {
         createInput.setAttribute("data-purpose", purpose);
         return createInput;
     };
-    const dataTextArea = (className = "", value = "...", title = "...", purpose = "non", readOnly = false) => {
-        const input = window.document.createElement('textarea');
+    var dataTextArea = function (className, value, title, purpose, readOnly) {
+        if (className === void 0) { className = ""; }
+        if (value === void 0) { value = "..."; }
+        if (title === void 0) { title = "..."; }
+        if (purpose === void 0) { purpose = "non"; }
+        if (readOnly === void 0) { readOnly = false; }
+        var input = window.document.createElement('textarea');
         input.className = className;
         input.readOnly = readOnly;
         input.value = value;
@@ -18,35 +45,39 @@ function createRow$(data = {}, titleText = {}) {
         input.setAttribute("data-purpose", purpose);
         return input;
     };
-    const createButton = (className = "", purpose = "") => {
-        const createButton = window.document.createElement('button');
+    var createButton = function (className, purpose) {
+        if (className === void 0) { className = ""; }
+        if (purpose === void 0) { purpose = ""; }
+        var createButton = window.document.createElement('button');
         createButton.className = className;
         createButton.textContent = purpose;
         createButton.type = 'button';
         createButton.setAttribute("data-action", purpose);
         return createButton;
     };
-    const tableBody = window.document.getElementById("mainTable");
-    const rowTable = window.document.createElement("tr");
+    var tableBody = window.document.getElementById("mainTable");
+    var rowTable = window.document.createElement("tr");
     tableBody.appendChild(rowTable);
-    let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "Id"));
+    var lastTr = $("#mainTable").children("tbody").append("<tr></tr>").children("tr").last();
+    lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey("inputDataId " + (titleText.Id ? "" : "error"), data, titleText, "Id"));
     lastTr.append("<td class='tabl-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value, "Value"));
     lastTr.append("<td class='tabl-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment, "Comment"));
     lastTr.append("<td class='tabl-row el-04' data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
     lastTr.append("<td class='tabl-row el-05' data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
 }
 function createTable$(datum_tmp, titles_tmp) {
-    let datum = datum_tmp;
-    let titles = titles_tmp;
+    var datum = datum_tmp;
+    var titles = titles_tmp;
     if (typeof datum === 'string' && typeof titles === 'string') {
         datum = JSON.parse(datum_tmp);
         titles = JSON.parse(titles_tmp);
     }
     if (Array.isArray(datum) && Array.isArray(titles)) {
-        for (let data of datum) {
-            let _title = {};
-            for (let title of titles) {
+        for (var _i = 0, datum_1 = datum; _i < datum_1.length; _i++) {
+            var data = datum_1[_i];
+            var _title = {};
+            for (var _a = 0, titles_1 = titles; _a < titles_1.length; _a++) {
+                var title = titles_1[_a];
                 if (data.Id === title.Id) {
                     _title = title;
                 }
@@ -61,55 +92,61 @@ function createTable$(datum_tmp, titles_tmp) {
         console.error("unknown error ");
     }
 }
-const countryResolver = (data) => {
-    const countrySelecter = document.createElement('select');
-    countrySelecter.className = `flex-container-element element-01`;
-    countrySelecter.id = `countrySelect`;
-    let opt = document.createElement("option");
+var countryResolver = function (data) {
+    var dataTmp = data;
+    var countrySelecter = document.createElement('select');
+    countrySelecter.className = "flex-container-element element-01";
+    countrySelecter.id = "countrySelect";
+    var opt = document.createElement("option");
     opt.text = "Select language";
     opt.disabled = true;
     countrySelecter.add(opt, null);
-    let i = 0;
-    for (let item of data) {
-        let opt = document.createElement("option");
-        opt.className = ``;
+    var i = 1;
+    if (!Array.isArray(dataTmp)) {
+        dataTmp = JSON.parse(data);
+    }
+    Array.from(dataTmp).forEach(function (item) {
+        var opt = document.createElement("option");
+        opt.className = "";
         opt.value = item.Id;
-        opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
+        opt.text = i++ + ". " + item.Id + " - " + item.Value + "(" + item.Comment + ")";
         opt.selected = item.Id === window.localStorage.getItem("countrySelect");
         countrySelecter.add(opt, null);
-    }
+    });
     return countrySelecter;
 };
 function GetCountrySet(langSet) {
-    AjaxPOSTAsync(urlControlSelectCountry, null).then((data) => {
+    AjaxPOSTAsync(urlControlSelectCountry, null).then(function (data) {
         if (data !== "") {
-            const CountrySelect = window.document.getElementById("CountrySelect");
-            let countrySelect = window.document.getElementById("countrySelect");
+            var CountrySelect = window.document.getElementById("CountrySelect");
+            var countrySelect = window.document.getElementById("countrySelect");
             if (countrySelect) {
                 CountrySelect.replaceChild(countryResolver(data), countrySelect);
             }
             else {
                 countrySelect = CountrySelect.insertBefore(countryResolver(data), CountrySelect[0]);
             }
-            let lang = langSet || countrySelect.value || window.localStorage.getItem("countrySelect");
+            var lang = langSet || countrySelect.value || window.localStorage.getItem("countrySelect");
             CountrySelectUpdateSet(lang);
         }
         else {
             console.log("error");
         }
-    }).catch((error) => {
+    }).catch(function (error) {
         console.error(error);
     });
 }
-$("#ResourceUploads").on("click", null, () => {
-    const fileUpload = document.querySelector(".fileUpload");
-    const resultUpload = (respond = "", alert = "") => {
-        const resultUpload = document.createElement('div');
-        resultUpload.className = `${alert}`;
-        resultUpload.textContent = `${respond}`;
+$("#ResourceUploads").on("click", null, function () {
+    var fileUpload = document.querySelector(".fileUpload");
+    var resultUpload = function (respond, alert) {
+        if (respond === void 0) { respond = ""; }
+        if (alert === void 0) { alert = ""; }
+        var resultUpload = document.createElement('div');
+        resultUpload.className = "" + alert;
+        resultUpload.textContent = "" + respond;
         return resultUpload;
     };
-    AjaxPOSTAsyncFileSend(urlControlUploadFile, "FileResource").then((respond) => {
+    AjaxPOSTAsyncFileSend(urlControlUploadFile, "FileResource").then(function (respond) {
         if (!respond.error && respond.fileName) {
             EmptyElement(fileUpload);
             fileUpload.appendChild(resultUpload(respond.fileName, "success"));
@@ -119,53 +156,53 @@ $("#ResourceUploads").on("click", null, () => {
             EmptyElement(fileUpload);
             fileUpload.appendChild(resultUpload(respond.error, "error"));
         }
-    }).catch((error) => {
+    }).catch(function (error) {
         console.error(error);
     });
 });
-$("#ResourceSave").on("click", null, null, () => {
-    const lng = $("#countrySelect").val();
+$("#ResourceSave").on("click", null, null, function () {
+    var lng = $("#countrySelect").val();
     $.ajax({
         type: "GET",
         url: urlControlGetFile,
         data: {
             language: $("#countrySelect").val()
         },
-        success: (data) => {
+        success: function (data) {
             if (data !== "") {
-                window.location.href = `${urlControlGetFile}?${encodeURIComponent('language')}=${encodeURIComponent(lng)}`;
+                window.location.href = urlControlGetFile + "?" + encodeURIComponent('language') + "=" + encodeURIComponent(lng);
             }
             else {
                 console.log("Please select language");
             }
         },
-        error: (xhr, ajaxOptions, thrownError) => {
+        error: function (xhr, ajaxOptions, thrownError) {
             console.log(xhr);
             console.log(ajaxOptions);
             console.log(thrownError);
         }
     });
 });
-window.document.getElementById("rootMainTable").addEventListener("change", (e) => {
+window.document.getElementById("rootMainTable").addEventListener("change", function (e) {
     if (e.target.getAttribute("data-purpose") === "Id") {
-        const that = e.target;
-        const countrySelect = document.getElementById("countrySelect").value;
-        const those = that.closest("tr");
-        const id = those.querySelector("[data-purpose=Id]");
-        const value = those.querySelector("[data-purpose=Value]");
-        const comment = those.querySelector("[data-purpose=Comment]");
-        const dataTmp = {
+        var that_1 = e.target;
+        var countrySelect = document.getElementById("countrySelect").value;
+        var those_1 = that_1.closest("tr");
+        var id_1 = those_1.querySelector("[data-purpose=Id]");
+        var value_1 = those_1.querySelector("[data-purpose=Value]");
+        var comment_1 = those_1.querySelector("[data-purpose=Comment]");
+        var dataTmp = {
             language: countrySelect,
             itemExists: {
-                "Id": id.value,
-                "Value": value.value,
-                "Comment": comment.value
+                "Id": id_1.value,
+                "Value": value_1.value,
+                "Comment": comment_1.value
             }
         };
-        AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
-            const createElementWithAttr = (object, options) => {
-                let element = window.document.createElement(object);
-                for (const key in options) {
+        AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then(function (data) {
+            var createElementWithAttr = function (object, options) {
+                var element = window.document.createElement(object);
+                for (var key in options) {
                     if (key === "textContent") {
                         element.textContent = options[key];
                     }
@@ -176,44 +213,44 @@ window.document.getElementById("rootMainTable").addEventListener("change", (e) =
                 return element;
             };
             if (data.status) {
-                that.classList.remove("error");
-                that.classList.add("success");
-                value.removeAttribute("placeholder");
-                comment.removeAttribute("placeholder");
-                those.querySelectorAll("div.dataError").forEach((el) => {
+                that_1.classList.remove("error");
+                that_1.classList.add("success");
+                value_1.removeAttribute("placeholder");
+                comment_1.removeAttribute("placeholder");
+                those_1.querySelectorAll("div.dataError").forEach(function (el) {
                     el.remove();
                 });
-                id.parentElement.appendChild(createElementWithAttr("div", {
+                id_1.parentElement.appendChild(createElementWithAttr("div", {
                     "class": "success dataSuccess",
                     "data-result": "Success",
                     "textContent": data.status
                 }));
-                those.querySelector("button.saveLineButton").disabled = false;
+                those_1.querySelector("button.saveLineButton").disabled = false;
             }
             else {
-                that.classList.remove("success");
-                that.classList.add("error");
-                value.setAttribute("placeholder", data.Value);
-                comment.setAttribute("placeholder", data.Comment);
-                those.querySelectorAll("div.dataSuccess").forEach((el) => {
+                that_1.classList.remove("success");
+                that_1.classList.add("error");
+                value_1.setAttribute("placeholder", data.Value);
+                comment_1.setAttribute("placeholder", data.Comment);
+                those_1.querySelectorAll("div.dataSuccess").forEach(function (el) {
                     el.remove();
                 });
-                id.parentElement.appendChild(createElementWithAttr("div", {
+                id_1.parentElement.appendChild(createElementWithAttr("div", {
                     "class": "error dataError",
                     "data-result": "Error",
-                    "textContent": `${data.Id} was found!`
+                    "textContent": data.Id + " was found!"
                 }));
-                those.querySelector("button.saveLineButton").disabled = true;
+                those_1.querySelector("button.saveLineButton").disabled = true;
             }
-        }).catch((error) => {
+        }).catch(function (error) {
             console.error(error);
         });
     }
 });
-$("#rootMainTable").on("click", ".saveLineButton", null, e => {
-    const that = $(e.target);
-    const [id, value, comment] = that.closest("tr").find("input, textarea");
-    const tmp = {
+$("#rootMainTable").on("click", ".saveLineButton", null, function (e) {
+    var that = $(e.target);
+    var _a = that.closest("tr").find("input, textarea"), id = _a[0], value = _a[1], comment = _a[2];
+    var tmp = {
         Id: id.value,
         Value: value.value,
         Comment: comment.value
@@ -225,52 +262,47 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
             language: $("#countrySelect").val(),
             rowUpdate: tmp
         },
-        success: (data) => {
+        success: function (data) {
             if (data.hasOwnProperty('status') && !data.hasOwnProperty('error')) {
                 that.removeClass("btn-danger");
                 $(id).removeClass("is-invalid");
                 that.attr("disabled", true);
-                that.parents("tr").find("th").first().append(`<div class="dataUpdate">${data.status}</div >`);
+                that.parents("tr").find("th").first().append("<div class=\"dataUpdate\">" + data.status + "</div >");
                 that.parents("tr").find("th").find("input").prop("readonly", true);
             }
             if (data.hasOwnProperty('status') && data.hasOwnProperty('error')) {
                 that.addClass("btn-danger");
                 $(id).addClass("is-invalid");
-                if (data.status) {
-                    $.each(data.error, (i, value) => {
-                        let errDiv = $("<div></div>", {
-                            class: `dataError invalid-feedback`,
-                            id: `id${i}dataError`,
-                            text: value
-                        });
-                        that.closest("tr").find("th").append(errDiv);
+                $.each(data.error, function (i, value) {
+                    var errDiv = $("<div></div>", {
+                        class: "dataError invalid-feedback",
+                        id: "id" + i + "dataError",
+                        text: value
                     });
-                }
-                else {
-                    alert(data.error);
-                }
+                    that.closest("tr").find("th").append(errDiv);
+                });
             }
-            if (data.hasOwnProperty('error')) {
+            if (!data.hasOwnProperty('status') && data.hasOwnProperty('error')) {
                 alert(data.error);
             }
         },
-        error: (xhr, ajaxOptions, thrownError) => {
+        error: function (xhr, ajaxOptions, thrownError) {
             console.error(xhr);
             console.error(ajaxOptions);
             console.error(thrownError);
         }
     });
 });
-$("#rootMainTable").on("click", ".deleteLineButton", null, e => {
+$("#rootMainTable").on("click", ".deleteLineButton", null, function (e) {
     if (window.confirm("Delete?")) {
-        const that = $(e.target);
-        const [id, value, comment] = that.closest("tr").find("input, textarea");
-        const tmp = {
+        var that_2 = $(e.target);
+        var _a = that_2.closest("tr").find("input, textarea"), id = _a[0], value = _a[1], comment = _a[2];
+        var tmp = {
             Id: id.value,
             Value: value.value,
             Comment: comment.value
         };
-        const language = window.document.getElementById("countrySelect").value;
+        var language = window.document.getElementById("countrySelect").value;
         $.ajax({
             type: "POST",
             url: urlControlActionDelete,
@@ -278,13 +310,13 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
                 language: language,
                 rowDelete: tmp
             },
-            success: (data, textStatus) => {
+            success: function (data, textStatus) {
                 console.log(textStatus);
                 if ($(data)) {
-                    that.closest("tr").empty();
+                    that_2.closest("tr").empty();
                 }
             },
-            error: (xhr, ajaxOptions, thrownError) => {
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.error(xhr);
                 console.error(ajaxOptions);
                 console.error(thrownError);
@@ -293,26 +325,26 @@ $("#rootMainTable").on("click", ".deleteLineButton", null, e => {
     }
 });
 function CountrySelectUpdate(lang, url, sort, filter, take, page) {
-    const that = lang;
-    const mainDataBodyTable = document.getElementById("mainDataBodyTable");
-    const dataLG = {
+    var that = lang;
+    var mainDataBodyTable = document.getElementById("mainDataBodyTable");
+    var dataLG = {
         "language": that,
         "sort": sort,
         "filter": filter,
         "take": take,
         "page": page
     };
-    const dataEN = {
+    var dataEN = {
         "language": "en",
         "sort": sort,
         "filter": filter,
         "take": take,
         "page": page
     };
-    AjaxPOSTAsync(url, dataLG).then((data) => {
+    AjaxPOSTAsync(url, dataLG).then(function (data) {
         if (data.error) {
             EmptyElement(mainDataBodyTable);
-            let divError = document.createElement("div");
+            var divError = document.createElement("div");
             divError.textContent = data.error;
             divError.className = "error";
             mainDataBodyTable.appendChild(divError);
@@ -320,89 +352,89 @@ function CountrySelectUpdate(lang, url, sort, filter, take, page) {
         }
         else {
             EmptyElement(mainDataBodyTable);
-            AjaxPOSTAsync(url, dataEN).then((datas) => {
+            AjaxPOSTAsync(url, dataEN).then(function (datas) {
                 createTable$(data, datas);
-            }).catch((error) => {
+            }).catch(function (error) {
                 console.error(error);
             });
             localStorage.setItem("countrySelect", String(that));
         }
-    }).catch((error) => {
+    }).catch(function (error) {
         console.error(error);
     });
 }
 function CountrySelectUpdateSet(lang) {
-    let sort = window.document.getElementById("select-sort-table").value;
-    let filter = JSON.stringify(findTextAll(".inputSearch"));
-    let take = window.document.getElementById("take").value;
-    let page = window.document.getElementById("page").value;
+    var sort = window.document.getElementById("select-sort-table").value;
+    var filter = JSON.stringify(findTextAll(".inputSearch"));
+    var take = window.document.getElementById("take").value;
+    var page = window.document.getElementById("page").value;
     CountrySelectUpdate(lang, urlControlSwitchLanguage, sort, filter, take, page);
 }
 document.addEventListener('DOMContentLoaded', function () {
     try {
-        const mainDataBodyTable = document.getElementById("mainDataBodyTable");
+        var mainDataBodyTable_1 = document.getElementById("mainDataBodyTable");
         GetCountrySet();
-        window.document.getElementById("countrySelectRefresh").addEventListener('click', () => {
+        window.document.getElementById("countrySelectRefresh").addEventListener('click', function () {
             GetCountrySet();
         });
-        window.document.getElementById("page").addEventListener('change', () => {
+        window.document.getElementById("page").addEventListener('change', function () {
             GetCountrySet();
         });
-        window.document.getElementById("take").addEventListener('change', () => {
+        window.document.getElementById("take").addEventListener('change', function () {
             GetCountrySet();
         });
-        window.addEventListener('popstate', (event) => {
+        window.addEventListener('popstate', function (event) {
             console.log(event.state);
             window.localStorage.setItem("countrySelect", String(event.state));
             $("#countrySelect").val(event.state).trigger("change");
             CountrySelectUpdateSet(event.state);
         });
-        const CountrySelect = document.getElementById("CountrySelect");
+        var CountrySelect = document.getElementById("CountrySelect");
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
-            CountrySelect.addEventListener("change", (event) => {
+            CountrySelect.addEventListener("change", function (event) {
                 if (event.target.nodeName === "SELECT") {
-                    EmptyElement(mainDataBodyTable);
-                    let lang = event.target.value || window.localStorage.getItem("countrySelect");
+                    EmptyElement(mainDataBodyTable_1);
+                    var lang = event.target.value || window.localStorage.getItem("countrySelect");
                     CountrySelectUpdateSet(lang);
                     window.history.pushState(event.target.value, event.target.value, urlControlRead);
                 }
             });
         }
-        const SelectSort = window.document.getElementById("select-sort-table");
-        if (SelectSort !== null && typeof SelectSort !== "undefined") {
-            SelectSort.addEventListener("change", () => {
-                if (SelectSort.tagName === 'SELECT') {
-                    const lang = document.getElementById("countrySelect").value;
-                    EmptyElement(mainDataBodyTable);
+        var SelectSort_1 = window.document.getElementById("select-sort-table");
+        if (SelectSort_1 !== null && typeof SelectSort_1 !== "undefined") {
+            SelectSort_1.addEventListener("change", function () {
+                if (SelectSort_1.tagName === 'SELECT') {
+                    var lang = document.getElementById("countrySelect").value;
+                    EmptyElement(mainDataBodyTable_1);
                     CountrySelectUpdateSet(lang);
                 }
             });
         }
-        const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
+        var mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
         if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
-            mainDataHeadFilterTable.addEventListener("keyup", (event) => {
+            mainDataHeadFilterTable.addEventListener("keyup", function (event) {
                 if (event.target.tagName === 'INPUT') {
-                    const lang = document.getElementById("countrySelect").value;
-                    EmptyElement(mainDataBodyTable);
+                    var lang = document.getElementById("countrySelect").value;
+                    EmptyElement(mainDataBodyTable_1);
                     CountrySelectUpdateSet(lang);
                 }
             });
         }
-        const BtnClear = document.getElementById("BtnClear");
+        var BtnClear = document.getElementById("BtnClear");
         if (BtnClear !== null && typeof BtnClear !== "undefined") {
-            BtnClear.addEventListener("click", () => {
-                const inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
-                const lang = document.getElementById("countrySelect").value;
+            BtnClear.addEventListener("click", function () {
+                var inputSearchAll = document.getElementById("mainDataHeadFilterTable").querySelectorAll(".inputSearch");
+                var lang = document.getElementById("countrySelect").value;
                 EmptyElement(document.getElementById("mainDataBodyTable"));
-                inputSearchAll.forEach((element) => {
+                inputSearchAll.forEach(function (element) {
                     element.value = "";
                 });
                 CountrySelectUpdateSet(lang);
             });
         }
-        const addTableRow = document.getElementById("addTableRow");
+        var addTableRow = document.getElementById("addTableRow");
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
-            addTableRow.addEventListener("click", () => {
+            addTableRow.addEventListener("click", function () {
                 createTable$({
                     "Id": "",
                     "Value": "",
@@ -414,68 +446,69 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
         }
-        if (mainDataBodyTable !== null && typeof mainDataBodyTable !== "undefined") {
-            mainDataBodyTable.addEventListener("change", (event) => {
+        if (mainDataBodyTable_1 !== null && typeof mainDataBodyTable_1 !== "undefined") {
+            mainDataBodyTable_1.addEventListener("change", function (event) {
                 event.target.closest("tr").querySelector("button.saveLineButton").removeAttribute("disabled");
             });
         }
-        const refreshLog = document.getElementById("refreshLog");
-        const rootLog = document.getElementById("rootLog");
+        var refreshLog = document.getElementById("refreshLog");
+        var rootLog_1 = document.getElementById("rootLog");
         if (refreshLog !== null && typeof refreshLog !== "undefined") {
-            refreshLog.addEventListener("click", () => {
-                AjaxPOSTAsync(urlControlLogFile, null).then((data) => {
-                    EmptyElement(rootLog);
+            refreshLog.addEventListener("click", function () {
+                AjaxPOSTAsync(urlControlLogFile, null).then(function (data) {
+                    EmptyElement(rootLog_1);
                     if (typeof data === "string") {
                         data = JSON.parse(data);
                     }
-                    for (let items of data) {
+                    for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+                        var items = data_1[_i];
                         if (data.hasOwnProperty(items)) {
-                            for (let item in items) {
+                            for (var item in items) {
                                 if (items.hasOwnProperty(item)) {
-                                    rootLog.textContent += `${item}: ${items[item]};`;
+                                    rootLog_1.textContent += item + ": " + items[item] + ";";
                                 }
                             }
-                            rootLog.appendChild(document.createElement('br'));
+                            rootLog_1.appendChild(document.createElement('br'));
                         }
                     }
-                }).catch((error) => {
+                }).catch(function (error) {
                     console.error(error);
                 });
             });
         }
-        window.document.querySelector('.dropdown').addEventListener("click", (e) => {
-            const that = e.target;
-            const DataAction = that.getAttribute('data-action');
+        window.document.querySelector('.dropdown').addEventListener("click", function (e) {
+            var that = e.target;
+            var DataAction = that.getAttribute('data-action');
             if (DataAction) {
                 if (DataAction === 'fileUpload' || DataAction === 'hide-all') {
-                    const colFileContainer = window.document.getElementById('colFileContainer');
+                    var colFileContainer = window.document.getElementById('colFileContainer');
                     if (colFileContainer) {
                         colFileContainer.classList.toggle('hide');
                         that.classList.toggle('change');
                     }
                 }
                 if (DataAction === 'languageChange' || DataAction === 'hide-all') {
-                    const colLanguageChange = window.document.getElementById('colLanguageChange');
+                    var colLanguageChange = window.document.getElementById('colLanguageChange');
                     if (colLanguageChange) {
                         colLanguageChange.classList.toggle('hide');
                         that.classList.toggle('change');
                     }
                 }
                 if (DataAction === 'colSortFilter' || DataAction === 'hide-all') {
-                    const colSortFilter = window.document.getElementById('colSortFilter');
+                    var colSortFilter = window.document.getElementById('colSortFilter');
                     if (colSortFilter) {
                         colSortFilter.classList.toggle('hide');
                         that.classList.toggle('change');
                     }
                 }
                 if (DataAction === 'hide-all') {
-                    Array.from(document.querySelectorAll('a[data-action]')).forEach((element) => {
+                    Array.from(document.querySelectorAll('a[data-action]')).forEach(function (element) {
                         element.classList.toggle('change');
                     });
                 }
             }
         }, false);
-        window.addEventListener("hashchange", (e) => {
+        window.addEventListener("hashchange", function (e) {
             console.log(e.oldURL);
             console.log(e.newURL);
         }, false);
@@ -490,11 +523,75 @@ function EmptyElement(element) {
     }
 }
 function findTextAll(el) {
-    const inputSearchAll = window.document.querySelectorAll(el);
-    const findTextAll = {};
-    inputSearchAll.forEach((element) => {
+    var inputSearchAll = window.document.querySelectorAll(el);
+    var findTextAll = {};
+    Array.from(inputSearchAll).forEach(function (element) {
         findTextAll[element.name] = element.value;
     });
     return findTextAll;
+}
+function AjaxPOST(url, object, success, error) {
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.timeout = 5000;
+    xhr.ontimeout = function () {
+        console.error("Request did not return i n а second.");
+    };
+    xhr.send(JSON.stringify(object));
+    xhr.addEventListener("load", function (e) {
+        var that = e.target;
+        if (that.status >= 200 && that.status < 300 || that.status === 304) {
+            success(JSON.parse(that.responseText));
+        }
+    }, false);
+    xhr.addEventListener("error", function (e) {
+        var that = e.target;
+        error(that);
+    }, false);
+}
+function AjaxPOSTAsync(url, object) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.responseType = 'json';
+        xhr.onload = function (e) {
+            var that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                resolve(xhr.response);
+            }
+        };
+        xhr.onerror = function () { return reject(xhr.statusText); };
+        if (object) {
+            xhr.send(JSON.stringify(object));
+        }
+        else {
+            xhr.send();
+        }
+    });
+}
+function AjaxPOSTAsyncFileSend(url, objectFiles) {
+    return new Promise(function (resolve, reject) {
+        var data = new window.FormData();
+        var files = window.document.getElementById(objectFiles).files;
+        for (var i = 0; i < files.length; i++) {
+            data.append("uploads[" + i + "]", files[i], files[i].name);
+        }
+        var xhr = new window.XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onload = function (e) {
+            var that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                resolve(xhr.response);
+            }
+        };
+        xhr.onerror = function () { return reject(xhr.statusText); };
+        xhr.send(data);
+    });
 }
 //# sourceMappingURL=main.js.map

@@ -2,8 +2,9 @@
   "compileOnSave": true,
   "noImplicitAny": true,
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es5",
+    "module": "none",
+    // "moduleResolution": "classic",
     "allowJs": true,
     //"checkJs": true,
     "removeComments": true,
@@ -23,6 +24,6 @@
       "scripthost"
     ]
   },
-  "include": [ "src" ],
-  "exclude": [ "node_modules", "build", "public", "obj" ]
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "public", "obj"]
 }

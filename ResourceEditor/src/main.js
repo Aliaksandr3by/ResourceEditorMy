@@ -1,8 +1,18 @@
-import {
-    AjaxPOST,
-    AjaxPOSTAsync,
-    AjaxPOSTAsyncFileSend
-} from "./Utils.js";
+if (!Element.prototype.matches)
+    Element.prototype.matches = Element.prototype.msMatchesSelector ||
+    Element.prototype.webkitMatchesSelector;
+
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function (s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
 
 function createRow$(data = {}, titleText = {}) {
 
@@ -75,6 +85,7 @@ function createTable$(datum_tmp, titles_tmp) {
 }
 
 const countryResolver = (data) => {
+    let dataTmp = data;
     const countrySelecter = document.createElement('select');
     countrySelecter.className = `flex-container-element element-01`;
     countrySelecter.id = `countrySelect`;
@@ -83,15 +94,19 @@ const countryResolver = (data) => {
     opt.text = "Select language";
     opt.disabled = true;
     countrySelecter.add(opt, null);
-    let i = 0;
-    for (let item of data) {
+    let i = 1;
+    if (!Array.isArray(dataTmp)) {
+        dataTmp = JSON.parse(data);
+    }
+    Array.from(dataTmp).forEach((item) => {
         let opt = document.createElement("option");
         opt.className = ``;
         opt.value = item.Id;
         opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
         opt.selected = item.Id === window.localStorage.getItem("countrySelect");
         countrySelecter.add(opt, null);
-    }
+    });
+
     return countrySelecter;
 };
 
@@ -285,7 +300,7 @@ $("#rootMainTable").on("click", ".saveLineButton", null, e => {
                 });
             }
 
-            if (!data.hasOwnProperty('status') &&data.hasOwnProperty('error')) {
+            if (!data.hasOwnProperty('status') && data.hasOwnProperty('error')) {
                 alert(data.error);
             }
         },
@@ -581,8 +596,85 @@ function EmptyElement(element) {
 function findTextAll(el) {
     const inputSearchAll = window.document.querySelectorAll(el);
     const findTextAll = {};
-    inputSearchAll.forEach((element) => {
+    Array.from(inputSearchAll).forEach((element) => {
         findTextAll[element.name] = element.value;
     });
     return findTextAll;
+}
+
+function AjaxPOST(url, object, success, error) {
+    const xhr = new window.XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.timeout = 5000;
+    xhr.ontimeout = () => {
+        console.error("Request did not return i n а second.");
+    };
+    xhr.send(JSON.stringify(object));
+    xhr.addEventListener("load", (e) => {
+        const that = e.target;
+        if (that.status >= 200 && that.status < 300 || that.status === 304) {
+            success(JSON.parse(that.responseText));
+        }
+    }, false);
+    xhr.addEventListener("error", (e) => {
+        const that = e.target;
+        error(that);
+    }, false);
+}
+
+/**
+ * Ajax function
+ * @param {string} url адрес контроллера
+ * @param {object} object содержит идентификатор language языка
+ * @returns {Promise} object
+ */
+function AjaxPOSTAsync(url, object) {
+    return new Promise((resolve, reject) => {
+        const xhr = new window.XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.responseType = 'json';
+        xhr.onload = (e) => {
+            const that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                //resolve(JSON.parse(xhr.responseText));
+                resolve(xhr.response);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        if (object) {
+            xhr.send(JSON.stringify(object));
+        } else {
+            xhr.send();
+        }
+    });
+}
+
+
+function AjaxPOSTAsyncFileSend(url, objectFiles) {
+    return new Promise((resolve, reject) => {
+
+        const data = new window.FormData(); //с encoding установленным в "multipart/form-data".
+        const files = window.document.getElementById(objectFiles).files;
+
+        for (let i = 0; i < files.length; i++) {
+            data.append(`uploads[${i}]`, files[i], files[i].name);
+        }
+
+        const xhr = new window.XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.responseType = 'json';
+        xhr.onload = (e) => {
+            const that = e.target;
+            if (that.status >= 200 && that.status < 300 || that.status === 304) {
+                resolve(xhr.response);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send(data);
+    });
 }
