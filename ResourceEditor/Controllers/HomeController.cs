@@ -183,17 +183,24 @@ namespace ResourceEditor.Controllers
         [ContentType]
         public JsonResult DataProtect(LangName itemExists, string language)
         {
-            var pathSave = ResourceHelper.GetPath(language);
-
-            var result = ResourceHelper.DataProtect(pathSave, itemExists);
-
-            if (result != null)
+            try
             {
-                return this.Json(result);
+                var pathSave = ResourceHelper.GetPath(language);
+
+                var result = ResourceHelper.DataProtect(pathSave, itemExists);
+
+                if (result != null)
+                {
+                    return this.Json(result);
+                }
+                else
+                {
+                    return this.Json(new { status = $"{itemExists.Id} was not found!" });
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                return this.Json(new { status = $"{itemExists.Id} was not found!" });
+                return this.Json(new { status = $"{ex.Message}" });
             }
         }
 
@@ -240,23 +247,30 @@ namespace ResourceEditor.Controllers
             {
                 var pathSave = ResourceHelper.GetPath(language);
 
-                if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
+                try
                 {
-                    ResourceHelper.Update(pathSave, rowUpdate);
-                    return this.Json(new { status = "Update" });
-                }
-                else
-                {
-                    if (language == "en")
+                    if (ResourceHelper.DataProtect(pathSave, rowUpdate) != null)
                     {
-                        ResourceHelper.InsertInAllFile(pathSave, rowUpdate);
-                        return this.Json(new { status = "Insert all resource file" });
+                        ResourceHelper.Update(pathSave, rowUpdate);
+                        return this.Json(new { status = "Update" });
                     }
                     else
                     {
-                        ResourceHelper.Insert(pathSave, rowUpdate);
-                        return this.Json(new { status = "Insert" });
+                        if (language == "en")
+                        {
+                            ResourceHelper.InsertInAllFile(pathSave, rowUpdate);
+                            return this.Json(new { status = "Insert all resource file" });
+                        }
+                        else
+                        {
+                            ResourceHelper.Insert(pathSave, rowUpdate);
+                            return this.Json(new { status = "Insert" });
+                        }
                     }
+                }
+                catch (System.UnauthorizedAccessException ex)
+                {
+                    return this.Json(new { status = ex.Message });
                 }
             }
 

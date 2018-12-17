@@ -19,13 +19,11 @@ body {
     display: grid;
     grid-template-columns: minmax(320px, 900px);
     grid-template-rows: minmax(100px, auto) auto 100px;
-    grid-template-areas: "header" "main" "footer";
-    /*<grid-row-gap> <grid-column-gap>;*/
+    grid-template-areas: "header""main""footer";
     grid-gap: 10px 20px;
-    /*<align-items> vertical / <justify-items> horizontal - inside*/
-    place-items: start stratch;
-    /*<align-content> vertical/ <justify-content> horizontal - outside*/
-    place-content: start center;
+    align-items: start;
+    justify-content: center;
+    /*edge*/
 }
 
 .container-grid-item {
@@ -85,18 +83,23 @@ a:visited {
         width: 100%;
         background-color: transparent;
     }
+
     th {
         vertical-align: middle;
     }
+
     tr {
         border: 1px solid azure;
     }
+
     td {
         border: 1px solid azure;
     }
+
     tbody tr:nth-child(even) {
         background-color: #f2f2f2;
     }
+
     tbody tr:hover {
         background-color: #f0f2f2;
     }
@@ -106,64 +109,82 @@ a:visited {
     table {
         width: 100%;
     }
+
     table thead {
         display: none;
     }
+
     table tfoot {
         display: none;
     }
+
+    tbody tr:nth-child(even) {
+        background-color: #f7ffff;
+    }
+
     table tr {
         color: #fff;
-        background-color: #546e7a;
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-        align-items: stretch;
-        align-content: stretch;
+        background-color: #ffffff;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-gap: 6px 6px;
     }
+
+    table tr:hover {
+        transform: translate3d(0.1rem, 0.1rem, 0.1rem);
+        box-shadow: -0.3rem -0.2rem 0.4em olive, 0.3rem 0.2rem red;
+    }
+
     table th[scope] {
-        color: #fff;
-        background-color: #607985;
+        color: rgb(255, 0, 0);
+        background-color: #f2f5f7;
     }
+
     table td[aria-label] {
-        color: #fff;
-        background-color: #546e7a;
+        color: rgb(107, 4, 4);
+        background-color: #ececec;
     }
+
     table .tabl-row {
-        margin: .5rem 0 1rem 0;
-        transition: box-shadow .25s, -webkit-box-shadow .25s;
+        margin: 0.3rem 0 0.1rem 0;
         border-radius: 3px;
-        flex: 1 0 auto;
     }
+
     table th:before {
         content: attr(aria-label);
         display: block;
     }
+
     table td:before {
         content: attr(aria-label);
     }
 }
 
-@media screen and (max-width: 540px) {
-    .el-01 {
-        background: rgb(186, 198, 202);
-        flex: 1 0 100px;
+@media screen and (max-width: 560px) {
+    table tr {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 3px 3px;
     }
-    .el-02 {
-        background-color: rgb(186, 198, 202);
-        flex: 1 0 200px;
+
+    .tabl-row.el-01 {
+        grid-column: 1/ -1;
     }
-    .el-03 {
-        background-color: rgb(186, 198, 202);
-        flex: 1 0 200px;
+
+    .tabl-row.el-02 {
+        grid-column: 1/-1;
     }
-    .el-04 {
-        align-self: center;
-        flex: 1 2 auto;
+
+    .tabl-row.el-03 {
+        grid-column: 1/ -1;
     }
-    .el-05 {
-        align-self: flex-end;
-        flex: 1 2 auto;
+
+    .tabl-row.el-04 {
+        grid-column: 2/ 3;
+    }
+
+    .tabl-row.el-05 {
+        grid-column: 4/ 5;
     }
 }
 
@@ -220,67 +241,47 @@ input.inputSearch {
 }
 
 input.inputDataId {
-    /* text-align: center; */
     border: none;
     background-color: transparent;
-    /* height: 2.5rem; */
 }
 
 .btn {
-    padding: 15px 32px;
+    min-width: 6rem;
+    min-height: 3rem;
+    margin: 3px 3px;
+    padding: 3px 3px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
     background-color: white;
     color: black;
     border: 2px solid #e7e7e7;
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
 .btn:hover {
-    text-decoration: none;
     color: white;
     background-color: black;
     border: 2px solid azure;
     cursor: pointer;
+    border-radius: 0px;
 }
 
 .btn:disabled {
     display: none;
 }
 
-.btn.btn-circle {
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
-    border-radius: 25px;
-    text-align: center;
-    font-size: 1.7rem;
-    line-height: 1.42857;
-}
-
-.btn.btn-circle:hover {
-    color: red;
-    width: 100%;
-    height: 70px;
-}
-
 .btn.deleteLineButton {
-    width: 100%;
-    border: 2px solid #f44336;
+    border: 2px solid #f3ffdd;
 }
 
 .btn.deleteLineButton:hover {
-    text-decoration: none;
     color: white;
-    background-color: #852222;
+    background-color: #ff0000;
     border: inherit;
-    padding: 13px 25px;
 }
 
 .btn.saveLineButton {
     width: 100%;
-    border: 2px solid #008CBA;
+    border: 2px solid rgb(3, 47, 61);
 }
 
 .btn.saveLineButton:hover {
@@ -302,4 +303,20 @@ input.inputDataId {
 
 .buttonAdd {
     text-align: center;
+}
+
+.btn.btn-circle {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 1.7rem;
+    line-height: 1.42857;
+}
+
+.btn.btn-circle:hover {
+    color: red;
+    width: 100%;
+    height: 70px;
 }

@@ -1,4 +1,8 @@
-import { AjaxPOST, AjaxPOSTAsync, AjaxPOSTAsyncFileSend } from "./Utils.js";
+import {
+    AjaxPOST,
+    AjaxPOSTAsync,
+    AjaxPOSTAsyncFileSend
+} from "./Utils.js";
 
 function createRow$(data = {}, titleText = {}) {
 
@@ -36,9 +40,9 @@ function createRow$(data = {}, titleText = {}) {
     tableBody.appendChild(rowTable);
 
     let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "key"));
-    lastTr.append("<td class='tabl-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value));
-    lastTr.append("<td class='tabl-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment));
+    lastTr.append("<th class='tabl-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "Id"));
+    lastTr.append("<td class='tabl-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value, "Value"));
+    lastTr.append("<td class='tabl-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment, "Comment"));
     lastTr.append("<td class='tabl-row el-04' data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
     lastTr.append("<td class='tabl-row el-05' data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
 }
@@ -126,8 +130,7 @@ $("#ResourceUploads").on("click", null, () => {
             EmptyElement(fileUpload);
             fileUpload.appendChild(resultUpload(respond.fileName, "success"));
             GetCountrySet();
-        }
-        else {
+        } else {
             EmptyElement(fileUpload);
             fileUpload.appendChild(resultUpload(respond.error, "error"));
         }
@@ -162,43 +165,85 @@ $("#ResourceSave").on("click", null, null, () => {
 /**
  * Method protects exist node of resource
  */
-$("#rootMainTable").on("change", ".inputDataId", null, function (e) {
-    const that = $(e.target);
-    const tmpData = that.closest("tr").find("input, textarea");
-    const [id, value, comment] = tmpData;
-    $.ajax({
-        type: "POST",
-        url: urlControlActionDataProtect,
-        data: {
-            language: $("#countrySelect").val(),
+window.document.getElementById("rootMainTable").addEventListener("change", (e) => {
+
+    if (e.target.getAttribute("data-purpose") === "Id") {
+
+        const that = e.target;
+        const countrySelect = document.getElementById("countrySelect").value;
+        const those = that.closest("tr");
+        const id = those.querySelector("[data-purpose=Id]");
+        const value = those.querySelector("[data-purpose=Value]");
+        const comment = those.querySelector("[data-purpose=Comment]");
+
+        const dataTmp = {
+            language: countrySelect,
             itemExists: {
-                Id: $(id).val(),
-                Value: $(value).val(),
-                Comment: $(comment).val()
+                "Id": id.value,
+                "Value": value.value,
+                "Comment": comment.value
             }
-        },
-        success: (data) => {
+        };
+
+        AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
+
+            const createElementWithAttr = (object, options) => {
+                let element = window.document.createElement(object);
+                for (const key in options) {
+                    if (key === "textContent") {
+                        element.textContent = options[key];
+                    } else {
+                        element.setAttribute(key, options[key]);
+                    }
+                }
+                return element;
+            };
+
             if (data.status) {
-                that.removeClass("is-invalid");
-                $(value).removeAttr("placeholder");
-                that.closest("th").find("div.dataError").remove();
-                that.closest("th").append(`<div class="dataSuccess">${data.status}</div >`);
-                that.closest("tr").children("td").children("button.saveLineButton").removeAttr("disabled");
+                that.classList.remove("error");
+                that.classList.add("success");
+
+                value.removeAttribute("placeholder");
+                comment.removeAttribute("placeholder");
+
+                those.querySelectorAll("div.dataError").forEach((el) => {
+                    el.remove();
+                });
+
+                id.parentElement.appendChild(createElementWithAttr("div", {
+                    "class": "success dataSuccess",
+                    "data-result": "Success",
+                    "textContent": data.status
+                }));
+
+                those.querySelector("button.saveLineButton").disabled = false;
+
             } else {
-                that.addClass("is-invalid");
-                $(value).attr("placeholder", data.Value);
-                that.closest("th").find("div.dataSuccess").remove();
-                that.closest("th").append(`<div class="dataError">${data.Id} was found!</div >`);
-                that.closest("tr").children("td").children("button.saveLineButton").attr("disabled", true);
+                that.classList.remove("success");
+                that.classList.add("error");
+
+                value.setAttribute("placeholder", data.Value);
+                comment.setAttribute("placeholder", data.Comment);
+
+                those.querySelectorAll("div.dataSuccess").forEach((el) => {
+                    el.remove();
+                });
+
+                id.parentElement.appendChild(createElementWithAttr("div", {
+                    "class": "error dataError",
+                    "data-result": "Error",
+                    "textContent": `${data.Id} was found!`
+                }));
+
+                those.querySelector("button.saveLineButton").disabled = true;
             }
-        },
-        error: (xhr, ajaxOptions, thrownError) => {
-            console.log(xhr);
-            console.log(ajaxOptions);
-            console.log(thrownError);
-        }
-    });
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
 });
+
 
 $("#rootMainTable").on("click", ".saveLineButton", null, e => {
     const that = $(e.target);
@@ -431,7 +476,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
             addTableRow.addEventListener("click", () => {
 
-                createTable$({ "Id": "", "Value": "", "Comment": "" }, { "Id": "", "Value": "", "Comment": "" });
+                createTable$({
+                    "Id": "",
+                    "Value": "",
+                    "Comment": ""
+                }, {
+                    "Id": "",
+                    "Value": "",
+                    "Comment": ""
+                });
 
             });
         }
@@ -457,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         data = JSON.parse(data);
                     }
 
-                    for (let items of data) {          //WWWWWFFFFFFFFFF
+                    for (let items of data) { //WWWWWFFFFFFFFFF
                         if (data.hasOwnProperty(items)) {
                             for (let item in items) {
                                 if (items.hasOwnProperty(item)) {

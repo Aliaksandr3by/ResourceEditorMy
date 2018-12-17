@@ -24,6 +24,13 @@ namespace ResourceEditor.Models
     using System.Web.Hosting;
     using System.Web.Script.Serialization;
 
+    public class Result
+    {
+        public string Status;
+        public string Error;
+    }
+
+
     /// <summary>
     /// Resource Helper
     /// </summary>
@@ -267,24 +274,31 @@ namespace ResourceEditor.Models
         /// </returns>
         public static bool Create(string pathSave, IEnumerable<LangName> langNames)
         {
-            if (langNames == null)
+            try
             {
-                return false;
-            }
-
-            using (var rw = new ResXResourceWriter(pathSave))
-            {
-                foreach (var item in langNames)
+                if (langNames == null)
                 {
-                    var node = CreateNodeElement(item);
-                    if (node != null)
-                    {
-                        rw.AddResource(node);
-                    }
+                    throw new Exception("langNames == null");
                 }
 
-                rw.Generate();
-                return true;
+                using (var rw = new ResXResourceWriter(pathSave))
+                {
+                    foreach (var item in langNames)
+                    {
+                        var node = CreateNodeElement(item);
+                        if (node != null)
+                        {
+                            rw.AddResource(node);
+                        }
+                    }
+
+                    rw.Generate();
+                    return true;
+                }
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                throw;
             }
         }
 
@@ -300,22 +314,31 @@ namespace ResourceEditor.Models
         /// <returns>
         /// The <see cref="IEnumerable"/> result update data.
         /// </returns>
-        public static IEnumerable<LangName> Update(string pathSave, LangName updatedItem)
+        public static bool Update(string pathSave, LangName updatedItem)
         {
-            Logging(updatedItem, pathSave, nameof(updatedItem));
-
-            var originalElement = Read(pathSave);
-
-            var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
-
-            if (findIndex < 0)
+            try
             {
-                return null;
-            }
+                Logging(updatedItem, pathSave, nameof(updatedItem));
 
-            originalElement[findIndex] = updatedItem;
-            Create(pathSave, originalElement);
-            return originalElement;
+                var originalElement = Read(pathSave);
+
+                var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
+
+                if (findIndex < 0)
+                {
+                    return false;
+                }
+
+                originalElement[findIndex] = updatedItem;
+
+                Create(pathSave, originalElement);
+
+                return true;
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                throw;
+            }
         }
 
         public static IEnumerable<LangName> InsertInAllFile(string pathSave, LangName newItem)
