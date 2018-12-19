@@ -3,7 +3,6 @@
     "browser": true,
     "undef": true,
     "varstmt": true,
-    "forin": true,
     "unused": true,
     "funcscope": true,
     "lastsemic": true,

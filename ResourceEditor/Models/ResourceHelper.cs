@@ -64,7 +64,7 @@ namespace ResourceEditor.Models
 
             return result;
         }
-        public static void Logging(LangName langName, string path, string status)
+        public static void Logging(LangName langNameNew, LangName langNameOriginal, LangName langNameEN, string path, string status)
         {
             string fileName = $@"{HostingEnvironment.MapPath("~/App_LocalResources/")}Log.txt";
 
@@ -82,9 +82,9 @@ namespace ResourceEditor.Models
                 {
                     LangNameLogFull langNameLog = new LangNameLogFull
                     {
-                        LangNameSampleEN = langName,
-                        LangNameOld = langName,
-                        LangNameNew = langName,
+                        LangNameSampleEN = langNameEN,
+                        LangNameOld = langNameOriginal,
+                        LangNameNew = langNameNew,
                         StatusLog = status,
                         DateLog = DateTime.Now.ToLocalTime().ToString(),
                         PathLog = Path.GetFileName(path)
@@ -175,7 +175,7 @@ namespace ResourceEditor.Models
             {
                 return null;
             }
-            
+
             var outLangNames = new List<LangName>();
 
             using (var rr = new ResXResourceReader(pathLoad))
@@ -316,29 +316,48 @@ namespace ResourceEditor.Models
         /// </returns>
         public static bool Update(string pathSave, LangName updatedItem)
         {
+            var originalElement = Read(pathSave);
+            var originalElementEn = Read(GetPath());
+
+            var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
+            var findIndexEN = originalElementEn.FindIndex(e => e.Id == updatedItem.Id);
+
+            if (findIndex < 0)
+            {
+                return false;
+            }
+
+            LangName tmpOriginalElement = new LangName
+            {
+                Id = originalElement[findIndex].Id,
+                Value = originalElement[findIndex].Value,
+                Comment = originalElement[findIndex].Comment
+            };
+
+
+            originalElement[findIndex] = updatedItem;
+
             try
             {
-                Logging(updatedItem, pathSave, nameof(updatedItem));
-
-                var originalElement = Read(pathSave);
-
-                var findIndex = originalElement.FindIndex(e => e.Id == updatedItem.Id);
-
-                if (findIndex < 0)
-                {
-                    return false;
-                }
-
-                originalElement[findIndex] = updatedItem;
-
                 Create(pathSave, originalElement);
-
-                return true;
             }
             catch (System.UnauthorizedAccessException)
             {
                 throw;
             }
+
+            if (findIndexEN < 0)
+            {
+                Logging(updatedItem, tmpOriginalElement, null, pathSave, nameof(updatedItem));
+
+            }
+            else
+            {
+                Logging(updatedItem, tmpOriginalElement, originalElementEn.ElementAt(findIndexEN), pathSave, nameof(updatedItem));
+
+            }
+
+            return true;
         }
 
         public static IEnumerable<LangName> InsertInAllFile(string pathSave, LangName newItem)
@@ -374,7 +393,7 @@ namespace ResourceEditor.Models
         /// <returns>Updated item</returns>
         public static IEnumerable<LangName> Insert(string pathSave, LangName newItem)
         {
-            Logging(newItem, pathSave, nameof(newItem));
+            Logging(newItem, null, null, pathSave, nameof(newItem));
 
             if (newItem == null)
             {

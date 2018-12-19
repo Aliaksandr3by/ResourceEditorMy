@@ -1,7 +1,6 @@
 "use strict";
 if (!Element.prototype.matches)
-    Element.prototype.matches = Element.prototype.msMatchesSelector ||
-        Element.prototype.webkitMatchesSelector;
+    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 if (!Element.prototype.closest) {
     Element.prototype.closest = function (s) {
         var el = this;
@@ -117,8 +116,8 @@ var countryResolver = function (data) {
 };
 function GetCountrySet(langSet) {
     AjaxPOSTAsync(urlControlSelectCountry, null).then(function (data) {
-        if (data !== "") {
-            var CountrySelect = window.document.getElementById("CountrySelect");
+        var CountrySelect = window.document.getElementById("CountrySelect");
+        if (data !== "" && CountrySelect) {
             var countrySelect = window.document.getElementById("countrySelect");
             if (countrySelect) {
                 CountrySelect.replaceChild(countryResolver(data), countrySelect);
@@ -183,70 +182,73 @@ $("#ResourceSave").on("click", null, null, function () {
         }
     });
 });
-window.document.getElementById("rootMainTable").addEventListener("change", function (e) {
-    if (e.target.getAttribute("data-purpose") === "Id") {
-        var that_1 = e.target;
-        var countrySelect = document.getElementById("countrySelect").value;
-        var those_1 = that_1.closest("tr");
-        var id_1 = those_1.querySelector("[data-purpose=Id]");
-        var value_1 = those_1.querySelector("[data-purpose=Value]");
-        var comment_1 = those_1.querySelector("[data-purpose=Comment]");
-        var dataTmp = {
-            language: countrySelect,
-            itemExists: {
-                "Id": id_1.value,
-                "Value": value_1.value,
-                "Comment": comment_1.value
-            }
-        };
-        AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then(function (data) {
-            var createElementWithAttr = function (object, options) {
-                var element = window.document.createElement(object);
-                for (var key in options) {
-                    if (key === "textContent") {
-                        element.textContent = options[key];
-                    }
-                    else {
-                        element.setAttribute(key, options[key]);
-                    }
+var rootMainTable = window.document.getElementById("rootMainTable");
+if (rootMainTable) {
+    rootMainTable.addEventListener("change", function (e) {
+        if (e.target.getAttribute("data-purpose") === "Id") {
+            var that_1 = e.target;
+            var countrySelect = document.getElementById("countrySelect").value;
+            var those_1 = that_1.closest("tr");
+            var id_1 = those_1.querySelector("[data-purpose=Id]");
+            var value_1 = those_1.querySelector("[data-purpose=Value]");
+            var comment_1 = those_1.querySelector("[data-purpose=Comment]");
+            var dataTmp = {
+                language: countrySelect,
+                itemExists: {
+                    "Id": id_1.value,
+                    "Value": value_1.value,
+                    "Comment": comment_1.value
                 }
-                return element;
             };
-            if (data.status) {
-                that_1.classList.remove("error");
-                that_1.classList.add("success");
-                value_1.removeAttribute("placeholder");
-                comment_1.removeAttribute("placeholder");
-                those_1.querySelectorAll("div.dataError").forEach(function (el) {
-                    el.remove();
-                });
-                id_1.parentElement.appendChild(createElementWithAttr("div", {
-                    "class": "success dataSuccess",
-                    "data-result": "Success",
-                    "textContent": data.status
-                }));
-                those_1.querySelector("button.saveLineButton").disabled = false;
-            }
-            else {
-                that_1.classList.remove("success");
-                that_1.classList.add("error");
-                value_1.setAttribute("placeholder", data.Value);
-                comment_1.setAttribute("placeholder", data.Comment);
-                those_1.querySelectorAll("div.dataSuccess").forEach(function (el) {
-                    el.remove();
-                });
-                id_1.parentElement.appendChild(createElementWithAttr("div", {
-                    "class": "error dataError",
-                    "data-result": "Error",
-                    "textContent": data.Id + " was found!"
-                }));
-                those_1.querySelector("button.saveLineButton").disabled = true;
-            }
-        }).catch(function (error) {
-            console.error(error);
-        });
-    }
-});
+            AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then(function (data) {
+                var createElementWithAttr = function (object, options) {
+                    var element = window.document.createElement(object);
+                    for (var key in options) {
+                        if (key === "textContent") {
+                            element.textContent = options[key];
+                        }
+                        else {
+                            element.setAttribute(key, options[key]);
+                        }
+                    }
+                    return element;
+                };
+                if (data.status) {
+                    that_1.classList.remove("error");
+                    that_1.classList.add("success");
+                    value_1.removeAttribute("placeholder");
+                    comment_1.removeAttribute("placeholder");
+                    those_1.querySelectorAll("div.dataError").forEach(function (el) {
+                        el.remove();
+                    });
+                    id_1.parentElement.appendChild(createElementWithAttr("div", {
+                        "class": "success dataSuccess",
+                        "data-result": "Success",
+                        "textContent": data.status
+                    }));
+                    those_1.querySelector("button.saveLineButton").disabled = false;
+                }
+                else {
+                    that_1.classList.remove("success");
+                    that_1.classList.add("error");
+                    value_1.setAttribute("placeholder", data.Value);
+                    comment_1.setAttribute("placeholder", data.Comment);
+                    those_1.querySelectorAll("div.dataSuccess").forEach(function (el) {
+                        el.remove();
+                    });
+                    id_1.parentElement.appendChild(createElementWithAttr("div", {
+                        "class": "error dataError",
+                        "data-result": "Error",
+                        "textContent": data.Id + " was found!"
+                    }));
+                    those_1.querySelector("button.saveLineButton").disabled = true;
+                }
+            }).catch(function (error) {
+                console.error(error);
+            });
+        }
+    });
+}
 $("#rootMainTable").on("click", ".saveLineButton", null, function (e) {
     var that = $(e.target);
     var _a = that.closest("tr").find("input, textarea"), id = _a[0], value = _a[1], comment = _a[2];
@@ -373,16 +375,18 @@ function CountrySelectUpdateSet(lang) {
 document.addEventListener('DOMContentLoaded', function () {
     try {
         var mainDataBodyTable_1 = document.getElementById("mainDataBodyTable");
-        GetCountrySet();
-        window.document.getElementById("countrySelectRefresh").addEventListener('click', function () {
+        if (GetCountrySet) {
             GetCountrySet();
-        });
-        window.document.getElementById("page").addEventListener('change', function () {
-            GetCountrySet();
-        });
-        window.document.getElementById("take").addEventListener('change', function () {
-            GetCountrySet();
-        });
+        }
+        var selectSortTable = window.document.getElementById("select-sort-table");
+        if (selectSortTable) {
+            window.document.getElementById("page").addEventListener('change', function () {
+                GetCountrySet();
+            });
+            window.document.getElementById("take").addEventListener('change', function () {
+                GetCountrySet();
+            });
+        }
         window.addEventListener('popstate', function (event) {
             console.log(event.state);
             window.localStorage.setItem("countrySelect", String(event.state));
@@ -391,6 +395,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         var CountrySelect = document.getElementById("CountrySelect");
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
+            window.document.getElementById("countrySelectRefresh").addEventListener('click', function () {
+                GetCountrySet();
+            });
             CountrySelect.addEventListener("change", function (event) {
                 if (event.target.nodeName === "SELECT") {
                     EmptyElement(mainDataBodyTable_1);
@@ -451,6 +458,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.target.closest("tr").querySelector("button.saveLineButton").removeAttribute("disabled");
             });
         }
+        var tmpTbl_1 = function (datas) {
+            if (typeof datas === "object") {
+                var tmpString = "<td>>>></td>";
+                for (var item in datas) {
+                    if (datas.hasOwnProperty(item)) {
+                        tmpString += "<th>" + item + "</th><td>" + datas[item] + "</td>";
+                    }
+                }
+                return tmpString;
+            }
+            return "<td>" + datas + "</td>";
+        };
+        var genTable_1 = function (data) {
+            var rootLogText = "";
+            rootLogText += '<table>';
+            Array.from(data).forEach(function (items) {
+                if (items) {
+                    rootLogText += '<tbody>';
+                    for (var item in items) {
+                        if (items.hasOwnProperty(item)) {
+                            rootLogText += "<tr><th>" + item + "</th>" + tmpTbl_1(items[item]) + "</tr>";
+                        }
+                    }
+                    rootLogText += '</tbody>';
+                }
+            });
+            rootLogText += '</table>';
+            return rootLogText;
+        };
         var refreshLog = document.getElementById("refreshLog");
         var rootLog_1 = document.getElementById("rootLog");
         if (refreshLog !== null && typeof refreshLog !== "undefined") {
@@ -460,17 +496,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (typeof data === "string") {
                         data = JSON.parse(data);
                     }
-                    for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-                        var items = data_1[_i];
-                        if (data.hasOwnProperty(items)) {
-                            for (var item in items) {
-                                if (items.hasOwnProperty(item)) {
-                                    rootLog_1.textContent += item + ": " + items[item] + ";";
-                                }
-                            }
-                            rootLog_1.appendChild(document.createElement('br'));
-                        }
-                    }
+                    rootLog_1.innerHTML = genTable_1(data);
                 }).catch(function (error) {
                     console.error(error);
                 });

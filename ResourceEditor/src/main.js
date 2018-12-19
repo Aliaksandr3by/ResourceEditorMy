@@ -1,10 +1,9 @@
 if (!Element.prototype.matches)
-    Element.prototype.matches = Element.prototype.msMatchesSelector ||
-    Element.prototype.webkitMatchesSelector;
+    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 
 if (!Element.prototype.closest) {
     Element.prototype.closest = function (s) {
-        var el = this;
+        let el = this;
         if (!document.documentElement.contains(el)) return null;
         do {
             if (el.matches(s)) return el;
@@ -112,8 +111,8 @@ const countryResolver = (data) => {
 
 function GetCountrySet(langSet) {
     AjaxPOSTAsync(urlControlSelectCountry, null).then((data) => {
-        if (data !== "") {
-            const CountrySelect = window.document.getElementById("CountrySelect");
+        const CountrySelect = window.document.getElementById("CountrySelect");
+        if (data !== "" && CountrySelect) {
             let countrySelect = window.document.getElementById("countrySelect");
             if (countrySelect) {
                 CountrySelect.replaceChild(countryResolver(data), countrySelect);
@@ -180,84 +179,87 @@ $("#ResourceSave").on("click", null, null, () => {
 /**
  * Method protects exist node of resource
  */
-window.document.getElementById("rootMainTable").addEventListener("change", (e) => {
+const rootMainTable = window.document.getElementById("rootMainTable");
+if (rootMainTable) {
+    rootMainTable.addEventListener("change", (e) => {
 
-    if (e.target.getAttribute("data-purpose") === "Id") {
+        if (e.target.getAttribute("data-purpose") === "Id") {
 
-        const that = e.target;
-        const countrySelect = document.getElementById("countrySelect").value;
-        const those = that.closest("tr");
-        const id = those.querySelector("[data-purpose=Id]");
-        const value = those.querySelector("[data-purpose=Value]");
-        const comment = those.querySelector("[data-purpose=Comment]");
+            const that = e.target;
+            const countrySelect = document.getElementById("countrySelect").value;
+            const those = that.closest("tr");
+            const id = those.querySelector("[data-purpose=Id]");
+            const value = those.querySelector("[data-purpose=Value]");
+            const comment = those.querySelector("[data-purpose=Comment]");
 
-        const dataTmp = {
-            language: countrySelect,
-            itemExists: {
-                "Id": id.value,
-                "Value": value.value,
-                "Comment": comment.value
-            }
-        };
-
-        AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
-
-            const createElementWithAttr = (object, options) => {
-                let element = window.document.createElement(object);
-                for (const key in options) {
-                    if (key === "textContent") {
-                        element.textContent = options[key];
-                    } else {
-                        element.setAttribute(key, options[key]);
-                    }
+            const dataTmp = {
+                language: countrySelect,
+                itemExists: {
+                    "Id": id.value,
+                    "Value": value.value,
+                    "Comment": comment.value
                 }
-                return element;
             };
 
-            if (data.status) {
-                that.classList.remove("error");
-                that.classList.add("success");
+            AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
 
-                value.removeAttribute("placeholder");
-                comment.removeAttribute("placeholder");
+                const createElementWithAttr = (object, options) => {
+                    let element = window.document.createElement(object);
+                    for (const key in options) {
+                        if (key === "textContent") {
+                            element.textContent = options[key];
+                        } else {
+                            element.setAttribute(key, options[key]);
+                        }
+                    }
+                    return element;
+                };
 
-                those.querySelectorAll("div.dataError").forEach((el) => {
-                    el.remove();
-                });
+                if (data.status) {
+                    that.classList.remove("error");
+                    that.classList.add("success");
 
-                id.parentElement.appendChild(createElementWithAttr("div", {
-                    "class": "success dataSuccess",
-                    "data-result": "Success",
-                    "textContent": data.status
-                }));
+                    value.removeAttribute("placeholder");
+                    comment.removeAttribute("placeholder");
 
-                those.querySelector("button.saveLineButton").disabled = false;
+                    those.querySelectorAll("div.dataError").forEach((el) => {
+                        el.remove();
+                    });
 
-            } else {
-                that.classList.remove("success");
-                that.classList.add("error");
+                    id.parentElement.appendChild(createElementWithAttr("div", {
+                        "class": "success dataSuccess",
+                        "data-result": "Success",
+                        "textContent": data.status
+                    }));
 
-                value.setAttribute("placeholder", data.Value);
-                comment.setAttribute("placeholder", data.Comment);
+                    those.querySelector("button.saveLineButton").disabled = false;
 
-                those.querySelectorAll("div.dataSuccess").forEach((el) => {
-                    el.remove();
-                });
+                } else {
+                    that.classList.remove("success");
+                    that.classList.add("error");
 
-                id.parentElement.appendChild(createElementWithAttr("div", {
-                    "class": "error dataError",
-                    "data-result": "Error",
-                    "textContent": `${data.Id} was found!`
-                }));
+                    value.setAttribute("placeholder", data.Value);
+                    comment.setAttribute("placeholder", data.Comment);
 
-                those.querySelector("button.saveLineButton").disabled = true;
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    }
+                    those.querySelectorAll("div.dataSuccess").forEach((el) => {
+                        el.remove();
+                    });
 
-});
+                    id.parentElement.appendChild(createElementWithAttr("div", {
+                        "class": "error dataError",
+                        "data-result": "Error",
+                        "textContent": `${data.Id} was found!`
+                    }));
+
+                    those.querySelector("button.saveLineButton").disabled = true;
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+
+    });
+}
 
 
 $("#rootMainTable").on("click", ".saveLineButton", null, e => {
@@ -396,18 +398,20 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         const mainDataBodyTable = document.getElementById("mainDataBodyTable");
 
-        GetCountrySet();
+        if (GetCountrySet) {
+            GetCountrySet();
+        }
 
-        window.document.getElementById("countrySelectRefresh").addEventListener('click', () => {
-            GetCountrySet();
-        });
+        const selectSortTable = window.document.getElementById("select-sort-table");
 
-        window.document.getElementById("page").addEventListener('change', () => {
-            GetCountrySet();
-        });
-        window.document.getElementById("take").addEventListener('change', () => {
-            GetCountrySet();
-        });
+        if (selectSortTable) {
+            window.document.getElementById("page").addEventListener('change', () => {
+                GetCountrySet();
+            });
+            window.document.getElementById("take").addEventListener('change', () => {
+                GetCountrySet();
+            });
+        }
 
 
         window.addEventListener('popstate', (event) => {
@@ -424,6 +428,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const CountrySelect = document.getElementById("CountrySelect");
         if (CountrySelect !== null && typeof CountrySelect !== "undefined") {
+
+            window.document.getElementById("countrySelectRefresh").addEventListener('click', () => {
+                GetCountrySet();
+            });
+
             CountrySelect.addEventListener("change", (event) => {
                 if (event.target.nodeName === "SELECT") {
                     EmptyElement(mainDataBodyTable);
@@ -512,29 +521,55 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        const tmpTbl = (datas) => {
+            if (typeof datas === "object") {
+                let tmpString = `<td>>>></td>`;
+                for (let item in datas) {
+                    if (datas.hasOwnProperty(item)) {
+                        tmpString += `<th>${item}</th><td>${datas[item]}</td>`;
+                    }
+                }
+                return tmpString;
+            }
+            return `<td>${datas}</td>`;
+        };
+
+        let genTable = (data) => {
+
+            let rootLogText = "";
+
+            rootLogText += '<table>';
+            Array.from(data).forEach((items) => {
+                if (items) {
+
+                    rootLogText += '<tbody>';
+
+                    for (let item in items) {
+                        if (items.hasOwnProperty(item)) {
+                            rootLogText += `<tr><th>${item}</th>${tmpTbl(items[item])}</tr>`;
+                        }
+                    }
+                    rootLogText += '</tbody>';
+                }
+
+            });
+            rootLogText += '</table>';
+
+            return rootLogText;
+        };
+
         const refreshLog = document.getElementById("refreshLog");
         const rootLog = document.getElementById("rootLog");
         if (refreshLog !== null && typeof refreshLog !== "undefined") {
             refreshLog.addEventListener("click", () => {
 
                 AjaxPOSTAsync(urlControlLogFile, null).then((data) => {
-
                     EmptyElement(rootLog);
 
                     if (typeof data === "string") {
                         data = JSON.parse(data);
                     }
-
-                    for (let items of data) { //WWWWWFFFFFFFFFF
-                        if (data.hasOwnProperty(items)) {
-                            for (let item in items) {
-                                if (items.hasOwnProperty(item)) {
-                                    rootLog.textContent += `${item}: ${items[item]};`;
-                                }
-                            }
-                            rootLog.appendChild(document.createElement('br'));
-                        }
-                    }
+                    rootLog.innerHTML = genTable(data);
 
                 }).catch((error) => {
                     console.error(error);
