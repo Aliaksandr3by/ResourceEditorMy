@@ -23,11 +23,10 @@ body {
     grid-gap: 10px 20px;
     align-items: start;
     justify-content: center;
-    /*edge*/
 }
 
 .container-grid-item {
-    background-color: #fafafa;
+    background-color: #f1f1f1;
 }
 
 .grid-item-header {
@@ -78,101 +77,128 @@ a:visited {
     color: white;
 }
 
+
+textarea {
+    /* vertical-align: middle; */
+    max-width: 385px; 
+    min-width: 100px;
+}
+
+
 @media screen and (min-width: 660px) {
     table {
         width: 100%;
         background-color: transparent;
     }
-    th {
-        /* vertical-align: middle; */
-        max-width: 200px;
-        min-width: 100px;
-    }
+
     tr {
         border: 1px solid azure;
     }
+
     td {
         border: 1px solid azure;
     }
+
     tbody tr:nth-child(even) {
         background-color: #f2f2f2;
     }
+
     tbody tr:hover {
         background-color: #f0f2f2;
     }
 }
 
-@media screen and (max-width: 660px) {
-    table {
-        width: 100%;
+@media screen and (max-width: 659px) {
+
+    textarea{
+        max-width: 100%;
+        min-width: 100%;
     }
-    table thead {
-        display: none;
-    }
-    table tfoot {
-        display: none;
-    }
-    tbody tr:nth-child(even) {
-        background-color: #f7ffff;
-    }
-    table tr {
-        color: #fff;
-        background-color: #ffffff;
+
+    thead tr {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        grid-gap: 6px 6px;
+        grid-template-columns: repeat(2,1fr);
+        grid-auto-flow: dense;
+        align-items: center;
+        justify-content: stretch;
     }
-    table tr:hover {
+
+    #mainDataHeadTable {
+        display: none;
+    }
+
+    thead th.tabl-tbody-row.el-01 {}
+
+    thead th.tabl-tbody-row.el-02 {}
+
+    thead th.tabl-tbody-row.el-03 {}
+
+    thead th.tabl-tbody-row.el-04 {}
+
+    /*tbody*/
+
+    tbody tr {
+        display: grid;
+        grid-template-columns: minmax(100px, 900px) minmax(100px, 900px);
+        grid-gap: 3px 12px;
+        margin: 20px 1px;
+        background-color: #e0ffff;
+
+    }
+
+    tbody tr:hover {
         transform: translate3d(0.1rem, 0.1rem, 0.1rem);
         box-shadow: -0.3rem -0.2rem 0.4em olive, 0.3rem 0.2rem red;
     }
-    table th[scope] {
-        color: rgb(255, 0, 0);
-        background-color: #f2f5f7;
-        max-width: 200px;
-        min-width: 100px;
+
+    tbody tr:nth-child(even) {
+        background-color: #f7ffff;
     }
-    table td[aria-label] {
+
+    tbody td[aria-label] {
         color: rgb(107, 4, 4);
-        background-color: #ececec;
+        background-color: #fdeeee;
     }
-    table .tabl-row {
-        margin: 0.3rem 0 0.1rem 0;
-        border-radius: 3px;
+
+    tbody td.el-02:hover {
+        background-color: #b7ffa8c5;
     }
-    table th:before {
+
+    tbody td.el-03:hover {
+        background-color: #fff45e;
+    }
+
+    tbody th:before {
         content: attr(aria-label);
         display: block;
     }
-    table td:before {
+
+    tbody td:before {
         content: attr(aria-label);
     }
-}
 
-@media screen and (max-width: 560px) {
-    table th[scope] {
-        max-width: 100%;
+    tbody th[scope] {
         min-height: 3.5rem;
     }
-    table tr {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 3px 3px;
+
+    tbody th.el-01 {
+        grid-column: 1 / -1;
     }
-    .tabl-row.el-01 {
-        grid-column: 1/ -1;
+
+    tbody td.el-02 {
+        grid-column: 1 /-1;
     }
-    .tabl-row.el-02 {
-        grid-column: 1/-1;
+
+    tbody td.el-03 {
+        grid-column: 1 / -1;
     }
-    .tabl-row.el-03 {
-        grid-column: 1/ -1;
+
+    tbody td.el-04 {
+        grid-column: 1/ 2;
     }
-    .tabl-row.el-04 {
+
+    tbody td.el-05 {
         grid-column: 2/ 3;
-    }
-    .tabl-row.el-05 {
-        grid-column: 4/ 5;
     }
 }
 
@@ -259,6 +285,7 @@ input.inputDataId {
 }
 
 .btn.deleteLineButton {
+    width: 90%;
     border: 2px solid #f3ffdd;
 }
 
@@ -269,7 +296,7 @@ input.inputDataId {
 }
 
 .btn.saveLineButton {
-    width: 100%;
+    width: 90%;
     border: 2px solid rgb(3, 47, 61);
 }
 
