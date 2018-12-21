@@ -13,7 +13,9 @@
   },
   "scripts": {
     "dev": "webpack --mode development --watch",
-    "build": "webpack"
+    "build": "webpack",
+    "sass": "sass --watch src:out",
+    "tsc": "tsc -watch"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",

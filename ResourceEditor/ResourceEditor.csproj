@@ -196,6 +196,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="public\bundle.js" />
+    <Content Include="src\Link.js" />
     <Content Include="tsconfig.json" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.css" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -490,6 +491,7 @@
     <Content Include="node_modules\jquery\package.json" />
     <Content Include="node_modules\jquery\README.md" />
     <Content Include="node_modules\jquery\src\.eslintrc.json" />
+    <Content Include=".jshintrc" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\NavigateBar.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -498,6 +500,7 @@
     <None Include="Properties\PublishProfiles\resourceeditor - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\resourceeditor - Web Deploy.pubxml" />
     <Content Include="Views\Home\Log.cshtml" />
+    <Content Include="src\main.scss" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -1,4 +1,34 @@
 "use strict";
+var browser = function () {
+    var _userAgent = navigator.userAgent;
+    var br = {
+        "Chrome": "Chrome",
+        "Edge": "Edge",
+        "Firefox": "Firefox",
+        ".NET CLR": "Internet Explorer 11",
+    };
+    var nobr = {
+        "MSIE 10.0": "Internet Explorer 10",
+        "MSIE 9.0": "Internet Explorer 9",
+        "MSIE 8.0": "Internet Explorer 8",
+        "MSIE 7.0": "Internet Explorer 7"
+    };
+    var thisBrow = "Unknown";
+    for (var keys in br) {
+        if (br.hasOwnProperty(keys)) {
+            if (_userAgent.includes(keys)) {
+                thisBrow = br[keys];
+                for (var key in nobr) {
+                    if (_userAgent.includes(key)) {
+                        thisBrow = nobr[key];
+                    }
+                }
+            }
+        }
+    }
+    return thisBrow;
+};
+console.log(browser());
 if (!Element.prototype.matches)
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 if (!Element.prototype.closest) {
