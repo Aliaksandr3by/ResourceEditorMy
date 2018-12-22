@@ -1,4 +1,3 @@
-
 const browser = () => {
     // "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3576.0 Safari/537.36"
     // "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.17 Safari/537.36"
@@ -44,6 +43,15 @@ const browser = () => {
 
 console.log(browser());
 
+if ('NodeList' in window && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = function (callback, thisArg) {
+        thisArg = thisArg || window;
+        for (let i = 0; i < this.length; i++) {
+            callback.call(thisArg, this[i], i, this);
+        }
+    };
+}
+
 if (!Element.prototype.matches)
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 
@@ -59,58 +67,82 @@ if (!Element.prototype.closest) {
     };
 }
 
-function createRow$(data = {}, titleText = {}) {
+function createRow(data = {}, titleText = {}) {
 
-    const inputDataKey = (className = "", value = "...", title = "...", purpose = "non") => {
-        const createInput = window.document.createElement('input');
-        createInput.className = className;
-        createInput.value = value.Id;
-        createInput.title = title.Id;
-        createInput.readOnly = Boolean(String(value.Id).length > 0);
-        createInput.setAttribute("data-purpose", purpose);
-        return createInput;
-    };
+    const tableBody = window.document.getElementById("mainDataBodyTable");
 
-    const dataTextArea = (className = "", value = "...", title = "...", purpose = "non", readOnly = false) => {
-        const input = window.document.createElement('textarea');
-        input.className = className;
-        input.readOnly = readOnly;
-        input.value = value;
-        input.title = title;
-        input.setAttribute("data-purpose", purpose);
-        return input;
-    };
+    const tableBodyTR = tableBody.appendChild(createElementWithAttr("tr", {
+        "class": "tabl-row",
+        "data-row": "table-row"
+    }));
 
-    const createButton = (className = "", purpose = "") => {
-        const createButton = window.document.createElement('button');
-        createButton.className = className;
-        createButton.textContent = purpose;
-        createButton.type = 'button';
-        createButton.setAttribute("data-action", purpose);
-        return createButton;
-    };
-
-    const tableBody = window.document.getElementById("mainTable");
-    const rowTable = window.document.createElement("tr");
-    tableBody.appendChild(rowTable);
-
-    let lastTr = $("#mainTable").children("tbody").append(`<tr></tr>`).children("tr").last();
-    lastTr.append("<th class='tabl-tbody-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey(`inputDataId ${titleText.Id ? "" : "error"}`, data, titleText, "Id"));
-    lastTr.append("<td class='tabl-tbody-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value, "Value"));
-    lastTr.append("<td class='tabl-tbody-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment, "Comment"));
-    lastTr.append("<td class='tabl-tbody-row el-04' data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
-    lastTr.append("<td class='tabl-tbody-row el-05' data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
+    tableBodyTR
+        .appendChild(createElementWithAttr("th", {
+            "class": "tabl-tbody-row el-01",
+            "aria-label": "Key",
+            "scope": "row"
+        }))
+        .appendChild(createElementWithAttr("input", {
+            "class": `inputDataId ${titleText.Id ? "" : "error"}`,
+            "value": data.Id,
+            "title": titleText.Id,
+            "data-purpose": "Id",
+            "readonly": String(data.Id).length > 0 ? true : false
+        }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+            "class": "tabl-tbody-row el-02",
+            "aria-label": "Value"
+        }))
+        .appendChild(createElementWithAttr("textarea", {
+            "class": `inputDataValue`,
+            "textContent": data.Value,
+            "title": titleText.Value,
+            "data-purpose": "Value",
+            "readonly": false
+        }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+            "class": "tabl-tbody-row el-03",
+            "aria-label": "Comment"
+        }))
+        .appendChild(createElementWithAttr("textarea", {
+            "class": `inputDataComment`,
+            "textContent": data.Comment,
+            "title": titleText.Comment,
+            "data-purpose": "Comment",
+            "readonly": false
+        }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+            "class": "tabl-tbody-row el-04",
+            "data-label": "Save"
+        }))
+        .appendChild(createElementWithAttr("button", {
+            "class": "btn saveLineButton",
+            "type": "button",
+            "textContent": data.Id === "" ? "Insert" : "Save",
+            "title": titleText.Comment,
+            "data-action": data.Id === "" ? "Insert" : "Save"
+        }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+            "class": "tabl-tbody-row el-05",
+            "data-label": "Delete"
+        }))
+        .appendChild(createElementWithAttr("button", {
+            "class": "btn deleteLineButton",
+            "type": "button",
+            "textContent": "Delete",
+            "title": titleText.Comment,
+            "data-action": "Delete"
+        }));
 }
 
-function createTable$(datum_tmp, titles_tmp) {
+function createTable(datum_tmp, titles_tmp) {
 
     let datum = datum_tmp;
     let titles = titles_tmp;
-
-    if (typeof datum === 'string' && typeof titles === 'string') {
-        datum = JSON.parse(datum_tmp);
-        titles = JSON.parse(titles_tmp);
-    }
 
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (let data of datum) {
@@ -120,10 +152,10 @@ function createTable$(datum_tmp, titles_tmp) {
                     _title = title;
                 }
             }
-            createRow$(data, _title);
+            createRow(data, _title);
         }
     } else if (typeof datum === "object" && typeof titles === "object") {
-        createRow$(datum, titles);
+        createRow(datum, titles);
     } else {
         console.error("unknown error ");
     }
@@ -140,9 +172,7 @@ const countryResolver = (data) => {
     opt.disabled = true;
     countrySelecter.add(opt, null);
     let i = 1;
-    if (!Array.isArray(dataTmp)) {
-        dataTmp = JSON.parse(data);
-    }
+
     Array.from(dataTmp).forEach((item) => {
         let opt = document.createElement("option");
         opt.className = ``;
@@ -248,18 +278,6 @@ if (rootMainTable) {
             };
 
             AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then((data) => {
-
-                const createElementWithAttr = (object, options) => {
-                    let element = window.document.createElement(object);
-                    for (const key in options) {
-                        if (key === "textContent") {
-                            element.textContent = options[key];
-                        } else {
-                            element.setAttribute(key, options[key]);
-                        }
-                    }
-                    return element;
-                };
 
                 if (data.status) {
                     that.classList.remove("error");
@@ -420,7 +438,7 @@ function CountrySelectUpdate(lang, url, sort, filter, take, page) {
         } else {
             EmptyElement(mainDataBodyTable);
             AjaxPOSTAsync(url, dataEN).then((datas) => {
-                createTable$(data, datas);
+                createTable(data, datas);
             }).catch((error) => {
                 console.error(error);
             });
@@ -449,7 +467,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const selectSortTable = window.document.getElementById("select-sort-table");
-
         if (selectSortTable) {
             window.document.getElementById("page").addEventListener('change', () => {
                 GetCountrySet();
@@ -546,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
             addTableRow.addEventListener("click", () => {
 
-                createTable$({
+                createTable({
                     "Id": "",
                     "Value": "",
                     "Comment": ""
@@ -611,10 +628,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 AjaxPOSTAsync(urlControlLogFile, null).then((data) => {
                     EmptyElement(rootLog);
-
-                    if (typeof data === "string") {
-                        data = JSON.parse(data);
-                    }
                     rootLog.innerHTML = genTable(data);
 
                 }).catch((error) => {
@@ -683,6 +696,28 @@ function findTextAll(el) {
     return findTextAll;
 }
 
+function createElementWithAttr(object, options) {
+    let element = window.document.createElement(object);
+    for (const key in options) {
+        switch (key) {
+            case "textContent":
+                element.textContent = options[key];
+                break;
+            case "readonly":
+                if (typeof options[key] === "boolean") {
+                    element.readOnly = options[key];
+                } else {
+                    console.error(options[key]);
+                }
+                break;
+            default:
+                element.setAttribute(key, options[key]);
+                break;
+        }
+    }
+    return element;
+}
+
 function AjaxPOST(url, object, success, error) {
     const xhr = new window.XMLHttpRequest();
     xhr.open('POST', url, true);
@@ -706,7 +741,7 @@ function AjaxPOST(url, object, success, error) {
 }
 
 /**
- * Ajax function
+ * Ajax function, only json return
  * @param {string} url адрес контроллера
  * @param {object} object содержит идентификатор language языка
  * @returns {Promise} object
@@ -721,8 +756,12 @@ function AjaxPOSTAsync(url, object) {
         xhr.onload = (e) => {
             const that = e.target;
             if (that.status >= 200 && that.status < 300 || that.status === 304) {
-                //resolve(JSON.parse(xhr.responseText));
-                resolve(xhr.response);
+                if (typeof (xhr.response) === 'string') {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                if (typeof (xhr.response) === 'object') {
+                    resolve(xhr.response);
+                }
             }
         };
         xhr.onerror = () => reject(xhr.statusText);

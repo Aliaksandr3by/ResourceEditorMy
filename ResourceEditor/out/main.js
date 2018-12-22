@@ -29,6 +29,14 @@ var browser = function () {
     return thisBrow;
 };
 console.log(browser());
+if ('NodeList' in window && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = function (callback, thisArg) {
+        thisArg = thisArg || window;
+        for (var i = 0; i < this.length; i++) {
+            callback.call(thisArg, this[i], i, this);
+        }
+    };
+}
 if (!Element.prototype.matches)
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 if (!Element.prototype.closest) {
@@ -44,63 +52,79 @@ if (!Element.prototype.closest) {
         return null;
     };
 }
-function createRow$(data, titleText) {
+function createRow(data, titleText) {
     if (data === void 0) { data = {}; }
     if (titleText === void 0) { titleText = {}; }
-    var inputDataKey = function (className, value, title, purpose) {
-        if (className === void 0) { className = ""; }
-        if (value === void 0) { value = "..."; }
-        if (title === void 0) { title = "..."; }
-        if (purpose === void 0) { purpose = "non"; }
-        var createInput = window.document.createElement('input');
-        createInput.className = className;
-        createInput.value = value.Id;
-        createInput.title = title.Id;
-        createInput.readOnly = Boolean(String(value.Id).length > 0);
-        createInput.setAttribute("data-purpose", purpose);
-        return createInput;
-    };
-    var dataTextArea = function (className, value, title, purpose, readOnly) {
-        if (className === void 0) { className = ""; }
-        if (value === void 0) { value = "..."; }
-        if (title === void 0) { title = "..."; }
-        if (purpose === void 0) { purpose = "non"; }
-        if (readOnly === void 0) { readOnly = false; }
-        var input = window.document.createElement('textarea');
-        input.className = className;
-        input.readOnly = readOnly;
-        input.value = value;
-        input.title = title;
-        input.setAttribute("data-purpose", purpose);
-        return input;
-    };
-    var createButton = function (className, purpose) {
-        if (className === void 0) { className = ""; }
-        if (purpose === void 0) { purpose = ""; }
-        var createButton = window.document.createElement('button');
-        createButton.className = className;
-        createButton.textContent = purpose;
-        createButton.type = 'button';
-        createButton.setAttribute("data-action", purpose);
-        return createButton;
-    };
-    var tableBody = window.document.getElementById("mainTable");
-    var rowTable = window.document.createElement("tr");
-    tableBody.appendChild(rowTable);
-    var lastTr = $("#mainTable").children("tbody").append("<tr></tr>").children("tr").last();
-    lastTr.append("<th class='tabl-tbody-row el-01' aria-label='Key' scope='row'></th>").children("th").last().append(inputDataKey("inputDataId " + (titleText.Id ? "" : "error"), data, titleText, "Id"));
-    lastTr.append("<td class='tabl-tbody-row el-02' aria-label='Value'></td>").children("td").last().append(dataTextArea("inputDataValue", data.Value, titleText.Value, "Value"));
-    lastTr.append("<td class='tabl-tbody-row el-03' aria-label='Comment'></td>").children("td").last().append(dataTextArea("inputDataComment", data.Comment, titleText.Comment, "Comment"));
-    lastTr.append("<td class='tabl-tbody-row el-04' data-label='Save'></td>").children("td").last().append(createButton("btn saveLineButton", data.Id === "" ? "Insert" : "Save"));
-    lastTr.append("<td class='tabl-tbody-row el-05' data-label='Delete'></td>").children("td").last().append(createButton("btn deleteLineButton", "Delete"));
+    var tableBody = window.document.getElementById("mainDataBodyTable");
+    var tableBodyTR = tableBody.appendChild(createElementWithAttr("tr", {
+        "class": "tabl-row",
+        "data-row": "table-row"
+    }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("th", {
+        "class": "tabl-tbody-row el-01",
+        "aria-label": "Key",
+        "scope": "row"
+    }))
+        .appendChild(createElementWithAttr("input", {
+        "class": "inputDataId " + (titleText.Id ? "" : "error"),
+        "value": data.Id,
+        "title": titleText.Id,
+        "data-purpose": "Id",
+        "readonly": String(data.Id).length > 0 ? true : false
+    }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+        "class": "tabl-tbody-row el-02",
+        "aria-label": "Value"
+    }))
+        .appendChild(createElementWithAttr("textarea", {
+        "class": "inputDataValue",
+        "textContent": data.Value,
+        "title": titleText.Value,
+        "data-purpose": "Value",
+        "readonly": false
+    }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+        "class": "tabl-tbody-row el-03",
+        "aria-label": "Comment"
+    }))
+        .appendChild(createElementWithAttr("textarea", {
+        "class": "inputDataComment",
+        "textContent": data.Comment,
+        "title": titleText.Comment,
+        "data-purpose": "Comment",
+        "readonly": false
+    }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+        "class": "tabl-tbody-row el-04",
+        "data-label": "Save"
+    }))
+        .appendChild(createElementWithAttr("button", {
+        "class": "btn saveLineButton",
+        "type": "button",
+        "textContent": data.Id === "" ? "Insert" : "Save",
+        "title": titleText.Comment,
+        "data-action": data.Id === "" ? "Insert" : "Save"
+    }));
+    tableBodyTR
+        .appendChild(createElementWithAttr("td", {
+        "class": "tabl-tbody-row el-05",
+        "data-label": "Delete"
+    }))
+        .appendChild(createElementWithAttr("button", {
+        "class": "btn deleteLineButton",
+        "type": "button",
+        "textContent": "Delete",
+        "title": titleText.Comment,
+        "data-action": "Delete"
+    }));
 }
-function createTable$(datum_tmp, titles_tmp) {
+function createTable(datum_tmp, titles_tmp) {
     var datum = datum_tmp;
     var titles = titles_tmp;
-    if (typeof datum === 'string' && typeof titles === 'string') {
-        datum = JSON.parse(datum_tmp);
-        titles = JSON.parse(titles_tmp);
-    }
     if (Array.isArray(datum) && Array.isArray(titles)) {
         for (var _i = 0, datum_1 = datum; _i < datum_1.length; _i++) {
             var data = datum_1[_i];
@@ -111,11 +135,11 @@ function createTable$(datum_tmp, titles_tmp) {
                     _title = title;
                 }
             }
-            createRow$(data, _title);
+            createRow(data, _title);
         }
     }
     else if (typeof datum === "object" && typeof titles === "object") {
-        createRow$(datum, titles);
+        createRow(datum, titles);
     }
     else {
         console.error("unknown error ");
@@ -131,9 +155,6 @@ var countryResolver = function (data) {
     opt.disabled = true;
     countrySelecter.add(opt, null);
     var i = 1;
-    if (!Array.isArray(dataTmp)) {
-        dataTmp = JSON.parse(data);
-    }
     Array.from(dataTmp).forEach(function (item) {
         var opt = document.createElement("option");
         opt.className = "";
@@ -231,18 +252,6 @@ if (rootMainTable) {
                 }
             };
             AjaxPOSTAsync(urlControlActionDataProtect, dataTmp).then(function (data) {
-                var createElementWithAttr = function (object, options) {
-                    var element = window.document.createElement(object);
-                    for (var key in options) {
-                        if (key === "textContent") {
-                            element.textContent = options[key];
-                        }
-                        else {
-                            element.setAttribute(key, options[key]);
-                        }
-                    }
-                    return element;
-                };
                 if (data.status) {
                     that_1.classList.remove("error");
                     that_1.classList.add("success");
@@ -385,7 +394,7 @@ function CountrySelectUpdate(lang, url, sort, filter, take, page) {
         else {
             EmptyElement(mainDataBodyTable);
             AjaxPOSTAsync(url, dataEN).then(function (datas) {
-                createTable$(data, datas);
+                createTable(data, datas);
             }).catch(function (error) {
                 console.error(error);
             });
@@ -472,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var addTableRow = document.getElementById("addTableRow");
         if (addTableRow !== null && typeof addTableRow !== "undefined") {
             addTableRow.addEventListener("click", function () {
-                createTable$({
+                createTable({
                     "Id": "",
                     "Value": "",
                     "Comment": ""
@@ -523,9 +532,6 @@ document.addEventListener('DOMContentLoaded', function () {
             refreshLog.addEventListener("click", function () {
                 AjaxPOSTAsync(urlControlLogFile, null).then(function (data) {
                     EmptyElement(rootLog_1);
-                    if (typeof data === "string") {
-                        data = JSON.parse(data);
-                    }
                     rootLog_1.innerHTML = genTable_1(data);
                 }).catch(function (error) {
                     console.error(error);
@@ -586,6 +592,28 @@ function findTextAll(el) {
     });
     return findTextAll;
 }
+function createElementWithAttr(object, options) {
+    var element = window.document.createElement(object);
+    for (var key in options) {
+        switch (key) {
+            case "textContent":
+                element.textContent = options[key];
+                break;
+            case "readonly":
+                if (typeof options[key] === "boolean") {
+                    element.readOnly = options[key];
+                }
+                else {
+                    console.error(options[key]);
+                }
+                break;
+            default:
+                element.setAttribute(key, options[key]);
+                break;
+        }
+    }
+    return element;
+}
 function AjaxPOST(url, object, success, error) {
     var xhr = new window.XMLHttpRequest();
     xhr.open('POST', url, true);
@@ -617,7 +645,12 @@ function AjaxPOSTAsync(url, object) {
         xhr.onload = function (e) {
             var that = e.target;
             if (that.status >= 200 && that.status < 300 || that.status === 304) {
-                resolve(xhr.response);
+                if (typeof (xhr.response) === 'string') {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                if (typeof (xhr.response) === 'object') {
+                    resolve(xhr.response);
+                }
             }
         };
         xhr.onerror = function () { return reject(xhr.statusText); };
