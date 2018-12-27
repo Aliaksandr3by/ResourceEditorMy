@@ -221,9 +221,18 @@ namespace ResourceEditor.Controllers
         [ContentType]
         public JsonResult Delete(LangName rowDelete, string language)
         {
-            var pathSave = ResourceHelper.GetPath(language);
-            var result = this.Json(ResourceHelper.Delete(pathSave, rowDelete));
-            return result;
+            try
+            {
+                var pathSave = ResourceHelper.GetPath(language);
+                var resultDelete = ResourceHelper.Delete(pathSave, rowDelete);
+                var result = this.Json(new { status = $"{resultDelete}" });
+                return result;
+            }
+            catch (System.Exception ex)
+            {
+                var result = this.Json(new { exception = $"{ex.Message}" });
+                return result;
+            }
         }
 
         /// <summary>

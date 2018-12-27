@@ -216,6 +216,7 @@ namespace ResourceEditor.Models
                 var _filterV = _filter.Value.Split(new Char[] { ' ', ',', '.', ':', '\t' });
                 var _filterC = _filter.Comment.Split(new Char[] { ' ', ',', '.', ':', '\t' });
 
+                //брак в фильтре
                 var tmp = from item in collection
                           from itemI in _filterI
                           from itemV in _filterV
@@ -466,27 +467,35 @@ namespace ResourceEditor.Models
         /// <param name="pathSave"> Path save file </param>
         /// <param name="langNameId"> The lang Name ID. </param>
         /// <returns> Update collection </returns>
-        public static IEnumerable<LangName> Delete(string pathSave, LangName langNameId)
+        public static bool Delete(string pathSave, LangName langNameId)
         {
-            var originalElement = Read(pathSave);
-
-            var index = originalElement.FindIndex(e => e.Id == langNameId.Id);
-
-            if (index >= 0)
+            try
             {
-                originalElement.RemoveAt(index);
-                Create(pathSave, originalElement);
-            }
+                var originalElement = Read(pathSave);
 
-            if (pathSave.Contains("Resource.resx"))
-            {
-                if (DeleteAllEntitiesEn(langNameId, HostingEnvironment.MapPath("~/App_LocalResources/")) == null)
+                var index = originalElement.FindIndex(e => e.Id == langNameId.Id);
+
+                if (index >= 0)
                 {
-                    return originalElement;
+                    originalElement.RemoveAt(index);
+                    Create(pathSave, originalElement);
                 }
-            }
 
-            return originalElement;
+                if (pathSave.Contains("Resource.resx"))
+                {
+                    if (DeleteAllEntitiesEn(langNameId, HostingEnvironment.MapPath("~/App_LocalResources/")) == null)
+                    {
+                        return true;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

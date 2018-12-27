@@ -1,5 +1,6 @@
 import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType } from "./Utils.js";
 console.log(getBrowserType());
+const rootMainTable = window.document.getElementById("rootMainTable");
 function createRow(data, titleText) {
     const tableBody = window.document.getElementById("mainDataBodyTable");
     if (tableBody) {
@@ -179,7 +180,6 @@ if (ResourceSave) {
         });
     });
 }
-const rootMainTable = window.document.getElementById("rootMainTable");
 if (rootMainTable) {
     rootMainTable.addEventListener("change", (e) => {
         if (e.target.getAttribute("data-purpose") === "Id") {
@@ -235,31 +235,34 @@ if (rootMainTable) {
     });
     rootMainTable.addEventListener("click", (e) => {
         const that = e.target;
-        const countrySelect = document.getElementById("countrySelect").value;
-        const those = that.closest("tr");
-        const id = those.querySelector("[data-purpose=Id]");
-        const value = those.querySelector("[data-purpose=Value]");
-        const comment = those.querySelector("[data-purpose=Comment]");
-        const dataTmp = {
-            language: countrySelect,
-            rowUpdate: {
-                "Id": id.value,
-                "Value": value.value,
-                "Comment": comment.value
-            }
-        };
-        AjaxPOSTAsync(urlControlActionUpdate, dataTmp).then((data) => {
-            const DataAction = that.getAttribute("data-action");
-            if (DataAction) {
+        const DataAction = that.getAttribute("data-action");
+        if (DataAction) {
+            const countrySelect = document.getElementById("countrySelect").value;
+            const those = that.closest("tr");
+            const id = those.querySelector("[data-purpose=Id]");
+            const value = those.querySelector("[data-purpose=Value]");
+            const comment = those.querySelector("[data-purpose=Comment]");
+            const dataTmp = {
+                language: countrySelect,
+                rowUpdate: {
+                    "Id": id.value,
+                    "Value": value.value,
+                    "Comment": comment.value
+                }
+            };
+            AjaxPOSTAsync(urlControlActionUpdate, dataTmp).then((data) => {
                 if (DataAction === "Save" || DataAction === "Insert") {
                     if (data.hasOwnProperty("status") && !data.hasOwnProperty("error")) {
-                        that.disabled = true;
                         let err = those.querySelector("[data-purpose=error]");
                         if (err) {
                             err.remove();
                         }
                         id.readOnly = true;
-                        $(that).parents("tr").find("th").first().append(`<div class="success">${data.status}</div >`);
+                        that.closest("tr").querySelector("th").append(createElementWithAttr("div", {
+                            "class": "success dataSuccess",
+                            "data-result": "Success",
+                            "textContent": data.status
+                        }));
                     }
                     if (data.hasOwnProperty("status") && data.hasOwnProperty("error")) {
                         that.disabled = false;
@@ -275,43 +278,46 @@ if (rootMainTable) {
                         alert(data.error);
                     }
                 }
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
     });
 }
-$("#rootMainTable").on("click", ".deleteLineButton", null, e => {
-    if (window.confirm("Delete?")) {
-        const that = $(e.target);
-        const [id, value, comment] = that.closest("tr").find("input, textarea");
-        const tmp = {
-            Id: id.value,
-            Value: value.value,
-            Comment: comment.value
-        };
-        const language = window.document.getElementById("countrySelect").value;
-        $.ajax({
-            type: "POST",
-            url: urlControlActionDelete,
-            data: {
-                language: language,
-                rowDelete: tmp
-            },
-            success: (data, textStatus) => {
-                console.log(textStatus);
-                if ($(data)) {
-                    that.closest("tr").empty();
-                }
-            },
-            error: (xhr, ajaxOptions, thrownError) => {
-                console.error(xhr);
-                console.error(ajaxOptions);
-                console.error(thrownError);
+if (rootMainTable) {
+    rootMainTable.addEventListener("click", (e) => {
+        if (e.target.getAttribute("data-action") === "Delete") {
+            const that = e.target;
+            if (window.confirm("Delete?")) {
+                const countrySelect = document.getElementById("countrySelect").value;
+                const those = that.closest("tr");
+                const id = those.querySelector("[data-purpose=Id]");
+                const value = those.querySelector("[data-purpose=Value]");
+                const comment = those.querySelector("[data-purpose=Comment]");
+                const tmp = {
+                    Id: id.value,
+                    Value: value.value,
+                    Comment: comment.value
+                };
+                const dataTmp = {
+                    language: countrySelect,
+                    rowDelete: tmp
+                };
+                AjaxPOSTAsync(urlControlActionDelete, dataTmp).then((data) => {
+                    if (data.status) {
+                        console.log(data.status);
+                        that.closest("tr").remove();
+                    }
+                    if (data.exception) {
+                        console.error("#0001");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
             }
-        });
-    }
-});
+        }
+    });
+}
 function CountrySelectUpdate(lang, url, sort, filter, take, page) {
     const that = lang;
     const mainDataBodyTable = document.getElementById("mainDataBodyTable");
