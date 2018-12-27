@@ -36,17 +36,17 @@ namespace ResourceEditor.Models
     /// </summary>
     public class ResourceHelper
     {
-        public static List<LangNameLogFull> GetLog()
+        public static List<LogEdit> GetLog()
         {
             //string qwe = @"[{'Id':'q1','Value':'qwe','Comment':'pl'},{'Id':'q1','Value':'qwe','Comment':'pl'}]";
 
             string path = HostingEnvironment.MapPath($"~/App_LocalResources/Log.txt");
 
-            List<LangNameLogFull> result = null;
+            List<LogEdit> result = null;
 
             if (File.Exists(path))
             {
-                result = new List<LangNameLogFull>();
+                result = new List<LogEdit>();
 
                 using (StreamReader sr = new StreamReader(path))
                 {
@@ -54,7 +54,7 @@ namespace ResourceEditor.Models
 
                     while (str != null)
                     {
-                        result.Add(JsonConvert.DeserializeObject<LangNameLogFull>(str));
+                        result.Add(JsonConvert.DeserializeObject<LogEdit>(str));
                         str = sr.ReadLine();
                     }
                 }
@@ -80,7 +80,7 @@ namespace ResourceEditor.Models
             {
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
-                    LangNameLogFull langNameLog = new LangNameLogFull
+                    LogEdit langNameLog = new LogEdit
                     {
                         LangNameSampleEN = langNameEN,
                         LangNameOld = langNameOriginal,
@@ -203,22 +203,53 @@ namespace ResourceEditor.Models
             int take = takeGet;
             int page = pageGet;
 
-
-
             var _filter = JsonConvert.DeserializeObject<LangName>(filter);
 
             var collection = Read(pathLoad);
             var outLangNames = new List<LangName>();
 
+
+
             if (_filter != null)
             {
-                foreach (var item in collection)
-                {
-                    if (item.Id.Contains(_filter.Id) && item.Value.Contains(_filter.Value) && item.Comment.Contains(_filter.Comment))
-                    {
-                        outLangNames.Add(item);
-                    }
-                }
+                var _filterI = _filter.Id.Split(new Char[] { ' ', ',', '.', ':', '\t' });
+                var _filterV = _filter.Value.Split(new Char[] { ' ', ',', '.', ':', '\t' });
+                var _filterC = _filter.Comment.Split(new Char[] { ' ', ',', '.', ':', '\t' });
+
+                var tmp = from item in collection
+                          from itemI in _filterI
+                          from itemV in _filterV
+                          from itemC in _filterC
+                          where item.Id.Contains(itemI) && item.Value.Contains(itemV) && item.Comment.Contains(itemC)
+                          select item;
+
+                outLangNames = tmp.ToList();
+
+
+                //foreach (var item in collection)
+                //{
+                //    foreach (var itemI in _filterI)
+                //    {
+                //        if (item.Id.Contains(itemI))
+                //        {
+                //            foreach (var itemV in _filterV)
+                //            {
+                //                if (item.Value.Contains(itemV))
+                //                {
+                //                    foreach (var itemC in _filterC)
+                //                    {
+                //                        if (item.Comment.Contains(itemC))
+                //                        {
+                //                            outLangNames.Add(item);
+                //                        }
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+
+
             }
 
             List<LangName> result = null;

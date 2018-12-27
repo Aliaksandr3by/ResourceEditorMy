@@ -21,7 +21,7 @@
     <title>@ViewBag.Title - ResX Editor</title>
 
     @RenderSection("scriptsHead", required: true)
-
+    <script src="~/dist/src/Link.js"></script>
 </head>
 <body>
     <div class="container-grid">
@@ -36,9 +36,7 @@
         </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/core.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/library.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.0/shim.min.js"></script>
+    <div id="IE11"></div>
     
     @RenderSection("scriptsFooter", required: true)
 

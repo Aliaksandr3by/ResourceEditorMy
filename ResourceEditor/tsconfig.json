@@ -2,18 +2,18 @@
   "compileOnSave": true,
   "noImplicitAny": true,
   "compilerOptions": {
-    "target": "es5",
-    "module": "none",
-    // "moduleResolution": "classic",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "allowJs": true,
-    //"checkJs": true,
+    "checkJs": false,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "experimentalDecorators": true,
     "strict": true,
     "noEmit": false,
-    "outDir": "out",
+    "outDir": "dist",
     "sourceMap": true,
     "lib": [
       "dom",
@@ -24,6 +24,14 @@
       "scripthost"
     ]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "build", "public", "obj"]
+  "include": [
+    "src",
+    "srcTest"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "public",
+    "obj"
+  ]
 }

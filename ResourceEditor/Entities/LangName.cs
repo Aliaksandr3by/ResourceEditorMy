@@ -40,26 +40,4 @@ namespace ResourceEditor.Entities
         [Display(Name = "Comment")]
         public string Comment { get; set; }
     }
-    public class LangNameLog : LangName
-    {
-        public string StatusLog { get; set; }
-
-        public string DateLog { get; set; }
-
-        public string PathLog { get; set; }
-
-        public static explicit operator string(LangNameLog obj)
-        {
-            return $"{obj.StatusLog} - {obj.DateLog} - {obj.PathLog}{Environment.NewLine}" ;
-        }
-    }
-    public class LangNameLogFull
-    {
-        public LangName LangNameSampleEN { get; set; }
-        public LangName LangNameOld { get; set; }
-        public LangName LangNameNew { get; set; }
-        public string StatusLog { get; set; }
-        public string DateLog { get; set; }
-        public string PathLog { get; set; }
-    }
 }

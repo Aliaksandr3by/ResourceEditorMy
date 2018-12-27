@@ -171,6 +171,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Entities\LogEdit.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -187,6 +188,12 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\NavMenu.css" />
+    <Content Include="dist\srcTest\bundle.js" />
+    <Content Include="dist\srcTest\test.js" />
+    <Content Include="dist\srcTest\test_BestMatch.js" />
+    <Content Include="dist\src\Link.js" />
+    <Content Include="dist\src\main.js" />
+    <Content Include="dist\src\Utils.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -197,6 +204,7 @@
     </Content>
     <Content Include="public\bundle.js" />
     <Content Include="src\Link.js" />
+    <Content Include="src\Utils.js" />
     <Content Include="tsconfig.json" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.css" />
     <Content Include="node_modules\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -491,7 +499,12 @@
     <Content Include="node_modules\jquery\package.json" />
     <Content Include="node_modules\jquery\README.md" />
     <Content Include="node_modules\jquery\src\.eslintrc.json" />
-    <Content Include=".jshintrc" />
+    <Content Include=".eslintrc.json" />
+    <Content Include="dist\srcTest\test.js.map" />
+    <Content Include="dist\srcTest\test_BestMatch.js.map" />
+    <Content Include="dist\src\Link.js.map" />
+    <Content Include="dist\src\main.js.map" />
+    <Content Include="dist\src\Utils.js.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\NavigateBar.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -508,6 +521,10 @@
   <ItemGroup>
     <Folder Include="App_LocalResources\" />
     <Folder Include="out\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="srcTest\test.ts" />
+    <TypeScriptCompile Include="srcTest\test_BestMatch.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
