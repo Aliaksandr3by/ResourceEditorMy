@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
-import CreateButton from './CreateButton';
-import CreateInput from './CreateInput';
-import CreateTextArea from './CreateTextarea';
+import CreateButton from "./CreateButton";
+import CreateInput from "./CreateInput";
+import CreateTextArea from "./CreateTextarea";
 
 const CreateRow = ({ datum = {}, titleText = {} }) => {
     const buttonName = datum.Id !== "" ? "Save" : "Insert";

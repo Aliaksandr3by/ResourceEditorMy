@@ -7,6 +7,7 @@ import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType } from "./Utils.js
 /*global urlControlSwitchLanguage*/
 /*global urlControlUploadFile*/
 /*global urlControlGetFile*/
+/*global urlControlDeleteFile*/
 /*global urlControlSelectCountry*/
 /*global urlControlRead*/
 /*global urlControlLogFile*/
@@ -114,7 +115,7 @@ function createTable(datum_tmp, titles_tmp) {
 const countryResolver = (data) => {
 	let dataTmp = data;
 	const countrySelecter = document.createElement("select");
-	countrySelecter.className = `flex-container-element element-01`;
+	countrySelecter.classList.add("flex-container-element", "element-01");
 	countrySelecter.id = `countrySelect`;
 
 	let opt = document.createElement("option");
@@ -125,7 +126,7 @@ const countryResolver = (data) => {
 
 	Array.from(dataTmp).forEach((item) => {
 		let opt = document.createElement("option");
-		opt.className = ``;
+		//opt.classList.add("");
 		opt.value = item.Id;
 		opt.text = `${i++}. ${item.Id} - ${item.Value}(${item.Comment})`;
 		opt.selected = item.Id === window.localStorage.getItem("countrySelect");
@@ -136,14 +137,14 @@ const countryResolver = (data) => {
 };
 
 function GetCountrySet(langSet) {
-	AjaxPOSTAsync(urlControlSelectCountry, null).then((data) => {
+	AjaxPOSTAsync(urlControlSelectCountry, null).then((resolve) => {
 		const CountrySelect = window.document.getElementById("CountrySelect");
-		if (data !== "" && CountrySelect) {
+		if (resolve !== "" && CountrySelect) {
 			let countrySelect = window.document.getElementById("countrySelect");
 			if (countrySelect) {
-				CountrySelect.replaceChild(countryResolver(data), countrySelect);
+				CountrySelect.replaceChild(countryResolver(resolve), countrySelect);
 			} else {
-				countrySelect = CountrySelect.insertBefore(countryResolver(data), CountrySelect[0]);
+				countrySelect = CountrySelect.insertBefore(countryResolver(resolve), CountrySelect[0]);
 			}
 			let lang = langSet || countrySelect.value || window.localStorage.getItem("countrySelect");
 			CountrySelectUpdateSet(lang);
@@ -163,7 +164,7 @@ if (ResourceUploads) {
 
 		const resultUpload = (respond = "", alert = "") => {
 			const resultUpload = document.createElement("div");
-			resultUpload.className = `${alert}`;
+			resultUpload.classList.add(`${alert}`);
 			resultUpload.textContent = `${respond}`;
 			return resultUpload;
 		};
@@ -205,6 +206,27 @@ if (ResourceSave) {
 		});
 	});
 }
+
+const ResourceDeleteFile = window.document.getElementById("ResourceDeleteFile");
+if (ResourceDeleteFile) {
+	ResourceDeleteFile.addEventListener("click", () => {
+
+		if (window.confirm("Delete?")) {
+			const data = {
+				language: window.document.getElementById("countrySelect").value
+			};
+
+			AjaxPOSTAsync(urlControlDeleteFile, data, "POST").then((resolve) => {
+				console.log(resolve.status);
+				GetCountrySet();
+			}).catch((error) => {
+				console.error(error);
+			});
+		}
+
+	});
+}
+
 
 /**
  * Method protects exist node of resource
@@ -414,13 +436,15 @@ function CountrySelectUpdate(lang, url, sort, filter, take, page) {
 			EmptyElement(mainDataBodyTable);
 			let divError = document.createElement("div");
 			divError.textContent = data.error;
-			divError.className = "error";
+			divError.classList.add("error");
 			mainDataBodyTable.appendChild(divError);
 			console.error(data.error);
-		} else {
+		}
+		if (data.data) {
 			EmptyElement(mainDataBodyTable);
 			AjaxPOSTAsync(url, dataEN).then((datas) => {
-				createTable(data, datas);
+				createTable(data.data, datas.data);
+				window.localStorage.setItem("maxPage", data.maxPage);
 			}).catch((error) => {
 				console.error(error);
 			});
@@ -450,10 +474,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		const selectSortTable = window.document.getElementById("select-sort-table");
 		if (selectSortTable) {
-			window.document.getElementById("page").addEventListener("change", () => {
+			const page = window.document.getElementById("page");
+			const take = window.document.getElementById("take");
+			page.addEventListener("input", () => {
+				page.max = Number(window.localStorage.getItem("maxPage"));
 				GetCountrySet();
 			});
-			window.document.getElementById("take").addEventListener("change", () => {
+			take.addEventListener("input", () => {
+				page.max = Number(window.localStorage.getItem("maxPage"));
 				GetCountrySet();
 			});
 		}
@@ -507,7 +535,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		const mainDataHeadFilterTable = document.getElementById("mainDataHeadFilterTable");
 		if (mainDataHeadFilterTable !== null && typeof mainDataHeadFilterTable !== "undefined") {
-			mainDataHeadFilterTable.addEventListener("keyup", (event) => {
+			mainDataHeadFilterTable.addEventListener("input", (event) => {
 
 				if (event.target.tagName === "INPUT") {
 					const lang = document.getElementById("countrySelect").value;

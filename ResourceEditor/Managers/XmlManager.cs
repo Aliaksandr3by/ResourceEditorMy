@@ -191,5 +191,32 @@ namespace ResourceEditor.Managers
 
             return false;
         }
+
+        public static bool DeleteLang(string language)
+        {
+            var pathXml = HostingEnvironment.MapPath("~/App_Data/cult.xml");
+
+            if (File.Exists(pathXml))
+            {
+
+                var cultureInfo = new CultureInfo(language, false);
+
+                var xDoc = XElement.Load(pathXml ?? throw new InvalidOperationException());
+
+                var findLang = xDoc.Elements("LangName").FirstOrDefault(e => e.Attribute("name")?.Value == language);
+
+                if (findLang != null)
+                {
+
+                    findLang.Remove();
+
+                    xDoc.Save(pathXml);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

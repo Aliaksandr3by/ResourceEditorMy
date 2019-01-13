@@ -47,6 +47,11 @@ namespace ResourceEditor
                 defaults: new { controller = "Home", action = "Update", id = UrlParameter.Optional });
 
             routes.MapRoute(
+                name: "DeleteFile",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "DeleteFile", id = UrlParameter.Optional });
+
+            routes.MapRoute(
                 name: "HomeDelete",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Delete", id = UrlParameter.Optional });

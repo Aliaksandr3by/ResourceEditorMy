@@ -226,6 +226,11 @@ textarea {
     order: 2;
 }
 
+.element-04 {
+    flex: 1 0 auto;
+    order: 3;
+}
+
 textarea {
     width: 100%;
     border: none;

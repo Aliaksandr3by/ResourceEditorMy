@@ -169,7 +169,7 @@ namespace ResourceEditor.Models
         /// </summary>
         /// <param name="pathLoad">Full path by explore file</param>
         /// <returns>Edited data</returns>
-        private static List<LangName> Read(string pathLoad)
+        public static List<LangName> Read(string pathLoad)
         {
             if (!File.Exists(pathLoad))
             {
@@ -198,78 +198,58 @@ namespace ResourceEditor.Models
             return outLangNames;
         }
 
-        public static List<LangName> ReadSortTake(string pathLoad, string sort = "", string filter = "", int takeGet = 5, int pageGet = 1)
+        public static int MaxPageResolver(List<LangName> collection, int elementsOnPage)
         {
-            int take = takeGet;
-            int page = pageGet;
+            int maxElementsOnPage = elementsOnPage;
+            int maxCountElement = collection.Count;
+            double maxPageOn = (double)maxCountElement / (double)maxElementsOnPage;
+            int pageMax = (int)Math.Ceiling(maxPageOn);
+            return pageMax;
+        }
 
+        public static List<LangName> ReadSortTake(List<LangName> collection, string sort = "", string filter = "", int takeGet = 5, int pageGet = 1)
+        {
+            List<LangName> outLangNames = new List<LangName>();
+            List<LangName> result = null;
             var _filter = JsonConvert.DeserializeObject<LangName>(filter);
 
-            var collection = Read(pathLoad);
-            var outLangNames = new List<LangName>();
-
-
+            int maxElementsOnPage = takeGet;
+            int pageMax = MaxPageResolver(collection, maxElementsOnPage);
+            int numberOfPage = pageGet <= pageMax && pageGet > 0 ? pageGet : pageMax;
 
             if (_filter != null)
             {
-                var _filterI = _filter.Id.Split(new Char[] { ' ', ',', '.', ':', '\t' });
-                var _filterV = _filter.Value.Split(new Char[] { ' ', ',', '.', ':', '\t' });
-                var _filterC = _filter.Comment.Split(new Char[] { ' ', ',', '.', ':', '\t' });
+                var _filterI = _filter.Id.Split(new Char[] { ' ', ',', '.', ':', '\t' }).ToArray();
+                var _filterV = _filter.Value.Split(new Char[] { ' ', ',', '.', ':', '\t' }).ToArray();
+                var _filterC = _filter.Comment.Split(new Char[] { ' ', ',', '.', ':', '\t' }).ToArray();
 
-                //брак в фильтре
-                var tmp = from item in collection
+                outLangNames = (from item in collection
                           from itemI in _filterI
                           from itemV in _filterV
                           from itemC in _filterC
                           where item.Id.Contains(itemI) && item.Value.Contains(itemV) && item.Comment.Contains(itemC)
-                          select item;
-
-                outLangNames = tmp.ToList();
-
-
-                //foreach (var item in collection)
-                //{
-                //    foreach (var itemI in _filterI)
-                //    {
-                //        if (item.Id.Contains(itemI))
-                //        {
-                //            foreach (var itemV in _filterV)
-                //            {
-                //                if (item.Value.Contains(itemV))
-                //                {
-                //                    foreach (var itemC in _filterC)
-                //                    {
-                //                        if (item.Comment.Contains(itemC))
-                //                        {
-                //                            outLangNames.Add(item);
-                //                        }
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
-
+                          select item).Distinct().ToList();
             }
-
-            List<LangName> result = null;
+            
+            Func<LangName, string> fn = e => e.Id;
 
             switch (sort)
             {
                 case "Id":
-                    result = outLangNames.OrderBy(e => e.Id).Skip((page - 1) * take).Take(take).ToList();
+                    fn = e => e.Id;
                     break;
                 case "Value":
-                    result = outLangNames.OrderBy(e => e.Value).Skip((page - 1) * take).Take(take).ToList();
+                    fn = e => e.Value;
                     break;
                 case "Comment":
-                    result = outLangNames.OrderBy(e => e.Comment).Skip((page - 1) * take).Take(take).ToList();
+                    fn = e => e.Comment;
                     break;
                 default:
                     result = outLangNames.ToList();
                     break;
             }
+
+            result = outLangNames.OrderBy(fn).Skip((numberOfPage - 1) * maxElementsOnPage).Take(maxElementsOnPage).ToList();
 
             return result;
         }

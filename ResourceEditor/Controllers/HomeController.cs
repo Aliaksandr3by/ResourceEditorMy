@@ -78,7 +78,9 @@ namespace ResourceEditor.Controllers
 
             var pathSave = ResourceHelper.GetPath(language);
 
-            var langName = ResourceHelper.ReadSortTake(pathSave);
+            var collection = ResourceHelper.Read(pathSave);
+
+            var langName = ResourceHelper.ReadSortTake(collection);
 
             return this.View("Read", langName);
         }
@@ -164,6 +166,23 @@ namespace ResourceEditor.Controllers
             }
 
             return null;
+        }
+
+        [HttpPost]
+        public JsonResult DeleteFile(string language)
+        {
+            try
+            {
+                var fileName = ResourceHelper.GetPath(language);
+
+                System.IO.File.Delete(fileName);
+                Managers.XmlManager.DeleteLang(language);
+                return this.Json(new { status = $"{System.IO.Path.GetFileName(fileName)} deleted" });
+            }
+            catch (System.Exception ex)
+            {
+                return this.Json(new { error = $"{ex.Message}" });
+            }
         }
 
         /// <summary>
@@ -338,13 +357,14 @@ namespace ResourceEditor.Controllers
         {
             var pathSave = ResourceHelper.GetPath(language);
 
+            var collection = ResourceHelper.Read(pathSave);
+
             var result = (pathSave == null)
                 ? this.Json(new { error = "File was not found" })
-                : this.Json(ResourceHelper.ReadSortTake(pathSave, sort, filter, take, page));
+                : this.Json(new { data = ResourceHelper.ReadSortTake(collection, sort, filter, take, page), maxPage = ResourceHelper.MaxPageResolver(collection, take) });
 
             return result;
         }
-
 
         /// <summary>
         /// The select country.
