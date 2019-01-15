@@ -13,6 +13,19 @@ body {
     background-color: transparent;
 }
 
+#panelNavigation {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+}
+
+.btnEnd, .btnTop, .btnScrollBack {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
 .container-grid {
     display: flex;
     flex-direction: column;

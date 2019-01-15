@@ -731,3 +731,59 @@ function createElementWithAttr(object, options) {
 	}
 	return element;
 }
+
+const panelNavigation = document.getElementById("panelNavigation");
+if (panelNavigation) {
+
+	const btnTop = panelNavigation.appendChild(createElementWithAttr("button", {
+		"type": "button",
+		"textContent": "♠",
+		"title": "up",
+		"class": "btnTop",
+		"data-action": "goTop"
+	}));
+
+	const btnScrollBack = panelNavigation.appendChild(createElementWithAttr("button", {
+		"type": "button",
+		"textContent": "♦",
+		"title": "back",
+		"class": "btnScrollBack",
+		"data-action": "goBack"
+	}));
+
+	const btnEnd = panelNavigation.appendChild(createElementWithAttr("button", {
+		"type": "button",
+		"textContent": "♥",
+		"title": "down",
+		"class": "btnEnd",
+		"data-action": "goEnd"
+	}));
+
+	let thisScreenPosition = 0;
+
+	panelNavigation.addEventListener("click", (e) => {
+
+		let scrollTopMax = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+		const docEl = document.documentElement;
+		const that = e.target;
+		const DataAction = that ? that.getAttribute("data-action") : null;
+
+		if (DataAction === "goTop") {
+			if (docEl.scrollTop > 0 && docEl.scrollTop < scrollTopMax) {
+				thisScreenPosition = docEl.scrollTop;
+			}
+			docEl.scrollTop = 0;
+		}
+
+		if (DataAction === "goBack") {
+			docEl.scrollTop = thisScreenPosition;
+		}
+
+		if (DataAction === "goEnd") {
+			if (docEl.scrollTop > 0 && docEl.scrollTop < scrollTopMax) {
+				thisScreenPosition = docEl.scrollTop;
+			}
+			docEl.scrollTop = docEl.scrollHeight;
+		}
+	});
+}
