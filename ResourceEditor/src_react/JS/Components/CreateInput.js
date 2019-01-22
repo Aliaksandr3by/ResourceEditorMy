@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 const CreateInput = ({ mainClass = "", valueTextContent = "", titleText = "NaN", editable = false }) => {

@@ -32,7 +32,7 @@ export const AjaxPOSTAsync = (url, object, method = "POST") => {
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.responseType = "json";
-        xhr.onload = () => {
+        xhr.addEventListener("load", () => {
             if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
                 if (typeof (xhr.response) === "string") {
                     resolve(JSON.parse(xhr.responseText));
@@ -41,8 +41,8 @@ export const AjaxPOSTAsync = (url, object, method = "POST") => {
                     resolve(xhr.response);
                 }
             }
-        };
-        xhr.onerror = () => reject(xhr.statusText);
+        });
+        xhr.addEventListener("error", () => reject(xhr.statusText));
         if (object) {
             xhr.send(JSON.stringify(object));
         } else {
@@ -67,12 +67,12 @@ export const AjaxPOSTAsyncFileSend = (url, objectFiles) => {
         xhr.open("POST", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.responseType = "json";
-        xhr.onload = () => {
+        xhr.addEventListener("load", () => {
             if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
                 resolve(xhr.response);
             }
-        };
-        xhr.onerror = () => reject(xhr.statusText);
+        });
+        xhr.addEventListener("error", () => reject(xhr.statusText));
         xhr.send(data);
     });
 };

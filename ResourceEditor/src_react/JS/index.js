@@ -2,14 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import "bootstrap";
-import "core-js";
+import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType } from "../../dist/src/Utils";
+
+// import "bootstrap";
+// import "core-js";
 
 import CreateSelect from "./Components/CreateSelect";
 import CreateTable from "./Components/CreateTable";
 
+// import "../CSS/style.css"
 
-
+console.log(getBrowserType());
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -29,10 +32,7 @@ function getCountryList(url) {
 	const CountrySelect = document.getElementById("CountrySelect");
 	if (CountrySelect) {
 		AjaxPOSTAsync(url).then((data) => {
-			ReactDOM.render(< CreateSelect langList={
-				data
-			}
-			/>, CountrySelect);
+			ReactDOM.render(< CreateSelect langList={data} />, CountrySelect);
 		}).catch((error) => {
 			console.error(error);
 		});
@@ -67,38 +67,4 @@ function getDataResourceWithTitle(lang, url, sort = "Id", filter = "") {
 			console.error(error);
 		});
 	}
-}
-
-/**
- * Ajax function, only json return
- * @param {string} url адрес контроллера
- * @param {object} object содержит идентификатор language языка
- * @returns {Promise} object
- * @param {string} method POST/get?
- */
-function AjaxPOSTAsync(url, object, method = "POST") {
-	return new Promise((resolve, reject) => {
-		const xhr = new window.XMLHttpRequest();
-		xhr.open(method, url, true);
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		xhr.responseType = "json";
-		xhr.onload = (e) => {
-			const that = e.target;
-			if (that.status >= 200 && that.status < 300 || that.status === 304) {
-				if (typeof xhr.response === "string") {
-					resolve(JSON.parse(xhr.responseText));
-				}
-				if (typeof xhr.response === "object") {
-					resolve(xhr.response);
-				}
-			}
-		};
-		xhr.onerror = () => reject(xhr.statusText);
-		if (object) {
-			xhr.send(JSON.stringify(object));
-		} else {
-			xhr.send();
-		}
-	});
 }

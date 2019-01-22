@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 const CreateTextArea = ({ mainClass = "", valueTextContent = "", titleText = "missing data", editable = false }) => {

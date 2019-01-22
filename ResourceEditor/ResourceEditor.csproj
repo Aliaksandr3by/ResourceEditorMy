@@ -50,6 +50,9 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvancedStringBuilder, Version=0.1.0.0, Culture=neutral, PublicKeyToken=e818a2fc08933ddb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AdvancedStringBuilder.0.1.0\lib\net45\AdvancedStringBuilder.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
@@ -78,8 +81,8 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MsieJavaScriptEngine, Version=2.2.10.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
-      <HintPath>..\packages\MsieJavaScriptEngine.2.2.10\lib\net45\MsieJavaScriptEngine.dll</HintPath>
+    <Reference Include="MsieJavaScriptEngine, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MsieJavaScriptEngine.3.0.0\lib\net45\MsieJavaScriptEngine.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -1824,19 +1827,20 @@
     <Content Include="node_modules\core-js\web\immediate.js" />
     <Content Include="node_modules\core-js\web\index.js" />
     <Content Include="node_modules\core-js\web\timers.js" />
-    <Content Include="public\bundle.js" />
+    <Content Include="public\app.bundle.js" />
     <Content Include="src\Link.js" />
     <Content Include="src\Utils.js" />
+    <Content Include="src_react\CSS\style.css" />
+    <Content Include="src_react\JS\Components\CreateButton.js" />
+    <Content Include="src_react\JS\Components\CreateInput.js" />
+    <Content Include="src_react\JS\Components\CreateRow.js" />
+    <Content Include="src_react\JS\Components\CreateSelect.js" />
+    <Content Include="src_react\JS\Components\CreateTable.js" />
+    <Content Include="src_react\JS\Components\CreateTextArea.js" />
+    <Content Include="src_react\JS\index.js" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <Content Include="src_react\Components\CreateTextArea.js" />
-    <Content Include="src_react\Components\CreateSelect.js" />
-    <Content Include="src_react\Components\CreateRow.js" />
-    <Content Include="src_react\Components\CreateButton.js" />
-    <Content Include="src_react\Components\CreateInput.js" />
-    <Content Include="src_react\Components\CreateTable.js" />
-    <Content Include="src_react\index.js" />
     <Content Include="src\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1854,7 +1858,6 @@
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".eslintrc.json" />
     <Content Include="dist\srcTest\test.js.map" />
     <Content Include="dist\srcTest\test_BestMatch.js.map" />
     <Content Include="dist\src\Link.js.map" />
@@ -1870,6 +1873,7 @@
     <Content Include="node_modules\core-js\LICENSE" />
     <Content Include="node_modules\core-js\package.json" />
     <Content Include="node_modules\core-js\README.md" />
+    <Content Include=".eslintrc" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\NavigateBar.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -1885,7 +1889,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_LocalResources\" />
-    <Folder Include="out\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="srcTest\test.ts" />
