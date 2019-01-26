@@ -1,32 +1,21 @@
 "use strict";
-
 const path = require("path");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-// const WebpackNotifierPlugin = require("webpack-notifier");
-// const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
-
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
-// const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-// Constant with our paths
 const paths = {
     DIST: path.resolve(__dirname, "public"),
     SRC: path.resolve(__dirname, "src_react"),
-    JS: path.resolve(__dirname, "src_react/JS"),
+    JS: path.resolve(__dirname, "src_react/js"),
 };
 
 module.exports = {
     mode: "development",
+    devtool: "inline-source-map",
     entry: path.join(paths.JS, "index.js"),
     output: {
         path: paths.DIST,
-        filename: "app.bundle.js",
+        filename: "bundle.js",
     },
-    plugins: [
-        // new WebpackNotifierPlugin(),
-        // new BrowserSyncPlugin(),
-        // new ExtractTextPlugin('style.bundle.css')
-    ],
     module: {
         rules: [
             {
@@ -35,11 +24,17 @@ module.exports = {
                 use: [
                     "babel-loader",
                 ],
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader"
+                })
             }
         ],
     },
-    resolve: {
-        extensions: ['.js', '.jsx'],
-    },
-    devtool: "inline-source-map"
+    plugins: [
+        new ExtractTextPlugin("bundle.css"),
+    ]
 };

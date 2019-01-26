@@ -4,13 +4,10 @@ import PropTypes from "prop-types";
 
 import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType } from "../../dist/src/Utils";
 
-// import "bootstrap";
-// import "core-js";
-
 import CreateSelect from "./Components/CreateSelect";
 import CreateTable from "./Components/CreateTable";
 
-// import "../CSS/style.css"
+import "../css/style.css";
 
 console.log(getBrowserType());
 
