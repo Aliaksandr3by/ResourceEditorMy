@@ -38,6 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.3</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.3</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdvancedStringBuilder, Version=0.1.0.0, Culture=neutral, PublicKeyToken=e818a2fc08933ddb, processorArchitecture=MSIL">
@@ -185,18 +187,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".babelrc" />
     <Content Include="App_Data\cult.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\NavMenu.css" />
-    <Content Include="dist\srcTest\bundle.js" />
-    <Content Include="dist\srcTest\test.js" />
-    <Content Include="dist\srcTest\test_BestMatch.js" />
-    <Content Include="dist\src\Link.js" />
-    <Content Include="dist\src\main.js" />
-    <Content Include="dist\src\Utils.js" />
+    <Content Include="dist\Link.js" />
+    <Content Include="dist\main.js" />
+    <Content Include="dist\Utils.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -205,23 +203,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="public\bundle.css" />
-    <Content Include="public\bundle.js" />
-    <Content Include="src\Link.js" />
-    <Content Include="src\Utils.js" />
-    <Content Include="src_react\css\NavMenu.css" />
-    <Content Include="src_react\css\style.css" />
-    <Content Include="src_react\js\Components\CreateButton.js" />
-    <Content Include="src_react\js\Components\CreateInput.js" />
-    <Content Include="src_react\js\Components\CreateRow.js" />
-    <Content Include="src_react\js\Components\CreateSelect.js" />
-    <Content Include="src_react\js\Components\CreateTable.js" />
-    <Content Include="src_react\js\Components\CreateTextArea.js" />
-    <Content Include="src_react\js\index.js" />
-    <Content Include="tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <Content Include="src\main.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -233,24 +216,19 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Read.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\GetUserIP.cshtml" />
-    <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dist\srcTest\test.js.map" />
-    <Content Include="dist\srcTest\test_BestMatch.js.map" />
-    <Content Include="dist\src\Link.js.map" />
-    <Content Include="dist\src\main.js.map" />
-    <Content Include="dist\src\Utils.js.map" />
     <Content Include=".eslintrc" />
+    <Content Include="dist\Link.js.map" />
+    <Content Include="dist\main.js.map" />
+    <Content Include="dist\Utils.js.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\NavigateBar.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\SelectCountry.cshtml" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <Content Include="Views\Home\Log.cshtml" />
-    <Content Include="src\main.scss" />
     <None Include="Properties\PublishProfiles\resourceeditor - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\resourceeditor - Web Deploy.pubxml" />
   </ItemGroup>
@@ -259,10 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_LocalResources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="srcTest\test.ts" />
-    <TypeScriptCompile Include="srcTest\test_BestMatch.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

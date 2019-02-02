@@ -48,17 +48,6 @@ namespace ResourceEditor.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Index()
-        {
-            ViewData["BrowserType"] = HttpContext.Request.Browser.Type;
-            return this.View();
-        }
 
         /// <summary>
         /// The read.
@@ -72,7 +61,7 @@ namespace ResourceEditor.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Read(List<LangName> list, string language)
+        public ActionResult Index(List<LangName> list, string language)
         {
             ViewData["BrowserType"] = HttpContext.Request.Browser.Type;
 
@@ -82,7 +71,7 @@ namespace ResourceEditor.Controllers
 
             var langName = ResourceHelper.ReadSortTake(collection);
 
-            return this.View("Read", langName);
+            return this.View("Index", langName);
         }
 
         /// <summary>
