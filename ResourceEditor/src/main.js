@@ -1,4 +1,4 @@
-import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType } from "./Utils.js";
+import { AjaxPOSTAsync, AjaxPOSTAsyncFileSend, getBrowserType, coreJs } from "./Utils.js";
 
 /*eslint-env jquery*/
 /*global urlControlActionDelete*/
