@@ -12,13 +12,13 @@
     "build": "src/*.js"
   },
   "scripts": {
-    "tsc": "tsc -watch"
+    "build": "tsc",
+    "dev": "tsc -watch"
   },
   "dependencies": {
-    "core-js": "^2.6.3"
+    "core-js": "^2.6.5"
   },
   "devDependencies": {
-    "eslint": "^5.13.0",
-    "npm-watch": "^0.6.0"
+    "eslint": "^5.14.1"
   }
 }

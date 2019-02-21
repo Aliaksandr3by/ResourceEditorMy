@@ -231,6 +231,7 @@
     <Content Include="Views\Home\Log.cshtml" />
     <None Include="Properties\PublishProfiles\resourceeditor - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\resourceeditor - Web Deploy.pubxml" />
+    <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

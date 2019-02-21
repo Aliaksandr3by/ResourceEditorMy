@@ -1,6 +1,5 @@
 ﻿<nav id="navigate" class="navigate">
     <ul class="nav">
-        @*<li class="nav-item item-00">@Html.ActionLink("ReactTest", "Index", "Home", null, new { @class = "nav-link" })</li>*@
         <li class="nav-item item-01">@Html.ActionLink("Main", "Index", "Home", null, new { @class = "nav-link" })</li>
         <li class="nav-item item-02">@Html.ActionLink("Log", "Log", "Home", null, new { @class = "nav-link" })</li>
         <li class="nav-item item-03 dropdown">
@@ -9,9 +8,6 @@
                 <a data-action="fileUpload" id="colFileContainerTogle">ResX file panel</a>
                 <a data-action="languageChange">Language panel</a>
                 <a data-action="colSortFilter">Filter-Sort panel</a>
-                <a data-action="">...</a>
-                <a data-action="">...</a>
-                <a data-action="">...</a>
             </div>
         </li>
         <li class="nav-item item-04"><a data-get-ip="getIP">@Html.Partial("GetUserIP")</a></li>

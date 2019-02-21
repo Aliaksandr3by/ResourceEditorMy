@@ -1,14 +1,4 @@
 "use strict";
-const urlControlActionDelete = "/Home/Delete";
-const urlControlActionUpdate = "/Home/Update";
-const urlControlActionDataProtect = "/Home/DataProtect";
-const urlControlSwitchLanguage = "/Home/SwitchLanguage";
-const urlControlUploadFile = "/Home/UploadFile";
-const urlControlGetFile = "/Home/GetFile";
-const urlControlDeleteFile = "/Home/DeleteFile";
-const urlControlSelectCountry = "/Home/SelectCountry";
-const urlControlRead = "/Home/Read";
-const urlControlLogFile = "/Home/LogFile";
 const coreJs = () => {
     const _userAgent = navigator.userAgent;
     if (_userAgent.indexOf(".NET CLR") >= 0) {

@@ -1,14 +1,3 @@
-const urlControlActionDelete = "/Home/Delete";
-const urlControlActionUpdate = "/Home/Update";
-const urlControlActionDataProtect = "/Home/DataProtect";
-const urlControlSwitchLanguage = "/Home/SwitchLanguage";
-const urlControlUploadFile = "/Home/UploadFile";
-const urlControlGetFile = "/Home/GetFile";
-const urlControlDeleteFile = "/Home/DeleteFile";
-const urlControlSelectCountry = "/Home/SelectCountry";
-const urlControlRead = "/Home/Read";
-const urlControlLogFile = "/Home/LogFile";
-
 const coreJs = () => {
     // <script src="~/node_modules/core-js/client/core.min.js"></script>
     // <script src="~/node_modules/core-js/client/library.min.js"></script>
